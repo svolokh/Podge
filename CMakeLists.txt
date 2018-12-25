@@ -7,6 +7,8 @@ endif()
 
 add_subdirectory(lib)
 
+option(PODGE_MAIN_ENABLED "whether to compile with podge()" TRUE)
+
 set(PODGE_GENERATED_SOURCES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
 file(MAKE_DIRECTORY "${PODGE_GENERATED_SOURCES_DIR}")
 
@@ -27,18 +29,24 @@ add_custom_command(
 	COMMAND python "${PODGE_GEN_TYPES}" "${PODGE_TYPES}" "${PODGE_TYPES_INL}"
 	DEPENDS "${PODGE_TYPES}")
 
-add_library(main SHARED
+set(PODGE_SOURCES
 	podge/podge.cpp
 	podge/os/android/gfx.cpp
 	podge/os/android/resources.cpp
 	"${PODGE_SYSTEMS_INL}"
 	"${PODGE_TYPES_INL}")
 
-set_property(TARGET main PROPERTY CXX_STANDARD 14)
-target_include_directories(main PRIVATE 
+if(PODGE_MAIN_ENABLED)
+	list(APPEND PODGE_SOURCES 
+		podge/main.cpp)
+endif()
+
+add_library(podge SHARED ${PODGE_SOURCES})
+
+set_property(TARGET podge PROPERTY CXX_STANDARD 14)
+target_include_directories(podge PRIVATE 
 	podge
 	${CMAKE_CURRENT_BINARY_DIR}/generated
-	lib/SDL2/include
 	lib/easy_profiler/easy_profiler_core/include
 	lib/glm
 	lib/pugixml/src
@@ -46,11 +54,19 @@ target_include_directories(main PRIVATE
 	lib/liquidfun/Box2D
 	lib/json/single_include
 	lib/nanovg/src)
-target_link_libraries(main GLESv2 SDL2 SDL2main pugixml Box2D nanovg)
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	target_compile_definitions(main PRIVATE DEBUG=1 _LIBCPP_DEBUG=1)
-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-	target_compile_definitions(main PRIVATE NDEBUG=1 _LIBCPP_DEBUG=0)
-	target_compile_options(main PRIVATE -O3)
+target_link_libraries(podge GLESv2 pugixml Box2D nanovg)
+
+if(PODGE_MAIN_ENABLED)
+	target_include_directories(podge PRIVATE
+		lib/SDL2/include)
+	target_link_libraries(podge SDL2main SDL2)
 endif()
-target_compile_options(main PRIVATE -Werror -Wall -Wno-unused-variable -Wno-unused-local-typedef -Wno-logical-op-parentheses -Wno-error-unused-function)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	target_compile_definitions(podge PRIVATE DEBUG=1 _LIBCPP_DEBUG=1)
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+	target_compile_definitions(podge PRIVATE NDEBUG=1 _LIBCPP_DEBUG=0)
+	target_compile_options(podge PRIVATE -O3)
+endif()
+
+target_compile_options(podge PRIVATE -Werror -Wall -Wno-unused-variable -Wno-unused-local-typedef -Wno-logical-op-parentheses -Wno-error-unused-function)

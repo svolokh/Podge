@@ -17,7 +17,6 @@
 #include <Box2D/Box2D.h>
 #include <pugixml.hpp>
 #include <nanovg.h>
-#include <SDL.h>
 #include <json.hpp>
 #include <glm/glm.hpp>
 #include <boost/any.hpp>
