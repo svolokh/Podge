@@ -1,0 +1,18 @@
+[
+    "systems/anchor.inl",
+    "systems/balloon.inl",
+    "systems/barrel/barrel.inl",
+    "systems/barrel/barrel_trigger.inl",
+    "systems/basic.inl",
+    "systems/bump_bat.inl",
+    "systems/camera.inl",
+    "systems/sensor.inl",
+    "systems/finish_trigger.inl",
+    "systems/glass.inl",
+    "systems/obstacle.inl",
+    "systems/podge.inl",
+    "systems/spike/spike.inl",
+    "systems/spike/spike_trigger.inl",
+    "systems/wall.inl",
+    "systems/leaf.inl"
+]

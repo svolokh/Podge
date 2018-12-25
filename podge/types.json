@@ -1,0 +1,113 @@
+{
+    "balloon": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "balloon"
+        ]
+    },
+    "finish_trigger": {
+        "has_body": true,
+        "systems": [
+            "sensor",
+            "finish_trigger"
+        ]
+    },
+    "podge": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "podge"
+        ]
+    },
+    "barrel": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "barrel"
+        ]
+    },
+    "barrel_trigger": {
+        "has_body": true,
+        "systems": [
+            "sensor",
+            "barrel_trigger"
+        ]
+    },
+    "camera": {
+        "has_body": false,
+        "systems": [
+            "camera"
+        ]
+    },
+    "glass": {
+        "has_body": true,
+        "systems": [
+            "glass"
+        ]
+    },
+    "bump_bat": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "bump_bat"
+        ]
+    },
+    "bump_bat_bounds": {
+        "has_body": true,
+        "systems": [
+            "sensor"
+        ]
+    },
+    "spike": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "spike"
+        ]
+    },
+    "spike_trigger": {
+        "has_body": true,
+        "systems": [
+            "sensor",
+            "spike_trigger"
+        ]
+    },
+    "leaf": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "leaf"
+        ]
+    },
+    "wall": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "wall"
+        ]
+    },
+    "smash_anchor": {
+        "has_body": true,
+        "systems": [
+            "anchor"
+        ]
+    },
+    "orbit_anchor": {
+        "has_body": true,
+        "systems": [
+            "anchor"
+        ]
+    },
+    "obstacle": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "obstacle"
+        ]
+    },
+    "placeholder": {
+        "has_body": false,
+        "systems": []
+    }
+}
