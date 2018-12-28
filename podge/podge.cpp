@@ -193,6 +193,7 @@ static registry registry;
 })
 
 #define PODGE_COMPONENT(NAME) struct NAME : detail::object_component_impl<NAME>
+#define PODGE_PUBLIC_COMPONENT(NAME) struct NAME : detail::public_object_component_impl<NAME>
 
 namespace systems {
 
@@ -216,9 +217,7 @@ PODGE_COMPONENT(tile_component) {
 PODGE_REGISTER_COMPONENT(tile_component);
 
 // The single component automatically added to all fixtures' data objects.
-PODGE_COMPONENT(fixture_component) {
-    enum { is_public = true };
-
+PODGE_PUBLIC_COMPONENT(fixture_component) {
     fixture_component() :
         damage(0),
         repulsive(false)
@@ -1132,8 +1131,19 @@ void registry::add_component_to(object &obj, std::type_index cidx) const {
     it->second(obj);
 }
 
-bool registry::exists_public_component_property(const std::string &prop) const {
-    return prop_to_public_component_.find(prop) != prop_to_public_component_.end();
+boost::optional<std::type_index> registry::property_public_component(const std::string &prop) const {
+    auto it(prop_to_public_component_.find(prop));
+    if(it == prop_to_public_component_.end()) {
+        return boost::none;
+    } else {
+        return it->second;
+    }
+}
+
+const std::vector<public_component_property> &registry::public_component_properties(std::type_index cidx) const {
+    auto it(public_component_properties_.find(cidx));
+    assert(it != public_component_properties_.end());
+    return it->second;
 }
 
 const entity_type &registry::type(const char *name) const {

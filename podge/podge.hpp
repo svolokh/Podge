@@ -127,7 +127,8 @@ struct object_component {
 	struct context {
 		virtual ~context() = default;
 
-		virtual bool entity_exists(const std::string &name) const = 0;
+		virtual bool is_map() const = 0; // true if this context is a map (if false it is a tileset)
+		virtual bool entity_exists(const std::string &name) const = 0; // whether this entity exists in the map (can only be used if is_map() == true)
 	};
 
 	virtual ~object_component() = default;
@@ -135,14 +136,81 @@ struct object_component {
 	virtual std::unique_ptr<object_component> clone() const = 0;
 };
 
+struct public_object_component : object_component {
+	enum prop_type {
+		type_string,
+		type_float,
+		type_vec4,
+		type_int,
+		type_bool,
+		type_resource_path
+	};
+
+	virtual prop_type property_type(const std::string &prop) const = 0;
+};
+
 namespace detail {
 
-template <typename Component>
-struct object_component_impl : object_component {
+template <typename Component, typename Base = object_component>
+struct object_component_impl : Base {
 	enum { is_public = false };
 
 	std::unique_ptr<object_component> clone() const {
 		return std::unique_ptr<object_component>(new Component(*static_cast<const Component *>(this)));
+	}
+};
+
+template <typename T>
+struct prop_type_tag {
+};
+
+struct prop_type_visitor {
+	using result_type = public_object_component::prop_type;
+
+	result_type operator()(prop_type_tag<std::string>) const {
+		return result_type::type_string;
+	}
+
+	result_type operator()(prop_type_tag<float>) const {
+		return result_type::type_float;
+	}
+
+	result_type operator()(prop_type_tag<glm::vec4>) const {
+		return result_type::type_vec4;
+	}
+
+	result_type operator()(prop_type_tag<int>) const {
+		return result_type::type_int;
+	}
+
+	result_type operator()(prop_type_tag<bool>) const {
+		return result_type::type_bool;
+	}
+
+	result_type operator()(prop_type_tag<resource_path>) const {
+		return result_type::type_resource_path;
+	}
+};
+
+template <typename Component>
+struct public_object_component_impl : object_component_impl<Component, public_object_component> {
+	enum { is_public = true }; 
+
+	prop_type operator()(const std::string &prop) const {
+		boost::optional<prop_type> res;
+		hana::for_each(hana::members(*static_cast<Component *>(this)), [&prop, &res](auto p) {
+			constexpr auto name(hana::first(p));
+			if(prop == decltype(name)::c_str()) {
+				const auto &val(hana::second(p));
+				using tag_type = prop_type_tag<typename std::decay<decltype(val)>::type>;
+				auto type(prop_type_visitor()(tag_type()));
+				res.emplace(type); // if you get a compiler error here the public component has an unacceptable property type
+			}
+		});
+		if(!prop) {
+			THROW_ERROR();
+		}
+		return *res;
 	}
 };
 
@@ -396,9 +464,12 @@ private:
 	using component_property_setter = std::function<void(const std::string &, boost::any, object_component &)>;
 
 public:
-	void add_component_to(object &obj, std::type_index cidx) const;
+	using public_component_property = std::pair<std::string, public_object_component::prop_type>;
 
-	bool exists_public_component_property(const std::string &prop) const;
+public:
+	void add_component_to(object &obj, std::type_index cidx) const;
+	boost::optional<std::type_index> property_public_component(const std::string &prop) const;
+	const std::vector<public_component_property> &public_component_properties(std::type_index cidx) const;
 
 	// Finds the component (with is_public() == true) having the given property, then sets that property to the given value.
 	template <typename T>
@@ -469,6 +540,7 @@ private:
 private:
 	std::map<std::type_index, component_adder> component_adders_;
 	std::map<std::type_index, component_property_setter> public_component_setters_;
+	std::map<std::type_index, std::vector<public_component_property>> public_component_properties_;
 	std::map<std::string, std::type_index> prop_to_public_component_; 
 	std::map<boost::string_view, std::unique_ptr<entity_system>> systems_;
 	std::map<boost::string_view, entity_type> types_;
@@ -526,6 +598,9 @@ struct registry_init {
 					constexpr auto accessor(hana::second(p));
 					auto res(reg.prop_to_public_component_.emplace(decltype(name)::c_str(), cidx));
 					assert(res.second);
+					using type_tag = detail::prop_type_tag<typename std::decay<decltype(accessor(std::declval<Component>()))>::type>;
+					auto type(detail::prop_type_visitor()(type_tag()));
+					reg.public_component_properties_[cidx].emplace_back(decltype(name)::c_str(), type);
 				});
 			}
 		}

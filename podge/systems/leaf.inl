@@ -15,9 +15,7 @@ struct state {
 	boost::optional<float> t;
 };
 
-PODGE_COMPONENT(component) {
-	enum { is_public = true };
-
+PODGE_PUBLIC_COMPONENT(component) {
 	component() :
 		ccw(false),
 		hits(3)

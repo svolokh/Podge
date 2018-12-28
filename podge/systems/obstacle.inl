@@ -40,9 +40,7 @@ struct spin_state {
 	float theta0;
 };
 
-PODGE_COMPONENT(component) {
-	enum { is_public = true };
-
+PODGE_PUBLIC_COMPONENT(component) {
 	component() :
 		orbit(false),
 		orbit_ccw(false),
@@ -70,24 +68,26 @@ PODGE_COMPONENT(component) {
 	}
 
 	void validate(const context &ctx) const {
-		if(orbit) {
-			if(orbit_anchor.empty()) {
-				throw validation_error("orbit_anchor must be defined");
+		if(ctx.is_map()) {
+			if(orbit) {
+				if(orbit_anchor.empty()) {
+					throw validation_error("orbit_anchor must be defined");
+				}
+				if(!ctx.entity_exists(orbit_anchor)) {
+					std::ostringstream oss;
+					oss << "orbit anchor '" << orbit_anchor << "' does not exist";
+					throw validation_error(oss.str());
+				}
 			}
-			if(!ctx.entity_exists(orbit_anchor)) {
-				std::ostringstream oss;
-				oss << "orbit anchor '" << orbit_anchor << "' does not exist";
-				throw validation_error(oss.str());
-			}
-		}
-		if(smash) {
-			if(smash_anchor.empty()) {
-				throw validation_error("smash_anchor must be defined");
-			}
-			if(!ctx.entity_exists(smash_anchor)) {
-				std::ostringstream oss;
-				oss << "smash anchor '" << smash_anchor << "' does not exist";
-				throw validation_error(oss.str());
+			if(smash) {
+				if(smash_anchor.empty()) {
+					throw validation_error("smash_anchor must be defined");
+				}
+				if(!ctx.entity_exists(smash_anchor)) {
+					std::ostringstream oss;
+					oss << "smash anchor '" << smash_anchor << "' does not exist";
+					throw validation_error(oss.str());
+				}
 			}
 		}
 	}

@@ -7,9 +7,7 @@
 
 namespace podge { namespace systems { namespace spike_trigger {
 
-PODGE_COMPONENT(component) {
-	enum { is_public = true };
-
+PODGE_PUBLIC_COMPONENT(component) {
 	BOOST_HANA_DEFINE_STRUCT(component,
 		(std::string, spikes));
 };

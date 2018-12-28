@@ -19,17 +19,17 @@ struct state {
 	entity *bounds;
 };
 
-PODGE_COMPONENT(component) {
-	enum { is_public = true };
-
+PODGE_PUBLIC_COMPONENT(component) {
 	void validate(const context &ctx) const {
-		if(bounds.empty()) {
-			throw validation_error("the name of this bump bat's bounds is required");
-		}
-		if(!ctx.entity_exists(bounds)) {
-			std::ostringstream oss;
-			oss << "bounds '" << bounds << "' does not exist";
-			throw validation_error(oss.str());
+		if(ctx.is_map()) {
+			if(bounds.empty()) {
+				throw validation_error("the name of this bump bat's bounds is required");
+			}
+			if(!ctx.entity_exists(bounds)) {
+				std::ostringstream oss;
+				oss << "bounds '" << bounds << "' does not exist";
+				throw validation_error(oss.str());
+			}
 		}
 	}
 

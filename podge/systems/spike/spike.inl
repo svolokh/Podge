@@ -14,9 +14,7 @@ enum signals : signal_t {
 struct activate_arg {
 };
 
-PODGE_COMPONENT(component) {
-	enum { is_public = true };
-
+PODGE_PUBLIC_COMPONENT(component) {
 	component() :
 		speed(10.0f)
 	{

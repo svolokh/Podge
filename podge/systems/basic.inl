@@ -10,9 +10,7 @@ namespace nm = nlohmann;
 
 namespace podge { namespace systems { namespace basic {
 
-PODGE_COMPONENT(component) {
-	enum { is_public = true }; 
-
+PODGE_PUBLIC_COMPONENT(component) {
 	component() :
 		keyframe("default"),
 		opacity(1.0f)

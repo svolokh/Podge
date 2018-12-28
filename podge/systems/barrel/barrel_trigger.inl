@@ -7,20 +7,20 @@
 
 namespace podge { namespace systems { namespace barrel_trigger {
 
-PODGE_COMPONENT(component) {
-	enum { is_public = true };
-
+PODGE_PUBLIC_COMPONENT(component) {
 	void validate(const context &ctx) const {
-		if(barrels.empty()) {
-			throw validation_error("barrels must be specified");
-		}
-		std::vector<std::string> names;
-		util::parse_names(barrels, names);
-		for(const auto &name : names) {
-			if(!ctx.entity_exists(name)) {
-				std::ostringstream oss;
-				oss << "barrel '" << name << "' does not exist";
-				throw validation_error(oss.str());
+		if(ctx.is_map()) {
+			if(barrels.empty()) {
+				throw validation_error("barrels must be specified");
+			}
+			std::vector<std::string> names;
+			util::parse_names(barrels, names);
+			for(const auto &name : names) {
+				if(!ctx.entity_exists(name)) {
+					std::ostringstream oss;
+					oss << "barrel '" << name << "' does not exist";
+					throw validation_error(oss.str());
+				}
 			}
 		}
 	}
