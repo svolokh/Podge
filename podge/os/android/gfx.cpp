@@ -33,24 +33,24 @@ android_gfx_context::android_gfx_context() :
 	try {
 		window = SDL_CreateWindow("Podge", 0, 0, 0, 0, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
 		if(window == nullptr) {
-			THROW_SDL_ERROR();
+			PODGE_THROW_SDL_ERROR();
 		}
 
 		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) < 0) {
-			THROW_SDL_ERROR();
+			PODGE_THROW_SDL_ERROR();
 		}
 
 		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) < 0) {
-			THROW_SDL_ERROR();
+			PODGE_THROW_SDL_ERROR();
 		}
 
 		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES) < 0) {
-			THROW_SDL_ERROR();
+			PODGE_THROW_SDL_ERROR();
 		}
 
 		gl_ctx = SDL_GL_CreateContext(window);
 		if(!gl_ctx) {
-			THROW_SDL_ERROR();
+			PODGE_THROW_SDL_ERROR();
 		}
 
 		if(SDL_GL_SetSwapInterval(1) < 0) {
@@ -74,7 +74,7 @@ android_gfx_context::~android_gfx_context() {
 
 void android_gfx_context::set_current() {
 	if(SDL_GL_MakeCurrent(window, gl_ctx) < 0) {
-		THROW_SDL_ERROR();
+		PODGE_THROW_SDL_ERROR();
 	}
 }
 

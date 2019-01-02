@@ -16,7 +16,7 @@ struct jni_local_scope {
 	jni_local_scope(int capacity) {
 		auto env(static_cast<JNIEnv *>(SDL_AndroidGetJNIEnv()));
 		if(env->PushLocalFrame(capacity) < 0) {
-			THROW_ERROR();
+			PODGE_THROW_ERROR();
 		}
 	}
 

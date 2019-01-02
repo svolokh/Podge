@@ -95,7 +95,7 @@ struct system : entity_system {
 						bc.keyframe = "hp1";
 						break;
 					default:
-						THROW_ERROR();
+						PODGE_THROW_ERROR();
 				}
 				if(info.amount > 0) {
 					c.invuln += 3.0f;

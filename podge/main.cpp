@@ -9,7 +9,7 @@ namespace podge {
 
 static void run() {
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-        THROW_SDL_ERROR();
+        PODGE_THROW_SDL_ERROR();
     }
     BOOST_SCOPE_EXIT(void) {
         SDL_Quit();
@@ -24,7 +24,7 @@ static void run() {
     pugi::xml_document tmx;
 	auto res(tmx.load_string(get_resource(tmx_path.str()).c_str()));
 	if(!res) {
-		THROW_ERROR();
+            PODGE_THROW_ERROR();
 	}
 
     for(;;) {
@@ -121,7 +121,7 @@ static void run() {
         } else if(lvl.exit_state()->type() == typeid(level_exits::failure)) {
             msg = "Game Over!";
         } else {
-            THROW_ERROR();
+            PODGE_THROW_ERROR();
         }
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Podge", msg, window);
     }
