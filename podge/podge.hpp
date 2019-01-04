@@ -475,6 +475,7 @@ public:
 
 public:
     void add_component_to(object &obj, std::type_index cidx) const;
+    bool is_component_public(std::type_index cidx) const;
     boost::optional<std::type_index> property_public_component(const std::string &prop) const;
     const std::vector<public_component_property> &public_component_properties(std::type_index cidx) const;
 
@@ -514,7 +515,6 @@ private:
             }
         }
         for(auto sB : b.type().systems()) {
-            auto name(sB->name());
             auto it(wildcard_contact_handlers_.find(boost::string_view(sB->name())));
             if(it != wildcard_contact_handlers_.end()) {
                 for(auto &handler : it->second) {
@@ -549,6 +549,7 @@ private:
 private:
     std::map<std::type_index, component_adder> component_adders_;
     std::map<std::type_index, component_property_setter> public_component_setters_;
+    std::set<std::type_index> public_components_;
     std::map<std::type_index, std::vector<public_component_property>> public_component_properties_;
     std::map<std::string, std::type_index> prop_to_public_component_; 
     std::map<boost::string_view, std::unique_ptr<entity_system>> systems_;
@@ -596,6 +597,8 @@ struct podge_registry_init {
             };
 
             std::type_index cidx(typeid(Component));
+            auto r(reg.public_components_.emplace(cidx));
+            assert(r.second);
             auto r2(reg.public_component_setters_.emplace(cidx, property_setter()));
             assert(r2.second);
 
@@ -612,7 +615,7 @@ struct podge_registry_init {
         }
 
         template <typename Component>
-        void do_register_public(podge_registry &reg, tag<false>) const {
+        void do_register_public(podge_registry &, tag<false>) const {
         }
 
     public:
@@ -789,7 +792,7 @@ PODGE_PUBLIC_COMPONENT(fixture_component) {
     {
     }
 
-    void validate(const context &ctx) const {
+    void validate(const context &) const {
         if(damage < 0) {
             throw validation_error("damage must be >= 0");
         }

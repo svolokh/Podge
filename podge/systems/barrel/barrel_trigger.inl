@@ -83,7 +83,6 @@ struct contact_handler : entity_contact_handler {
 	}
 
 	void begin_contact(entity_contact &contact) const {
-		auto &p(contact.entity_a());
 		auto &t(contact.entity_b());
 		auto &pc(t.component<private_component>());
 		for(auto e : pc.barrels) {

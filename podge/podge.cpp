@@ -738,7 +738,6 @@ entity_spec entity_spec::from_object_xml(pugi::xml_node object_node, const resou
 	auto &cc(spec.component<core_component>());
 	cc.flip_horizontal = false;
 	cc.flip_vertical = false;
-	auto &lvl(level::current());
 	auto properties_xpn(object_node.select_node("./properties"));
 	if(properties_xpn) {
 		spec.load_properties_xml(properties_xpn.node(), cwd);
@@ -1064,6 +1063,10 @@ void podge_registry::add_component_to(object &obj, std::type_index cidx) const {
 	it->second(obj);
 }
 
+bool podge_registry::is_component_public(std::type_index cidx) const {
+	return public_components_.find(cidx) != public_components_.end();
+}
+
 boost::optional<std::type_index> podge_registry::property_public_component(const std::string &prop) const {
 	auto it(prop_to_public_component_.find(prop));
 	if(it == prop_to_public_component_.end()) {
@@ -1225,7 +1228,6 @@ std::size_t tileset::size() const {
 }
 
 void tileset::load_xml(pugi::xml_node tsx_node, const resource_path &cwd) {
-	auto &lvl(level::current());
 	auto tileset_node(tsx_node.select_node("/tileset").node());
 	auto tile_xpns(tsx_node.select_nodes("/tileset/tile"));
 	for(auto tile_xpn : tile_xpns) {
@@ -1373,7 +1375,6 @@ void layer::pre_step() {
 }
 
 void layer::step() {
-	auto &lvl(level::current());
 	for(auto &e : entities_) {
 		for(auto s : e->type().systems()) {
 			s->step(*e);
@@ -1454,7 +1455,6 @@ void layer::remove_all_marked_removed() {
 template <typename Entity>
 boost::optional<Entity &> layer::entity_by_name_(const std::string &name) {
 	for(auto &e : entities_) {
-		auto done(false);
 		auto &cc(e->component<core_component>());
 		if(cc.name && *cc.name == name) {
 			return *e;

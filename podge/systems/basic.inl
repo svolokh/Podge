@@ -10,13 +10,7 @@ namespace nm = nlohmann;
 
 namespace podge { namespace systems { namespace basic {
 
-PODGE_PUBLIC_COMPONENT(component) {
-	component() :
-		keyframe("default"),
-		opacity(1.0f)
-	{
-	}
-
+PODGE_PUBLIC_COMPONENT(public_component) {
 	void validate(const context &ctx) const {
 		if(keyframes.empty()) {
 			throw validation_error("'keyframes' must be defined");
@@ -26,8 +20,19 @@ PODGE_PUBLIC_COMPONENT(component) {
 		}
 	}
 
+	BOOST_HANA_DEFINE_STRUCT(public_component,
+		(resource_path, keyframes));
+};
+PODGE_REGISTER_COMPONENT(public_component);
+
+PODGE_COMPONENT(component) {
+	component() :
+		keyframe("default"),
+		opacity(1.0f)
+	{
+	}
+
 	BOOST_HANA_DEFINE_STRUCT(component,
-		(resource_path, keyframes),
 		(std::string, keyframe),
 		(float, opacity));
 };
@@ -59,6 +64,7 @@ struct system : entity_system {
 
 	std::vector<std::type_index> components() const {
 		return {
+			typeid(public_component),
 			typeid(component),
 			typeid(private_component)
 		};
@@ -66,13 +72,13 @@ struct system : entity_system {
 
 	void init(entity &e) const {
 		auto &lvl(level::current());
-		auto &c(e.component<component>());
+		auto &pubc(e.component<public_component>());
 		auto &pc(e.component<private_component>());
 		auto &cc(e.component<core_component>());
 
 		// load keyframes
-		auto json_kf(lvl.pool().json(c.keyframes));
-		auto dir(c.keyframes.parent());
+		auto json_kf(lvl.pool().json(pubc.keyframes));
+		auto dir(pubc.keyframes.parent());
 		for(auto it(json_kf.begin()); it != json_kf.end(); ++it) {
 			resource_path path(it.value().get<std::string>());
 			pc.keyframes.emplace(it.key(), lvl.pool().image(path.canonical(dir).str()));

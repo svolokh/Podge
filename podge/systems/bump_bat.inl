@@ -104,7 +104,6 @@ private:
 
 public:
 	void step(entity &e) const {
-		const auto &lvl(level::const_current());
 		auto &pc(e.component<private_component>());
 		auto &cc(e.component<core_component>());
 		auto &st(pc.st);

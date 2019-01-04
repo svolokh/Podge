@@ -90,13 +90,13 @@ if(NOT PODGE_LIBRARY)
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	target_compile_definitions(podge PRIVATE DEBUG=1 _LIBCPP_DEBUG=1)
+	target_compile_definitions(podge PRIVATE DEBUG=1)
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-	target_compile_definitions(podge PRIVATE NDEBUG=1 _LIBCPP_DEBUG=0)
+	target_compile_definitions(podge PRIVATE NDEBUG=1)
 	target_compile_options(podge PRIVATE -O3)
 endif()
 
-target_compile_options(podge PRIVATE -Werror -Wall -Wno-unused-variable -Wno-unused-local-typedef -Wno-logical-op-parentheses -Wno-error-unused-function)
+target_compile_options(podge PRIVATE -Werror -Wall -Wno-logical-op-parentheses -Wno-unused-local-typedef -Wno-error-unused-variable -Wno-error-unused-local-typedef -Wno-error-unused-function)
 
 if(PODGE_LIBRARY)
 	install(TARGETS podge

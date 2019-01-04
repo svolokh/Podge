@@ -153,7 +153,7 @@ struct system : entity_system {
 						return 1;
 					}
 					auto &fc(o.fixture_data(fixture).component<fixture_component>());
-					if(fc.repulsive || fc.damage > 0) {
+					if(fc.repulsive) {
 						dist = glm::length(to_vec2(point) - to_vec2(e.body()->GetPosition()));
 					}
 					return 0;
