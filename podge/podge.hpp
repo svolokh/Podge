@@ -155,6 +155,19 @@ struct public_object_component : object_component {
     };
 
     virtual prop_type property_type(const std::string &prop) const = 0;
+
+    virtual std::string &property_string(const std::string &prop) = 0;
+    virtual const std::string &property_string(const std::string &prop) const = 0;
+    virtual float &property_float(const std::string &prop) = 0;
+    virtual float property_float(const std::string &prop) const = 0;
+    virtual glm::vec4 &property_vec4(const std::string &prop) = 0;
+    virtual const glm::vec4 &property_vec4(const std::string &prop) const = 0;
+    virtual int &property_int(const std::string &prop) = 0;
+    virtual int property_int(const std::string &prop) const = 0;
+    virtual bool &property_bool(const std::string &prop) = 0;
+    virtual bool property_bool(const std::string &prop) const = 0;
+    virtual resource_path &property_resource_path(const std::string &prop) = 0;
+    virtual const resource_path &property_resource_path(const std::string &prop) const = 0;
 };
 
 namespace detail {
@@ -207,6 +220,9 @@ struct public_object_component_impl : object_component_impl<Component, public_ob
     public_object_component::prop_type property_type(const std::string &prop) const {
         boost::optional<public_object_component::prop_type> res;
         hana::for_each(hana::accessors<Component>(), [&prop, &res](auto p) {
+            if(res) {
+                return;
+            }
             constexpr auto name(hana::first(p));
             if(prop == decltype(name)::c_str()) {
                 constexpr auto accessor(hana::second(p));
@@ -219,6 +235,75 @@ struct public_object_component_impl : object_component_impl<Component, public_ob
             PODGE_THROW_ERROR();
         }
         return *res;
+    }
+
+    std::string &property_string(const std::string &prop) {
+        return property<std::string>(prop);
+    }
+
+    const std::string &property_string(const std::string &prop) const {
+        return const_cast<public_object_component_impl *>(this)->property<std::string>(prop);
+    }
+
+    float &property_float(const std::string &prop) {
+        return property<float>(prop);
+    }
+
+    float property_float(const std::string &prop) const {
+        return const_cast<public_object_component_impl *>(this)->property<float>(prop);
+    }
+
+    glm::vec4 &property_vec4(const std::string &prop) {
+        return property<glm::vec4>(prop);
+    }
+
+    const glm::vec4 &property_vec4(const std::string &prop) const {
+        return const_cast<public_object_component_impl *>(this)->property<glm::vec4>(prop);
+    }
+
+    int &property_int(const std::string &prop) {
+        return property<int>(prop);
+    }
+
+    int property_int(const std::string &prop) const {
+        return const_cast<public_object_component_impl *>(this)->property<int>(prop);
+    }
+
+    bool &property_bool(const std::string &prop) {
+        return property<bool>(prop);
+    }
+
+    bool property_bool(const std::string &prop) const {
+        return const_cast<public_object_component_impl *>(this)->property<bool>(prop);
+    }
+
+    resource_path &property_resource_path(const std::string &prop) {
+        return property<resource_path>(prop);
+    }
+
+    const resource_path &property_resource_path(const std::string &prop) const {
+        return const_cast<public_object_component_impl *>(this)->property<resource_path>(prop);
+    }
+
+private:
+    template <typename T>
+    T &property(const std::string &prop) {
+        auto &c(static_cast<Component &>(*this));
+        boost::optional<boost::any> res;
+        hana::for_each(hana::accessors<Component>(), [&prop, &res, &c](auto p) {
+            if(res) {
+                return;
+            }
+            constexpr auto name(hana::first(p));
+            if(prop == decltype(name)::c_str()) {
+                constexpr auto accessor(hana::second(p));
+                res.emplace(&accessor(c));
+            }
+        });
+        if(!res) {
+            PODGE_THROW_ERROR();
+        }
+        return *boost::any_cast<T *>(*res);
     }
 };
 
