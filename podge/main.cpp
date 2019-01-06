@@ -7,25 +7,28 @@
 
 namespace podge {
 
-static void run() {
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-        PODGE_THROW_SDL_ERROR();
+struct game {
+    game() {
+        if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+            PODGE_THROW_SDL_ERROR();
+        }
+        gctx = create_gfx_context();
+        // TODO
     }
-    BOOST_SCOPE_EXIT(void) {
+
+    ~game() {
         SDL_Quit();
-    } BOOST_SCOPE_EXIT_END
+    }
 
-    auto gctx(create_gfx_context());
-    gctx->set_current();
+    std::unique_ptr<gfx_context> gctx;
+};
 
-    auto window(gctx->get_window());
-
-    resource_path tmx_path("levels/demo.tmx");
+static void play_level(const resource_path &tmx_path) {
     pugi::xml_document tmx;
-	auto res(tmx.load_string(get_resource(tmx_path.str()).c_str()));
-	if(!res) {
-            PODGE_THROW_ERROR();
-	}
+    auto res(tmx.load_string(get_resource(tmx_path.str()).c_str()));
+    if(!res) {
+        PODGE_THROW_ERROR();
+    }
 
     for(;;) {
         auto vg(gctx->create_nvg_context());
@@ -127,6 +130,22 @@ static void run() {
     }
 }
 
+static void run() {
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+        PODGE_THROW_SDL_ERROR();
+    }
+    BOOST_SCOPE_EXIT(void) {
+        SDL_Quit();
+    } BOOST_SCOPE_EXIT_END
+
+    auto gctx(create_gfx_context());
+    gctx->set_current();
+
+    auto window(gctx->get_window());
+
+    resource_path tmx_path("levels/demo.tmx");
+}
+
 }
 
 extern "C" {
@@ -138,7 +157,7 @@ int main(int argc, char **argv) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Error: %s", e.what());
         return 1;
     }
-	return 0;
+    return 0;
 }
 
 }

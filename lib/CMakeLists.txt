@@ -2,6 +2,10 @@ include(GNUInstallDirs)
 
 if(NOT PODGE_LIBRARY)
     add_subdirectory(SDL2)
+
+    set(NANOGUISDL_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+    set(NANOGUISDL_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+    add_subdirectory(nanogui-sdl)
 endif()
 
 add_subdirectory(pugixml)

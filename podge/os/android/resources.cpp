@@ -51,6 +51,21 @@ std::string get_resource(const std::string &path) {
 	return std::string(static_cast<const char *>(buf), static_cast<const char *>(buf) + AAsset_getLength(asset));
 }
 
+std::vector<std::string> list_resources(const std::string &path) {
+	std::vector<std::string> res;
+	jni_local_scope scope(16);
+	auto assetmgr(get_asset_manager());
+	auto dir(AAssetManager_openDir(assetmgr, path.c_str()));
+	BOOST_SCOPE_EXIT(dir) {
+		AAssetDir_close(dir);
+	} BOOST_SCOPE_EXIT_END
+	const char *name;
+	while((name = AAssetDir_getNextFileName(dir)) != nullptr) {
+		res.emplace_back(name);
+	}
+	return res;
+}
+
 bool resource_exists(const std::string &path) {
 	jni_local_scope scope(16);
 	auto assetmgr(get_asset_manager());
