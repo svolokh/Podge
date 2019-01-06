@@ -1,10 +1,17 @@
 include(GNUInstallDirs)
 
+function(podge_check_submodule path)
+	if(NOT EXISTS ${path})
+		message(FATAL_ERROR "missing submodule '${path}', please run `git submodule update --init --recursive`")
+	endif()
+endfunction()
+
 if(NOT PODGE_LIBRARY)
     add_subdirectory(SDL2)
 
     set(NANOGUISDL_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
     set(NANOGUISDL_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+	podge_check_submodule(nanogui-sdl)
     add_subdirectory(nanogui-sdl)
 endif()
 
