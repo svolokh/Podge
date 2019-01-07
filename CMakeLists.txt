@@ -113,7 +113,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 	target_compile_options(podge PRIVATE -O3)
 endif()
 
-target_compile_options(podge PRIVATE -Werror -Wall -Wno-logical-op-parentheses -Wno-unused-local-typedef -Wno-error-unused-variable -Wno-error-unused-local-typedef -Wno-error-unused-function)
+target_compile_options(podge PRIVATE -Werror -Wall -Wno-logical-op-parentheses -Wno-unused-local-typedef -Wno-unused-variable -Wno-error-unused-local-typedef -Wno-error-unused-function)
 
 if(PODGE_LIBRARY)
 	install(TARGETS podge
