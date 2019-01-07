@@ -1,19 +1,28 @@
 cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
-project(podge C CXX)
 
-add_subdirectory(lib)
+project(podge C CXX)
 
 option(PODGE_LIBRARY "compile Podge as a library" OFF)
 
-set(PODGE_GENERATED_SOURCES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
-file(MAKE_DIRECTORY "${PODGE_GENERATED_SOURCES_DIR}")
+# place to copy headers to satisfy libraries' expectations about where headers should be
+set(PODGE_HEADERS_MIRROR_DIR ${CMAKE_CURRENT_BINARY_DIR}/headers_mirror)
+if(EXISTS ${PODGE_HEADERS_MIRROR_DIR})
+    file(REMOVE_RECURSE ${PODGE_HEADERS_MIRROR_DIR})
+endif()
+file(MAKE_DIRECTORY ${PODGE_HEADERS_MIRROR_DIR})
+include_directories(${PODGE_HEADERS_MIRROR_DIR})
 
-file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/aux/gen_systems.py" PODGE_GEN_SYSTEMS)
-file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/aux/gen_types.py" PODGE_GEN_TYPES)
-file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/podge/systems.json" PODGE_SYSTEMS)
-file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/podge/types.json" PODGE_TYPES)
-file(TO_NATIVE_PATH "${PODGE_GENERATED_SOURCES_DIR}/systems.inl" PODGE_SYSTEMS_INL)
-file(TO_NATIVE_PATH "${PODGE_GENERATED_SOURCES_DIR}/types.inl" PODGE_TYPES_INL)
+add_subdirectory(lib)
+
+set(PODGE_GENERATED_SOURCES_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated)
+file(MAKE_DIRECTORY ${PODGE_GENERATED_SOURCES_DIR})
+
+file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/aux/gen_systems.py PODGE_GEN_SYSTEMS)
+file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/aux/gen_types.py PODGE_GEN_TYPES)
+file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/podge/systems.json PODGE_SYSTEMS)
+file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/podge/types.json PODGE_TYPES)
+file(TO_NATIVE_PATH ${PODGE_GENERATED_SOURCES_DIR}/systems.inl PODGE_SYSTEMS_INL)
+file(TO_NATIVE_PATH ${PODGE_GENERATED_SOURCES_DIR}/types.inl PODGE_TYPES_INL)
 
 set(PODGE_ROOT_HEADERS
 	podge/podge.hpp
@@ -30,18 +39,18 @@ set(PODGE_HEADERS ${PODGE_ROOT_HEADERS} ${PODGE_OS_HEADERS})
 
 set(PODGE_SOURCES
 	podge/podge.cpp
-	"${PODGE_SYSTEMS_INL}"
-	"${PODGE_TYPES_INL}")
+	${PODGE_SYSTEMS_INL}
+	${PODGE_TYPES_INL})
 
 add_custom_command(
-	OUTPUT "${PODGE_SYSTEMS_INL}" 
-	COMMAND python "${PODGE_GEN_SYSTEMS}" "${PODGE_SYSTEMS}" "${PODGE_SYSTEMS_INL}"
-	DEPENDS "${PODGE_SYSTEMS}" ${PODGE_HEADERS} "${PODGE_GEN_SYSTEMS}")
+	OUTPUT ${PODGE_SYSTEMS_INL}
+	COMMAND python ${PODGE_GEN_SYSTEMS} ${PODGE_SYSTEMS} ${PODGE_SYSTEMS_INL}
+	DEPENDS ${PODGE_SYSTEMS} ${PODGE_HEADERS} ${PODGE_GEN_SYSTEMS})
 
 add_custom_command(
-	OUTPUT "${PODGE_TYPES_INL}"
-	COMMAND python "${PODGE_GEN_TYPES}" "${PODGE_TYPES}" "${PODGE_TYPES_INL}"
-	DEPENDS "${PODGE_TYPES}" ${PODGE_HEADERS} "${PODGE_GEN_TYPES}")
+	OUTPUT ${PODGE_TYPES_INL}
+	COMMAND python ${PODGE_GEN_TYPES} ${PODGE_TYPES} ${PODGE_TYPES_INL}
+	DEPENDS ${PODGE_TYPES} ${PODGE_HEADERS} ${PODGE_GEN_TYPES})
 
 if(ANDROID)
 	list(APPEND PODGE_SOURCES
@@ -85,8 +94,16 @@ endif()
 
 if(NOT PODGE_LIBRARY)
 	target_include_directories(podge PRIVATE
-		lib/SDL2/include)
+		lib/SDL2/include
+		lib/nuklear)
 	target_link_libraries(podge SDL2main SDL2)
+
+	if(ANDROID)
+		target_include_directories(podge PRIVATE
+			lib/nuklear/demo/sdl_opengles2)
+	else()
+		message(FATAL_ERROR)
+	endif()
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

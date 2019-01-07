@@ -1,18 +1,16 @@
 include(GNUInstallDirs)
 
-function(podge_check_submodule path)
-	if(NOT EXISTS ${path})
-		message(FATAL_ERROR "missing submodule '${path}', please run `git submodule update --init --recursive`")
-	endif()
+function(podge_check_submodule name path)
+    if(NOT EXISTS ${path})
+	message(FATAL_ERROR "missing submodule '${name}', please run `git submodule update --init --recursive`")
+    endif()
 endfunction()
 
 if(NOT PODGE_LIBRARY)
-    add_subdirectory(SDL2)
-
-    set(NANOGUISDL_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
-    set(NANOGUISDL_BUILD_SHARED OFF CACHE BOOL "" FORCE)
-	podge_check_submodule(nanogui-sdl)
-    add_subdirectory(nanogui-sdl)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/SDL2)
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/SDL2/include DESTINATION ${PODGE_HEADERS_MIRROR_DIR})
+    file(RENAME ${PODGE_HEADERS_MIRROR_DIR}/include ${PODGE_HEADERS_MIRROR_DIR}/SDL2)
+    podge_check_submodule(nuklear ${CMAKE_CURRENT_SOURCE_DIR}/nuklear)
 endif()
 
 add_subdirectory(pugixml)
