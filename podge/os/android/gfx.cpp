@@ -123,7 +123,9 @@ android_gfx_context::android_gfx_context() :
 			auto roboto(nk_font_atlas_add_from_memory(atlas, const_cast<char *>(roboto_ttf.data()), roboto_ttf.size(), 16, nullptr));
 			nk_sdl_font_stash_end();
 			nk_style_set_font(nk_ctx, &roboto->handle);
+			nk_style_hide_cursor(nk_ctx);
 		}
+		nk_style_hide_cursor(nk_ctx);
 	} catch(...) {
 		if(nk_ctx != nullptr) {
 			nk_sdl_shutdown();
@@ -186,6 +188,10 @@ struct nk_context *android_gfx_context::nk_context() {
 
 void android_gfx_context::nk_begin() {
 	nk_ctx->delta_time_seconds = SDL_GetTicks()/1000.0f;
+
+	// move the "mouse" off-screen at the start of each frame (there is no persistent cursor on a touch screen)
+	nk_ctx->input.mouse.pos = nk_vec2(-1.0f, -1.0f);
+	nk_ctx->input.mouse.prev = nk_vec2(-1.0f, -1.0f);
 }
 
 void android_gfx_context::nk_handle_event(SDL_Event *evt) {

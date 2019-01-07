@@ -28,13 +28,15 @@ resource_path game::choose_level() {
     auto tmxs(list_resources("levels"));
     SDL_Event event;
     for(;;) {
+        gctx->nk_begin();
+        nk_input_begin(ctx);
         while(SDL_PollEvent(&event)) {
             gctx->nk_handle_event(&event);
         }
+        nk_input_end(ctx);
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
-        gctx->nk_begin();
-        if(nk_begin(ctx, "Level Select", nk_rect(16, 16, w - 32, h - 32), NK_WINDOW_TITLE | NK_WINDOW_BORDER)) {
+        if(nk_begin(ctx, "Level Select", nk_rect(16, 16, w - 32, h - 32), NK_WINDOW_TITLE | NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR)) {
             nk_layout_row_dynamic(ctx, 30, 1);
             for(const auto &tmx : tmxs) {
                 if(nk_button_label(ctx, tmx.c_str())) {
