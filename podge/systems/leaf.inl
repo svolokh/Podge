@@ -117,10 +117,12 @@ struct system : entity_system {
 	}
 
 	bool handle_input(entity &e, const input &in) const {
-		auto &pc(e.component<private_component>());
-		if(!pc.st.t && pc.st.counter > 0 && util::point_in_body(e.body(), b2Vec2(in.x, in.y))) {
-			pc.st.t.emplace(0.0f);
-			return true;
+		if(in.type == input::DOWN) {
+			auto &pc(e.component<private_component>());
+			if(!pc.st.t && pc.st.counter > 0 && util::point_in_body(e.body(), b2Vec2(in.x, in.y))) {
+				pc.st.t.emplace(0.0f);
+				return true;
+			}
 		}
 		return false;
 	}
