@@ -54,8 +54,12 @@ add_custom_command(
 
 if(ANDROID)
 	list(APPEND PODGE_SOURCES
-		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/android/gfx_opengles2.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/gfx_opengles2.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/android/resources.cpp)
+elseif(IOS)
+	list(APPEND PODGE_SOURCES
+		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/gfx_opengles2.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/ios/resources.mm)
 else()
 	if(NOT PODGE_LIBRARY)
 		message(FATAL_ERROR "Podge can only be compiled with PODGE_LIBRARY on this platform.")
@@ -90,6 +94,8 @@ target_link_libraries(podge pugixml Box2D nanovg)
 
 if(ANDROID)
 	target_link_libraries(podge GLESv2)
+elseif(IOS)
+	target_link_libraries(podge "-framework OpenGLES.framework")
 endif()
 
 if(NOT PODGE_LIBRARY)
@@ -98,7 +104,7 @@ if(NOT PODGE_LIBRARY)
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/nuklear)
 	target_link_libraries(podge SDL2main SDL2)
 
-	if(ANDROID)
+	if(ANDROID OR IOS)
 		target_include_directories(podge PRIVATE
 			${CMAKE_CURRENT_SOURCE_DIR}/lib/nuklear/demo/sdl_opengles2)
 	else()
