@@ -1,8 +1,6 @@
 #define BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS
 #include "../resources.hpp"
 
-#include <boost/scope_exit.hpp>
-
 #include <fstream>
 #include <dirent.h>
 

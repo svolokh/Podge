@@ -1,21 +1,34 @@
 #define BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS
-
-#include "../../common.hpp"
 #include "../resources.hpp"
 
-#include <SDL.h>
-#include <SDL_system.h>
 #include <boost/scope_exit.hpp>
+
+#include <fstream>
+#include <dirent.h>
+
+#define PODGE_ASSETS_PREFIX "assets/"
 
 namespace podge {
 
 std::string get_resource(const std::string &path) {
+    std::ifstream ifs(PODGE_ASSETS_PREFIX + path, std::ios::binary);
+    return std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
 }
 
 std::vector<std::string> list_resources(const std::string &path) {
+    std::vector<std::string> res;
+	auto realpath(PODGE_ASSETS_PREFIX + path);
+    auto dp(opendir(realpath.c_str()));
+    struct dirent *ent;
+    while((ent = readdir(dp)) != nullptr) {
+        res.emplace_back(ent->d_name);
+    }
+    return res;
 }
 
 bool resource_exists(const std::string &path) {
+    std::ifstream ifs(PODGE_ASSETS_PREFIX + path, std::ios::binary);
+    return !ifs.fail();
 }
 
 }

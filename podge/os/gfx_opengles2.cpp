@@ -6,7 +6,7 @@
 #define NK_IMPLEMENTATION
 #define NK_SDL_GLES2_IMPLEMENTATION
 
-#include "../../common.hpp"
+#include "../common.hpp"
 
 #include <os/gfx.hpp>
 #include <os/resources.hpp>
