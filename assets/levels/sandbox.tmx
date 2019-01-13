@@ -7,7 +7,7 @@
  <tileset firstgid="30" source="../tilesets/barrels.tsx"/>
  <tileset firstgid="31" source="../tilesets/balloons.tsx"/>
  <tileset firstgid="32" source="../tilesets/spikes.tsx"/>
- <tileset firstgid="34" source="../tilesets/npcs.tsx"/>
+ <tileset firstgid="34" source="../tilesets/bump_bat.tsx"/>
  <tileset firstgid="35" source="../tilesets/leaf.tsx"/>
  <objectgroup name="BackgroundObject">
   <object id="368" gid="2147483683" x="576" y="1664" width="320" height="128">

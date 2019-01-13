@@ -7,10 +7,10 @@ function(podge_check_submodule name path)
 endfunction()
 
 if(NOT PODGE_LIBRARY)
+    podge_check_submodule(nuklear ${CMAKE_CURRENT_SOURCE_DIR}/nuklear/nuklear.h)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/SDL2)
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/SDL2/include DESTINATION ${PODGE_HEADERS_MIRROR_DIR})
     file(RENAME ${PODGE_HEADERS_MIRROR_DIR}/include ${PODGE_HEADERS_MIRROR_DIR}/SDL2)
-    podge_check_submodule(nuklear ${CMAKE_CURRENT_SOURCE_DIR}/nuklear)
 endif()
 
 add_subdirectory(pugixml)

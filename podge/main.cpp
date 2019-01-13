@@ -23,15 +23,16 @@ game::game() :
 }
 
 resource_path game::choose_level() {
-    auto ctx(gctx->nk_context());
+    auto pctx(gctx->new_nk_context());
+    auto ctx(pctx.get());
     auto window(gctx->window());
     auto tmxs(list_resources("levels"));
     SDL_Event event;
     for(;;) {
-        gctx->nk_begin();
+        gctx->nk_begin(ctx);
         nk_input_begin(ctx);
         while(SDL_PollEvent(&event)) {
-            gctx->nk_handle_event(&event);
+            gctx->nk_handle_event(ctx, &event);
         }
         nk_input_end(ctx);
         int w, h;
@@ -40,15 +41,13 @@ resource_path game::choose_level() {
             nk_layout_row_dynamic(ctx, 30, 1);
             for(const auto &tmx : tmxs) {
                 if(nk_button_label(ctx, tmx.c_str())) {
-                    nk_end(ctx);
-                    nk_clear(ctx);
                     return resource_path("levels")/tmx;
                 }
                 nk_button_set_behavior(ctx, NK_BUTTON_DEFAULT);
             }
         }
         nk_end(ctx);
-        gctx->nk_end(glm::vec4(0.3f, 0.3f, 0.3f, 1.0f));
+        gctx->nk_end(ctx, glm::vec4(0.3f, 0.3f, 0.3f, 1.0f));
     }
     PODGE_THROW_ERROR();
 }
@@ -60,7 +59,8 @@ level_exit game::play_level(const resource_path &tmx_path) {
         PODGE_THROW_ERROR();
     }
 
-    auto vg(gctx->nvg_context());
+    auto pvg(gctx->new_nvg_context());
+    auto vg(pvg.get());
     auto window(gctx->window());
 
     level lvl(vg, tmx, 1.0f/60.0f, tmx_path.parent());
@@ -137,12 +137,12 @@ level_exit game::play_level(const resource_path &tmx_path) {
         int winWidth, winHeight;
         SDL_GetWindowSize(window, &winWidth, &winHeight);
         auto campos(lvl.camera_position());
-        gctx->nvg_begin(lvl.bg_color());
+        gctx->nvg_begin(vg, lvl.bg_color());
         nvgTranslate(vg, winWidth/2.0f, winHeight/2.0f);
         nvgScale(vg, winWidth/lvl.camera_width(), -winHeight/lvl.camera_height());
         nvgTranslate(vg, -campos.x, -campos.y);
         lvl.render();
-        gctx->nvg_end();
+        gctx->nvg_end(vg);
     }
     return *lvl.exit_state();
 }

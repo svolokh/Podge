@@ -7,7 +7,7 @@ option(PODGE_LIBRARY "compile Podge as a library" OFF)
 # place to copy headers to satisfy libraries' expectations about where headers should be
 set(PODGE_HEADERS_MIRROR_DIR ${CMAKE_CURRENT_BINARY_DIR}/headers_mirror)
 if(EXISTS ${PODGE_HEADERS_MIRROR_DIR})
-    file(REMOVE_RECURSE ${PODGE_HEADERS_MIRROR_DIR})
+	file(REMOVE_RECURSE ${PODGE_HEADERS_MIRROR_DIR})
 endif()
 file(MAKE_DIRECTORY ${PODGE_HEADERS_MIRROR_DIR})
 include_directories(${PODGE_HEADERS_MIRROR_DIR})
@@ -25,20 +25,20 @@ file(TO_NATIVE_PATH ${PODGE_GENERATED_SOURCES_DIR}/systems.inl PODGE_SYSTEMS_INL
 file(TO_NATIVE_PATH ${PODGE_GENERATED_SOURCES_DIR}/types.inl PODGE_TYPES_INL)
 
 set(PODGE_ROOT_HEADERS
-	podge/podge.hpp
-	podge/common.hpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/podge/podge.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/podge/common.hpp)
 set(PODGE_OS_HEADERS
-	podge/os/resources.hpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/podge/os/resources.hpp)
 
 if(NOT PODGE_LIBRARY)
 	list(APPEND PODGE_OS_HEADERS
-		podge/os/gfx.hpp)
+		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/gfx.hpp)
 endif()
 
 set(PODGE_HEADERS ${PODGE_ROOT_HEADERS} ${PODGE_OS_HEADERS})
 
 set(PODGE_SOURCES
-	podge/podge.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/podge/podge.cpp
 	${PODGE_SYSTEMS_INL}
 	${PODGE_TYPES_INL})
 
@@ -54,19 +54,19 @@ add_custom_command(
 
 if(ANDROID)
 	list(APPEND PODGE_SOURCES
-		podge/os/android/gfx.cpp
-		podge/os/android/resources.cpp)
+		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/android/gfx.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/android/resources.cpp)
 else()
 	if(NOT PODGE_LIBRARY)
 		message(FATAL_ERROR "Podge can only be compiled with PODGE_LIBRARY on this platform.")
 	endif()
 	list(APPEND PODGE_SOURCES
-		podge/os/generic/resources.cpp)
+		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/generic/resources.cpp)
 endif()
 
 if(NOT PODGE_LIBRARY)
 	list(APPEND PODGE_SOURCES 
-		podge/main.cpp)
+		${CMAKE_CURRENT_SOURCE_DIR}/podge/main.cpp)
 endif()
 
 if(PODGE_LIBRARY)
@@ -77,15 +77,15 @@ endif()
 
 set_property(TARGET podge PROPERTY CXX_STANDARD 14)
 target_include_directories(podge PRIVATE 
-	podge
+	${CMAKE_CURRENT_SOURCE_DIR}/podge
 	${CMAKE_CURRENT_BINARY_DIR}/generated
-	lib/easy_profiler/easy_profiler_core/include
-	lib/glm
-	lib/pugixml/src
-	lib/boost
-	lib/liquidfun/Box2D
-	lib/json/single_include
-	lib/nanovg/src)
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/easy_profiler/easy_profiler_core/include
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/glm
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/pugixml/src
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/boost
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/liquidfun/Box2D
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/json/single_include
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/nanovg/src)
 target_link_libraries(podge pugixml Box2D nanovg)
 
 if(ANDROID)
@@ -94,13 +94,13 @@ endif()
 
 if(NOT PODGE_LIBRARY)
 	target_include_directories(podge PRIVATE
-		lib/SDL2/include
-		lib/nuklear)
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/include
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/nuklear)
 	target_link_libraries(podge SDL2main SDL2)
 
 	if(ANDROID)
 		target_include_directories(podge PRIVATE
-			lib/nuklear/demo/sdl_opengles2)
+			${CMAKE_CURRENT_SOURCE_DIR}/lib/nuklear/demo/sdl_opengles2)
 	else()
 		message(FATAL_ERROR)
 	endif()
