@@ -11,13 +11,17 @@
 #include <os/gfx.hpp>
 #include <os/resources.hpp>
 #include <stb_image.h>
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#include <SDL_opengles2.h>
+#include <SDL.h>
 #include <nanovg_gl.h>
 #include <map>
-#include <SDL.h>
 
-// Hack macro to allow Podge and its dependencies to assume 96 DPI (primarily for the sake of nuklear)
+#if defined(__IPHONEOS__) || defined(__MACOSX__)
+#define PODGE_SUPPORTS_HIGHPDI
+#endif
+
+#ifndef PODGE_SUPPORTS_HIGHDPI
+// Hack macro to allow Podge and its dependencies to assume 96 DPI (primarily for the sake of nuklear) on platforms that don't support SDL_WINDOW_ALLOW_HIGHDPI
 #define SDL_GL_GetDrawableSize(WINDOW, W, H) Podge_SDL_GL_GetDrawableSize(WINDOW, W, H)
 
 static std::map<SDL_Window *, std::pair<int, int>> podge_fb_sizes;
@@ -29,6 +33,7 @@ static void Podge_SDL_GL_GetDrawableSize(SDL_Window *window, int *w, int *h) {
 	*w = dim.first;
 	*h = dim.second;
 }
+#endif
 
 #include <nuklear_sdl_gles2.h>
 
@@ -45,9 +50,9 @@ void nk_context_deleter::operator()(struct nk_context *ctx) const {
 	current_nk_context = nullptr;
 }
 
-struct android_gfx_context : gfx_context {
-	android_gfx_context();
-	~android_gfx_context();
+struct gl_gfx_context : gfx_context {
+	gl_gfx_context();
+	~gl_gfx_context();
 
 	void set_current();
 	SDL_Window *window();
@@ -64,7 +69,7 @@ private:
 	SDL_GLContext gl_ctx;
 };
 
-android_gfx_context::android_gfx_context() :
+gl_gfx_context::gl_gfx_context() :
 	sdl_window(nullptr),
 	gl_ctx(nullptr)
 {
@@ -73,12 +78,17 @@ android_gfx_context::android_gfx_context() :
 			PODGE_THROW_SDL_ERROR();
 		}
 
-		sdl_window = SDL_CreateWindow("Podge", 0, 0, 0, 0, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+		auto window_flags(SDL_WINDOW_OPENGL);
+#ifdef PODGE_SUPPORTS_HIGHDPI
+		window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
+#endif
+		sdl_window = SDL_CreateWindow("Podge", 0, 0, 0, 0, window_flags);
 		if(sdl_window == nullptr) {
 			PODGE_THROW_SDL_ERROR();
 		}
 
-		// set up high-DPI rendering
+#ifndef PODGE_SUPPORTS_HIGHDPI
+		// set up high-DPI rendering for platforms that doesn't support SDL_WINDOW_ALLOW_HIGHDPI
 		{
 			float hdpi;
 			if(SDL_GetDisplayDPI(0, nullptr, &hdpi, nullptr) < 0) {
@@ -92,6 +102,7 @@ android_gfx_context::android_gfx_context() :
 			h = int(h * scale);
 			SDL_SetWindowSize(sdl_window, w, h);
 		}
+#endif
 
 		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) < 0) {
 			PODGE_THROW_SDL_ERROR();
@@ -124,24 +135,24 @@ android_gfx_context::android_gfx_context() :
 	}
 } 
 
-android_gfx_context::~android_gfx_context() {
+gl_gfx_context::~gl_gfx_context() {
 	podge_fb_sizes.erase(sdl_window);
 	SDL_GL_DeleteContext(gl_ctx);
 	SDL_DestroyWindow(sdl_window);
 	SDL_Quit();
 }
 
-void android_gfx_context::set_current() {
+void gl_gfx_context::set_current() {
 	if(SDL_GL_MakeCurrent(sdl_window, gl_ctx) < 0) {
 		PODGE_THROW_SDL_ERROR();
 	}
 }
 
-SDL_Window *android_gfx_context::window() {
+SDL_Window *gl_gfx_context::window() {
 	return sdl_window;
 }
 
-nvg_context_ptr android_gfx_context::new_nvg_context() {
+nvg_context_ptr gl_gfx_context::new_nvg_context() {
 	auto flags(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 #if defined(DEBUG)
 	flags |= NVG_DEBUG;
@@ -149,7 +160,7 @@ nvg_context_ptr android_gfx_context::new_nvg_context() {
 	return nvg_context_ptr(nvgCreateGLES2(flags));
 }
 
-void android_gfx_context::nvg_begin(NVGcontext *ctx, const glm::vec4 &bg_color) {
+void gl_gfx_context::nvg_begin(NVGcontext *ctx, const glm::vec4 &bg_color) {
 	int fbWidth, fbHeight;
 	int winWidth, winHeight;
 	SDL_GL_GetDrawableSize(sdl_window, &fbWidth, &fbHeight);
@@ -161,12 +172,12 @@ void android_gfx_context::nvg_begin(NVGcontext *ctx, const glm::vec4 &bg_color) 
 	nvgBeginFrame(ctx, winWidth, winHeight, pxRatio);
 }
 
-void android_gfx_context::nvg_end(NVGcontext *ctx) { 
+void gl_gfx_context::nvg_end(NVGcontext *ctx) { 
 	nvgEndFrame(ctx);
 	SDL_GL_SwapWindow(sdl_window);
 }
 
-nk_context_ptr android_gfx_context::new_nk_context() {
+nk_context_ptr gl_gfx_context::new_nk_context() {
 	assert(current_nk_context == nullptr); // only one SDL nuklear context can be present at a time due to globals
 	nk_context_ptr ptr(nk_sdl_init(sdl_window));
 	auto ctx(ptr.get());
@@ -181,7 +192,7 @@ nk_context_ptr android_gfx_context::new_nk_context() {
 	return ptr;
 }
 
-void android_gfx_context::nk_begin(struct nk_context *ctx) {
+void gl_gfx_context::nk_begin(struct nk_context *ctx) {
 	assert(ctx == current_nk_context);
 	ctx->delta_time_seconds = SDL_GetTicks()/1000.0f;
 
@@ -190,12 +201,12 @@ void android_gfx_context::nk_begin(struct nk_context *ctx) {
 	ctx->input.mouse.prev = nk_vec2(-1.0f, -1.0f);
 }
 
-void android_gfx_context::nk_handle_event(struct nk_context *ctx, SDL_Event *evt) {
+void gl_gfx_context::nk_handle_event(struct nk_context *ctx, SDL_Event *evt) {
 	assert(ctx == current_nk_context);
 	nk_sdl_handle_event(evt);
 }
 
-void android_gfx_context::nk_end(struct nk_context *ctx, const glm::vec4 &bg_color) {
+void gl_gfx_context::nk_end(struct nk_context *ctx, const glm::vec4 &bg_color) {
 	assert(ctx == current_nk_context);
 	glClearColor(bg_color[0], bg_color[1], bg_color[2], bg_color[3]);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -204,7 +215,7 @@ void android_gfx_context::nk_end(struct nk_context *ctx, const glm::vec4 &bg_col
 }
 
 std::unique_ptr<gfx_context> create_gfx_context() {
-	return std::unique_ptr<gfx_context>(new android_gfx_context());
+	return std::unique_ptr<gfx_context>(new gl_gfx_context());
 }
 
 }

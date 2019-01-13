@@ -54,7 +54,7 @@ add_custom_command(
 
 if(ANDROID)
 	list(APPEND PODGE_SOURCES
-		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/android/gfx.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/android/gfx_opengles2.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/android/resources.cpp)
 else()
 	if(NOT PODGE_LIBRARY)
