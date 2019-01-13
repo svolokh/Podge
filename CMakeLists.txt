@@ -123,6 +123,8 @@ elseif(IOS)
 	podge_find_framework(AVFoundation PODGE_AVFOUNDATION_FRAMEWORK)
 	podge_find_framework(UIKit PODGE_UIKIT_FRAMEWORK)
 	target_link_libraries(podge ${PODGE_OPENGLES_FRAMEWORK} ${PODGE_AVFOUNDATION_FRAMEWORK} ${PODGE_UIKIT_FRAMEWORK})
+else()
+	message(FATAL_ERROR)
 endif()
 
 if(NOT PODGE_LIBRARY)
