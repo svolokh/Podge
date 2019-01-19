@@ -3,6 +3,7 @@
 
 #include <boost/scope_exit.hpp>
 
+#include <cstring>
 #include <fstream>
 #include <dirent.h>
 
@@ -17,10 +18,13 @@ std::string get_resource(const std::string &path) {
 
 std::vector<std::string> list_resources(const std::string &path) {
     std::vector<std::string> res;
-	auto realpath(PODGE_ASSETS_PREFIX + path);
+    auto realpath(PODGE_ASSETS_PREFIX + path);
     auto dp(opendir(realpath.c_str()));
     struct dirent *ent;
     while((ent = readdir(dp)) != nullptr) {
+        if(std::strcmp(ent->d_name, ".") == 0 || std::strcmp(ent->d_name, "..") == 0) {
+            continue;
+        }
         res.emplace_back(ent->d_name);
     }
     return res;

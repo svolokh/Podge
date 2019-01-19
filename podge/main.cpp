@@ -2,6 +2,7 @@
 #include "os/gfx.hpp"
 #include "os/resources.hpp"
 
+#include <SDL_main.h>
 #include <SDL.h>
 #include <nuklear.h>
 #include <boost/scope_exit.hpp>

@@ -1,6 +1,11 @@
 #if !defined(OS_GFX_HPP_)
 #define OS_GFX_HPP_
 
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_FIXED_TYPES
+#define NK_INCLUDE_FONT_BAKING
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+
 #include "../common.hpp"
 
 #include <memory>

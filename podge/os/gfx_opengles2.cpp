@@ -1,8 +1,4 @@
 #define NANOVG_GLES2_IMPLEMENTATION
-#define NK_INCLUDE_DEFAULT_ALLOCATOR
-#define NK_INCLUDE_FIXED_TYPES
-#define NK_INCLUDE_FONT_BAKING
-#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
 #define NK_IMPLEMENTATION
 #define NK_SDL_GLES2_IMPLEMENTATION
 
@@ -17,7 +13,7 @@
 #include <map>
 
 #if defined(__IPHONEOS__) || defined(__MACOSX__)
-#define PODGE_SUPPORTS_HIGHPDI
+#define PODGE_SUPPORTS_HIGHDPI
 #endif
 
 #ifndef PODGE_SUPPORTS_HIGHDPI
@@ -78,7 +74,7 @@ gl_gfx_context::gl_gfx_context() :
 			PODGE_THROW_SDL_ERROR();
 		}
 
-		auto window_flags(SDL_WINDOW_OPENGL);
+		int window_flags(SDL_WINDOW_OPENGL);
 #ifdef PODGE_SUPPORTS_HIGHDPI
 		window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 #endif
@@ -136,7 +132,9 @@ gl_gfx_context::gl_gfx_context() :
 } 
 
 gl_gfx_context::~gl_gfx_context() {
+#ifndef PODGE_SUPPORTS_HIGHDPI
 	podge_fb_sizes.erase(sdl_window);
+#endif
 	SDL_GL_DeleteContext(gl_ctx);
 	SDL_DestroyWindow(sdl_window);
 	SDL_Quit();
