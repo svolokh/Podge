@@ -1,1 +1,0 @@
-There are some Podge-specific changes we need to make to the SDL2 source tree that we probably won't be able to contribute through Bugzilla. We put all these changes here and attempt to apply them on top of the untouched SDL2 submodule when compiling Podge.
