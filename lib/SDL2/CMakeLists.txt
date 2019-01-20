@@ -338,6 +338,7 @@ dep_option(KMSDRM_SHARED       "Dynamically load KMS DRM support" ON "VIDEO_KMSD
 # The options below are for compatibility to configure's default behaviour.
 set(SDL_SHARED ${SDL_SHARED_ENABLED_BY_DEFAULT} CACHE BOOL "Build a shared version of the library")
 set(SDL_STATIC ON CACHE BOOL "Build a static version of the library")
+set(SDL_SKIP_CONFIGURE OFF CACHE BOOL "skip compiler checks and generating SDL_config.h (you'll need to manually copy it in)") 
 
 dep_option(SDL_STATIC_PIC      "Static version of the library should be built with Position Independent Code" OFF "SDL_STATIC" OFF)
 set_option(SDL_TEST            "Build the test directory" OFF)
@@ -376,6 +377,7 @@ else()
 endif()
 set(HAVE_ASSERTIONS ${ASSERTIONS})
 
+if(NOT SDL_SKIP_CONFIGURE)
 # Compiler option evaluation
 if(USE_GCC OR USE_CLANG)
   # Check for -Wall first, so later things can override pieces of it.
@@ -722,7 +724,7 @@ else()
     set(HAVE_STDDEF_H 1)
   endif()
 endif()
-
+endif(NOT SDL_SKIP_CONFIGURE)
 
 # Enable/disable various subsystems of the SDL library
 foreach(_SUB ${SDL_SUBSYSTEMS})
@@ -1390,7 +1392,9 @@ elseif(APPLE)
     set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
     set(HAVE_SDL_JOYSTICK TRUE)
     set(SDL_FRAMEWORK_IOKIT 1)
-    set(SDL_FRAMEWORK_FF 1)
+    if(NOT IOS)
+      set(SDL_FRAMEWORK_FF 1)
+    endif()
   endif()
 
   if(SDL_HAPTIC)
@@ -1404,10 +1408,17 @@ elseif(APPLE)
     set(SOURCE_FILES ${SOURCE_FILES} ${HAPTIC_SOURCES})
     set(HAVE_SDL_HAPTIC TRUE)
     set(SDL_FRAMEWORK_IOKIT 1)
-    set(SDL_FRAMEWORK_FF 1)
+    if(NOT IOS)
+      set(SDL_FRAMEWORK_FF 1)
+    endif()
     if(NOT SDL_JOYSTICK)
       message(FATAL_ERROR "SDL_HAPTIC requires SDL_JOYSTICK to be enabled")
     endif()
+  endif()
+  
+  if(SDL_SENSOR)
+    file(GLOB SENSOR_SOURCES ${SDL2_SOURCE_DIR}/src/sensor/coremotion/*.m)
+    set(SOURCE_FILES ${SOURCE_FILES} ${SENSOR_SOURCES})
   endif()
 
   if(SDL_POWER)
