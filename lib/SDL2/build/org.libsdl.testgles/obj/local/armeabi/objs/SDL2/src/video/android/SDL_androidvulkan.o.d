@@ -1,0 +1,24 @@
+./obj/local/armeabi/objs/SDL2/src/video/android/SDL_androidvulkan.o: \
+  jni/SDL/src/video/android/SDL_androidvulkan.c \
+  jni/SDL/src/video/android/../../SDL_internal.h \
+  jni/SDL/src/video/android/../../dynapi/SDL_dynapi.h \
+  jni/SDL/src/video/android/../../dynapi/SDL_dynapi_overrides.h \
+  jni/SDL/include/SDL_config.h jni/SDL/include/SDL_platform.h \
+  jni/SDL/include/begin_code.h jni/SDL/include/close_code.h \
+  jni/SDL/include/SDL_config_android.h
+
+jni/SDL/src/video/android/../../SDL_internal.h:
+
+jni/SDL/src/video/android/../../dynapi/SDL_dynapi.h:
+
+jni/SDL/src/video/android/../../dynapi/SDL_dynapi_overrides.h:
+
+jni/SDL/include/SDL_config.h:
+
+jni/SDL/include/SDL_platform.h:
+
+jni/SDL/include/begin_code.h:
+
+jni/SDL/include/close_code.h:
+
+jni/SDL/include/SDL_config_android.h:
