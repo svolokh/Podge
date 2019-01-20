@@ -61,6 +61,9 @@ struct gl_gfx_context : gfx_context {
 	void nk_end(struct nk_context *ctx, const glm::vec4 &bg_color);
 
 private:
+	void update_window_size();
+
+private:
 	SDL_Window *sdl_window;
 	SDL_GLContext gl_ctx;
 };
@@ -83,23 +86,6 @@ gl_gfx_context::gl_gfx_context() :
 			PODGE_THROW_SDL_ERROR();
 		}
 
-#ifndef PODGE_SUPPORTS_HIGHDPI
-		// set up high-DPI rendering for platforms that doesn't support SDL_WINDOW_ALLOW_HIGHDPI
-		{
-			float hdpi;
-			if(SDL_GetDisplayDPI(0, nullptr, &hdpi, nullptr) < 0) {
-				PODGE_THROW_SDL_ERROR();
-			}
-			auto scale(96.0f/hdpi);
-			int w, h;
-			SDL_GetWindowSize(sdl_window, &w, &h);
-			podge_fb_sizes.emplace(sdl_window, std::make_pair(w, h));
-			w = int(w * scale);
-			h = int(h * scale);
-			SDL_SetWindowSize(sdl_window, w, h);
-		}
-#endif
-
 		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) < 0) {
 			PODGE_THROW_SDL_ERROR();
 		}
@@ -107,6 +93,16 @@ gl_gfx_context::gl_gfx_context() :
 		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) < 0) {
 			PODGE_THROW_SDL_ERROR();
 		}
+
+#ifndef PODGE_SUPPORTS_HIGHDPI
+		{
+			// store framebuffer size for later (SDL_GetWindowSize gives the framebuffer size when SDL_WINDOW_ALLOW_HIGHDPI is not supported)
+			int w, h;
+			SDL_GetWindowSize(sdl_window, &w, &h);
+			podge_fb_sizes.emplace(sdl_window, std::make_pair(w, h));
+		}
+		update_window_size();
+#endif
 
 		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES) < 0) {
 			PODGE_THROW_SDL_ERROR();
@@ -159,6 +155,8 @@ nvg_context_ptr gl_gfx_context::new_nvg_context() {
 }
 
 void gl_gfx_context::nvg_begin(NVGcontext *ctx, const glm::vec4 &bg_color) {
+	update_window_size();
+
 	int fbWidth, fbHeight;
 	int winWidth, winHeight;
 	SDL_GL_GetDrawableSize(sdl_window, &fbWidth, &fbHeight);
@@ -192,6 +190,7 @@ nk_context_ptr gl_gfx_context::new_nk_context() {
 
 void gl_gfx_context::nk_begin(struct nk_context *ctx) {
 	assert(ctx == current_nk_context);
+	update_window_size();
 	ctx->delta_time_seconds = SDL_GetTicks()/1000.0f;
 
 	// move the "mouse" off-screen at the start of each frame (there is no persistent cursor on a touch screen)
@@ -210,6 +209,22 @@ void gl_gfx_context::nk_end(struct nk_context *ctx, const glm::vec4 &bg_color) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	nk_sdl_render(NK_ANTI_ALIASING_ON, 512 * 1024, 128 * 1024);
 	SDL_GL_SwapWindow(sdl_window);
+}
+
+void gl_gfx_context::update_window_size() {
+#ifndef PODGE_SUPPORTS_HIGHDPI
+	// set up high-DPI rendering for platforms that doesn't support SDL_WINDOW_ALLOW_HIGHDPI
+	float hdpi;
+	if(SDL_GetDisplayDPI(0, nullptr, &hdpi, nullptr) < 0) {
+		PODGE_THROW_SDL_ERROR();
+	}
+	auto scale(96.0f/hdpi);
+	auto it(podge_fb_sizes.find(sdl_window));
+	assert(it != podge_fb_sizes.end());
+	auto w(it->second.first * scale);
+	auto h(it->second.second * scale);
+	SDL_SetWindowSize(sdl_window, w, h);
+#endif
 }
 
 std::unique_ptr<gfx_context> create_gfx_context() {
