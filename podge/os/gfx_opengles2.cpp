@@ -17,32 +17,10 @@
 #endif
 
 #ifndef PODGE_SUPPORTS_HIGHDPI
-
-namespace podge {
-
-static void real_window_size(SDL_Window *window, int *w, int *h) {
-       SDL_GetWindowSize(window, w, h);
-}
-
-}
-
-// Hack macros to allow Podge and its dependencies to assume 96 DPI (primarily for the sake of nuklear) on platforms that don't support SDL_WINDOW_ALLOW_HIGHDPI
-#define SDL_GetWindowSize(WINDOW, W, H) Podge_SDL_GetWindowSize(WINDOW, W, H)
+// Hack macro to allow Podge and its dependencies to assume 96 DPI (primarily for the sake of nuklear) on platforms that don't support SDL_WINDOW_ALLOW_HIGHDPI
 #define SDL_GL_GetDrawableSize(WINDOW, W, H) Podge_SDL_GL_GetDrawableSize(WINDOW, W, H)
 
 static std::map<SDL_Window *, std::pair<int, int>> podge_fb_sizes;
-
-static void Podge_SDL_GetWindowSize(SDL_Window *window, int *w, int *h) {
-	auto it(podge_fb_sizes.find(window));
-	assert(it != podge_fb_sizes.end());
-	float hdpi;
-	if(SDL_GetDisplayDPI(0, nullptr, &hdpi, nullptr) < 0) {
-		PODGE_THROW_SDL_ERROR();
-	}
-	auto scale(96.0f/hdpi);
-	*w = int(it->second.first * scale);
-	*h = int(it->second.second * scale);
-}
 
 static void Podge_SDL_GL_GetDrawableSize(SDL_Window *window, int *w, int *h) {
 	auto it(podge_fb_sizes.find(window));
@@ -108,9 +86,17 @@ gl_gfx_context::gl_gfx_context() :
 #ifndef PODGE_SUPPORTS_HIGHDPI
 		// set up high-DPI rendering for platforms that doesn't support SDL_WINDOW_ALLOW_HIGHDPI
 		{
+			float hdpi;
+			if(SDL_GetDisplayDPI(0, nullptr, &hdpi, nullptr) < 0) {
+				PODGE_THROW_SDL_ERROR();
+			}
+			auto scale(96.0f/hdpi);
 			int w, h;
-			real_window_size(sdl_window, &w, &h);
+			SDL_GetWindowSize(sdl_window, &w, &h);
 			podge_fb_sizes.emplace(sdl_window, std::make_pair(w, h));
+			w = int(w * scale);
+			h = int(h * scale);
+			SDL_SetWindowSize(sdl_window, w, h);
 		}
 #endif
 

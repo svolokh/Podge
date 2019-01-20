@@ -37,7 +37,7 @@ resource_path game::choose_level() {
         }
         nk_input_end(ctx);
         int w, h;
-        SDL_GetWindowSize(window, &w, &h);
+        gctx->window_size(window, &w, &h);
         if(nk_begin(ctx, "Level Select", nk_rect(16, 16, w - 32, h - 32), NK_WINDOW_TITLE | NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR)) {
             nk_layout_row_dynamic(ctx, 30, 1);
             for(const auto &tmx : tmxs) {
@@ -65,9 +65,9 @@ level_exit game::play_level(const resource_path &tmx_path) {
     auto window(gctx->window());
 
     level lvl(vg, tmx, 1.0f/60.0f, tmx_path.parent());
-    auto update_camera_dims([&lvl, &window]() {
+    auto update_camera_dims([this, &lvl, &window]() {
         int w, h;
-        SDL_GetWindowSize(window, &w, &h);
+        gctx->window_size(window, &w, &h);
         float cam_width, cam_height;
         if(w < h) {
             // portrait
@@ -136,7 +136,7 @@ level_exit game::play_level(const resource_path &tmx_path) {
             first_frame = false;
         }
         int winWidth, winHeight;
-        SDL_GetWindowSize(window, &winWidth, &winHeight);
+        gctx->window_size(window, &winWidth, &winHeight);
         auto campos(lvl.camera_position());
         gctx->nvg_begin(vg, lvl.bg_color());
         nvgTranslate(vg, winWidth/2.0f, winHeight/2.0f);

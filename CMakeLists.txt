@@ -87,6 +87,8 @@ if(PODGE_LIBRARY)
 else()
 	if(ANDROID)
 		add_library(podge SHARED ${PODGE_SOURCES})
+		set_target_properties(podge PROPERTIES
+			DEBUG_POSTFIX "")
 	elseif(IOS)
 		add_executable(podge ${PODGE_SOURCES})
 	else()
