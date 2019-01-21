@@ -106,35 +106,32 @@ target_include_directories(podge PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/boost
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/liquidfun/Box2D
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/json/single_include
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/nanovg/src)
-target_link_libraries(podge pugixml Box2D nanovg)
-
-if(ANDROID)
-	target_link_libraries(podge GLESv2)
-elseif(IOS)
-	podge_find_framework(OpenGLES PODGE_OPENGLES_FRAMEWORK)
-	podge_find_framework(AVFoundation PODGE_AVFOUNDATION_FRAMEWORK)
-	podge_find_framework(UIKit PODGE_UIKIT_FRAMEWORK)
-	podge_find_framework(CoreMotion PODGE_COREMOTION_FRAMEWORK)
-	podge_find_framework(CoreGraphics PODGE_COREGRAPHICS_FRAMEWORK)
-	podge_find_framework(GameController PODGE_GAMECONTROLLER_FRAMEWORK)
-	podge_find_framework(QuartzCore PODGE_QUARTZCORE_FRAMEWORK)
-	target_link_libraries(podge ${PODGE_OPENGLES_FRAMEWORK} ${PODGE_AVFOUNDATION_FRAMEWORK} ${PODGE_UIKIT_FRAMEWORK} ${PODGE_COREMOTION_FRAMEWORK} ${PODGE_GAMECONTROLLER_FRAMEWORK} ${PODGE_QUARTZCORE_FRAMEWORK} ${PODGE_COREGRAPHICS_FRAMEWORK})
-else()
-	message(FATAL_ERROR)
-endif()
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/nanovg/src
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2_mixer)
+target_link_libraries(podge pugixml Box2D nanovg SDL2-static SDL2_mixer)
 
 if(NOT PODGE_LIBRARY)
+	if(ANDROID)
+		target_link_libraries(podge GLESv2)
+	elseif(IOS)
+		podge_find_framework(OpenGLES PODGE_OPENGLES_FRAMEWORK)
+		podge_find_framework(AVFoundation PODGE_AVFOUNDATION_FRAMEWORK)
+		podge_find_framework(UIKit PODGE_UIKIT_FRAMEWORK)
+		podge_find_framework(CoreMotion PODGE_COREMOTION_FRAMEWORK)
+		podge_find_framework(CoreGraphics PODGE_COREGRAPHICS_FRAMEWORK)
+		podge_find_framework(GameController PODGE_GAMECONTROLLER_FRAMEWORK)
+		podge_find_framework(QuartzCore PODGE_QUARTZCORE_FRAMEWORK)
+		target_link_libraries(podge ${PODGE_OPENGLES_FRAMEWORK} ${PODGE_AVFOUNDATION_FRAMEWORK} ${PODGE_UIKIT_FRAMEWORK} ${PODGE_COREMOTION_FRAMEWORK} ${PODGE_GAMECONTROLLER_FRAMEWORK} ${PODGE_QUARTZCORE_FRAMEWORK} ${PODGE_COREGRAPHICS_FRAMEWORK})
+	else()
+		message(FATAL_ERROR)
+	endif()
+
 	target_include_directories(podge PRIVATE
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/include
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/nuklear)
 	
 	if(ANDROID)
-		target_link_libraries(podge SDL2-static SDL2main)
-	elseif(IOS)
-		target_link_libraries(podge SDL2-static)
-	else()
-		message(FATAL_ERROR)
+		target_link_libraries(podge SDL2main)
 	endif()
 
 	if(ANDROID OR IOS)

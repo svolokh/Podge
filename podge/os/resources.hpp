@@ -2,6 +2,7 @@
 #define OS_RESOURCES_HPP_
 
 #include <string>
+#include <vector>
 
 namespace podge {
 

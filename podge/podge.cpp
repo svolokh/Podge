@@ -100,7 +100,7 @@ resource_path resource_path::canonical(const resource_path &base) const {
 	return result;
 }
 
-resource_path resource_path::operator/(const resource_path &path) const {
+resource_path resource_path::operator /(const resource_path &path) const {
 	resource_path result(*this);
 	result.parts_.reserve(result.parts_.size() + path.parts_.size());
 	std::copy(path.parts_.begin(), path.parts_.end(), std::back_inserter(result.parts_));

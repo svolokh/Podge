@@ -14,6 +14,7 @@
 #include <initializer_list>
 #include <typeindex>
 
+#include <SDL_mixer.h>
 #include <Box2D/Box2D.h>
 #include <pugixml.hpp>
 #include <nanovg.h>
@@ -86,7 +87,7 @@ private:
 public:
     resource_path parent() const;
     resource_path canonical(const resource_path &base) const;
-    resource_path operator/(const resource_path &path) const;
+    resource_path operator /(const resource_path &path) const;
     std::string str() const;
     bool empty() const;
 
@@ -116,8 +117,10 @@ struct resource_pool {
     resource_pool(NVGcontext *vg);
     ~resource_pool();
 
-    const nm::json &json(const resource_path &path) const;
-    int image(const resource_path &pah) const;
+	// functions to load resources (if the resource is already loaded the already loaded one is returned)
+	// use these sparingly and as early as possible (e.g. systems should obtain the resource in their init() function)
+	const nm::json &json(const resource_path &path) const;
+	int image(const resource_path &path) const;
 
 private:
     NVGcontext *vg_;
