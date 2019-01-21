@@ -73,10 +73,6 @@ gl_gfx_context::gl_gfx_context() :
 	gl_ctx(nullptr)
 {
 	try {
-		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-			PODGE_THROW_SDL_ERROR();
-		}
-
 		int window_flags(SDL_WINDOW_OPENGL);
 #ifdef PODGE_SUPPORTS_HIGHDPI
 		window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
@@ -133,7 +129,6 @@ gl_gfx_context::~gl_gfx_context() {
 #endif
 	SDL_GL_DeleteContext(gl_ctx);
 	SDL_DestroyWindow(sdl_window);
-	SDL_Quit();
 }
 
 void gl_gfx_context::set_current() {

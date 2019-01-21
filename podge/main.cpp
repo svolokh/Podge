@@ -1,3 +1,5 @@
+#define BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS 
+
 #include "podge.hpp"
 #include "os/gfx.hpp"
 #include "os/resources.hpp"
@@ -149,6 +151,13 @@ level_exit game::play_level(const resource_path &tmx_path) {
 }
 
 static void run() {
+    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+        PODGE_THROW_SDL_ERROR();
+    }
+    BOOST_SCOPE_EXIT() {
+        SDL_Quit();
+    } BOOST_SCOPE_EXIT_END
+
     game g;
     auto window(g.gctx->window());
     for(;;) {
