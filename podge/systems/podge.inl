@@ -59,6 +59,13 @@ PODGE_REGISTER_COMPONENT(obstacle_component);
 
 namespace podge { namespace systems { namespace podge {
 
+PODGE_COMPONENT(private_component) {
+	BOOST_HANA_DEFINE_STRUCT(private_component,
+		(std::vector<Mix_Chunk *>, pops),
+		(std::vector<Mix_Chunk *>, shockwaves));
+};
+PODGE_REGISTER_COMPONENT(private_component);
+
 struct system : entity_system {
 	const char *name() const {
 		return "podge";
@@ -67,22 +74,41 @@ struct system : entity_system {
 	std::vector<std::type_index> components() const {
 		return {
 			typeid(basic::component),
-			typeid(component)
+			typeid(component),
+			typeid(private_component)
 		};
 	}
 
 	void init(entity &e) const {
+		auto &lvl(level::current());
+		auto &pc(e.component<private_component>());
 		auto &bc(e.component<basic::component>());
 		bc.keyframe = "hp2";
+		{
+			resource_path popdir("audio/bubble/pop");
+			for(auto name : {"1.ogg", "2.ogg", "3.ogg", "4.ogg"}) {
+				pc.pops.emplace_back(lvl.pool().load_sample(popdir/name));
+			}
+			resource_path shockdir("audio/tap/shockwave");
+			for(auto name : {"1.ogg", "2.ogg", "3.ogg", "4.ogg"}) {
+				pc.shockwaves.emplace_back(lvl.pool().load_sample(shockdir/name));
+			}
+		}
 		e.body()->SetFixedRotation(true);
 		e.body()->SetGravityScale(0.0f);
 		e.handle_signal<b2Vec2>(shove_, [](entity &e, const b2Vec2 &force) {
 			e.body()->ApplyForce(force, e.body()->GetPosition(), true);
 		});
 		e.handle_signal<hit_arg>(hit_, [](entity &e, const hit_arg &info) {
+			auto &lvl(level::current());
+			auto &pc(e.component<private_component>());
 			auto &bc(e.component<basic::component>());
 			auto &c(e.component<component>());
 			c.hp -= info.amount;
+			if(info.amount > 0) {
+				auto sample(pc.pops[std::uniform_int_distribution<>(0, pc.pops.size()-1)(lvl.rng())]);
+				Mix_PlayChannel(-1, sample, 0);
+			}
 			if(c.hp <= 0) {
 				auto &lvl(level::current());
 				lvl.exit(level_exits::failure());
@@ -196,6 +222,7 @@ struct system : entity_system {
 
 	bool handle_input(entity &e, const input &in) const {
 		auto &lvl(level::current());
+		auto &pc(e.component<private_component>());
 		auto &cc(e.component<core_component>());
 		switch(in.type) {
 			case input::DOWN:
@@ -210,6 +237,12 @@ struct system : entity_system {
 					auto dir(glm::normalize(hit_pos - in_pos));
 					auto force(to_b2Vec2(strength*dir));
 					e.body()->ApplyForce(force, to_b2Vec2(hit_pos), true);
+				}
+				{
+					std::uniform_int_distribution<> dist(0, pc.shockwaves.size()-1);
+					auto index(dist(lvl.rng()));
+					auto sample(pc.shockwaves[index]);
+					Mix_PlayChannel(-1, sample, 0);
 				}
 				break;
 			}

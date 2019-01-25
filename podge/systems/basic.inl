@@ -77,11 +77,11 @@ struct system : entity_system {
 		auto &cc(e.component<core_component>());
 
 		// load keyframes
-		auto json_kf(lvl.pool().json(pubc.keyframes));
+		auto json_kf(lvl.pool().load_json(pubc.keyframes));
 		auto dir(pubc.keyframes.parent());
 		for(auto it(json_kf.begin()); it != json_kf.end(); ++it) {
 			resource_path path(it.value().get<std::string>());
-			pc.keyframes.emplace(it.key(), lvl.pool().image(path.canonical(dir).str()));
+			pc.keyframes.emplace(it.key(), lvl.pool().load_image(path.canonical(dir).str()));
 		}
 
 		// set up collision

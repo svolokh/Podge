@@ -1,4 +1,5 @@
 [
+    "systems/ambient_source.inl",
     "systems/anchor.inl",
     "systems/balloon.inl",
     "systems/barrel/barrel.inl",

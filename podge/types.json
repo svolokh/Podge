@@ -103,6 +103,7 @@
         "has_body": true,
         "systems": [
             "basic",
+            "ambient_source",
             "obstacle"
         ]
     },

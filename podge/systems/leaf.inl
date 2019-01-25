@@ -47,7 +47,8 @@ namespace podge { namespace systems { namespace leaf {
 
 PODGE_COMPONENT(private_component) {
 	BOOST_HANA_DEFINE_STRUCT(private_component, 
-		(state, st));
+		(state, st),
+		(std::vector<Mix_Chunk *>, samples));
 };
 PODGE_REGISTER_COMPONENT(private_component);
 
@@ -64,6 +65,12 @@ struct system : entity_system {
 	}
 
 	void init(entity &e) const {
+		auto &lvl(level::current());
+		auto &pc(e.component<private_component>());
+		resource_path dir("audio/tap/leaf");
+		for(auto name : {"1.ogg", "2.ogg", "3.ogg"}) {
+			pc.samples.push_back(lvl.pool().load_sample(dir/name));
+		}
 		e.body()->SetType(b2_staticBody);
 	}
 
@@ -117,10 +124,15 @@ struct system : entity_system {
 	}
 
 	bool handle_input(entity &e, const input &in) const {
+		auto &lvl(level::current());
 		if(in.type == input::DOWN) {
 			auto &pc(e.component<private_component>());
 			if(!pc.st.t && pc.st.counter > 0 && util::point_in_body(e.body(), b2Vec2(in.x, in.y))) {
 				pc.st.t.emplace(0.0f);
+				std::uniform_int_distribution<> dist(0, pc.samples.size()-1);
+				auto index(dist(lvl.rng()));
+				auto sample(pc.samples[index]);
+				Mix_PlayChannel(-1, sample, 0);
 				return true;
 			}
 		}

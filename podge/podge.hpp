@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <map>
+#include <random>
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
@@ -40,9 +41,6 @@
 #include <boost/multi_index/global_fun.hpp>
 #include <boost/utility/string_view.hpp>
 #include <boost/functional/hash.hpp>
-
-#define PODGE_CONCAT_(LEFT, MIDDLE, RIGHT) LEFT ## MIDDLE ## RIGHT
-#define PODGE_CONCAT(LEFT, MIDDLE, RIGHT) PODGE_CONCAT_(LEFT, MIDDLE, RIGHT)
 
 namespace podge {
 
@@ -88,6 +86,7 @@ public:
     resource_path parent() const;
     resource_path canonical(const resource_path &base) const;
     resource_path operator /(const resource_path &path) const;
+    resource_path operator /(const std::string &path) const;
     std::string str() const;
     bool empty() const;
 
@@ -119,13 +118,15 @@ struct resource_pool {
 
 	// functions to load resources (if the resource is already loaded the already loaded one is returned)
 	// use these sparingly and as early as possible (e.g. systems should obtain the resource in their init() function)
-	const nm::json &json(const resource_path &path) const;
-	int image(const resource_path &path) const;
+	const nm::json &load_json(const resource_path &path) const;
+	int load_image(const resource_path &path) const;
+    Mix_Chunk *load_sample(const resource_path &path) const;
 
 private:
     NVGcontext *vg_;
     mutable std::map<std::string, nm::json> jsons_;
     mutable std::map<std::string, int> images_;
+    mutable std::map<std::string, Mix_Chunk *> samples_;
 };
 
 struct validation_error {
@@ -981,6 +982,7 @@ public:
     void render() const;
     void exit(const level_exit &exit);
     boost::optional<level_exit> exit_state() const;
+    std::default_random_engine &rng();
 
 public:
     void query_entities(const b2AABB &aabb, std::vector<entity *> &out); // Queries for entities in the level: entities are ordered by render order (i.e. visibility order), first entity would be rendered in front, second behind that, etc.
@@ -1008,6 +1010,7 @@ private:
     float time_;
     float dt_;
     boost::optional<level_exit> exit_state_;
+    std::default_random_engine rng_;
 
     mutable std::set<int> z_indices_buf_;
 };

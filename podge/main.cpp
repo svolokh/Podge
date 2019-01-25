@@ -1,5 +1,6 @@
 #define BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS 
 
+#include "common.hpp"
 #include "podge.hpp"
 #include "os/gfx.hpp"
 #include "os/resources.hpp"
@@ -14,8 +15,9 @@ namespace podge {
 struct game {
     game();
 
+    // game states
     resource_path choose_level();
-    level_exit play_level(const resource_path &tmx_path);
+    void play_level(const resource_path &tmx_path);
 
     std::unique_ptr<gfx_context> gctx;
 };
@@ -55,7 +57,7 @@ resource_path game::choose_level() {
     PODGE_THROW_ERROR();
 }
 
-level_exit game::play_level(const resource_path &tmx_path) {
+void game::play_level(const resource_path &tmx_path) {
     pugi::xml_document tmx;
     auto res(tmx.load_string(get_resource(tmx_path.str()).c_str()));
     if(!res) {
@@ -147,7 +149,17 @@ level_exit game::play_level(const resource_path &tmx_path) {
         lvl.render();
         gctx->nvg_end(vg);
     }
-    return *lvl.exit_state();
+
+    auto es(*lvl.exit_state());
+    const char *msg;
+    if(es.type() == typeid(level_exits::victory)) {
+        msg = "Victory!";
+    } else if(es.type() == typeid(level_exits::failure)) {
+        msg = "Game Over!";
+    } else {
+        PODGE_THROW_ERROR();
+    }
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Podge", msg, window);
 }
 
 static void run() {
@@ -158,20 +170,28 @@ static void run() {
         SDL_Quit();
     } BOOST_SCOPE_EXIT_END
 
+    auto mix_flags(MIX_INIT_OGG);
+    if((Mix_Init(mix_flags) & mix_flags) != mix_flags) {
+        PODGE_THROW_MIX_ERROR();
+    }
+    BOOST_SCOPE_EXIT() {
+        Mix_Quit();
+    } BOOST_SCOPE_EXIT_END
+
+    if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
+        PODGE_THROW_MIX_ERROR();
+    }
+    BOOST_SCOPE_EXIT() {
+        Mix_CloseAudio(); 
+    } BOOST_SCOPE_EXIT_END
+
+    Mix_AllocateChannels(PODGE_MIX_NUM_CHANNELS);
+
     game g;
     auto window(g.gctx->window());
     for(;;) {
         auto tmx_path(g.choose_level());
-        auto es(g.play_level(tmx_path));
-        const char *msg;
-        if(es.type() == typeid(level_exits::victory)) {
-            msg = "Victory!";
-        } else if(es.type() == typeid(level_exits::failure)) {
-            msg = "Game Over!";
-        } else {
-            PODGE_THROW_ERROR();
-        }
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Podge", msg, window);
+        g.play_level(tmx_path);
     }
 }
 

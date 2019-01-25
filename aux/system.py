@@ -14,7 +14,7 @@ print \
 
 namespace podge { namespace systems { namespace {{name}} {
 
-/*TODO*/
+/* TODO */
 
 } } }
 
@@ -27,7 +27,13 @@ namespace podge { namespace systems { namespace {{name}} {
 
 namespace podge { namespace systems { namespace {{name}} {
 
-/*TODO*/
+struct system : entity_system {
+    const char *name() const {
+        return "{{name}}";
+    }
+
+    /* TODO */
+};
 PODGE_REGISTER_SYSTEM(system);
 
 } } }

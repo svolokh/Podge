@@ -31,6 +31,84 @@
 
 namespace podge {
 
+// Fades out an SDL_Mixer channel upon destruction.
+//
+// The primary use case is when playing an infinite loop and 
+// having the channel's lifetime be bound to the initiator of 
+// that loop (e.g. an entity).
+struct mix_channel {
+	explicit mix_channel(int channel);
+
+	mix_channel() = default;
+	mix_channel(const mix_channel &) = delete;
+	mix_channel(mix_channel &&o);
+
+	mix_channel &operator =(const mix_channel &) = delete;
+	mix_channel &operator =(mix_channel &&o);
+
+	~mix_channel();
+
+	int id() const;
+	operator bool() const;
+	void clear();
+
+	// Find an unused Mix channel.
+	// Returns an empty mix_channel if all channels are in use, otherwise the free channel number.
+	static mix_channel next();
+
+private:
+	boost::optional<int> id_;
+};
+
+mix_channel::mix_channel(int channel) :
+	id_(channel)
+{
+}
+
+mix_channel::mix_channel(mix_channel &&o) :
+	id_(o.id_)
+{
+	o.id_ = boost::none;
+}
+
+mix_channel &mix_channel::operator =(mix_channel &&o) {
+	id_ = o.id_;
+	o.id_ = boost::none;
+	return *this;
+}
+
+mix_channel::~mix_channel() {
+	clear();
+}
+
+int mix_channel::id() const {
+	return *id_;
+}
+
+mix_channel::operator bool() const {
+	return id_;
+}
+
+void mix_channel::clear() {
+	if(id_) {
+		if(Mix_Playing(*id_)) {
+			Mix_FadeOutChannel(*id_, 500);
+		}
+	}
+	id_ = boost::none;
+}
+
+// Find an unused Mix channel.
+// Returns an empty mix_channel if all channels are in use, otherwise the free channel number.
+mix_channel mix_channel::next() {
+	for(auto i(0); i != PODGE_MIX_NUM_CHANNELS; ++i) {
+		if(!Mix_Playing(i)) {
+			return mix_channel(i);
+		}
+	}
+	return {};
+}
+
 b2Vec2 to_b2Vec2(const glm::vec2 &v) {
 	return {v.x, v.y};
 }
@@ -105,6 +183,10 @@ resource_path resource_path::operator /(const resource_path &path) const {
 	result.parts_.reserve(result.parts_.size() + path.parts_.size());
 	std::copy(path.parts_.begin(), path.parts_.end(), std::back_inserter(result.parts_));
 	return result;
+}
+
+resource_path resource_path::operator /(const std::string &path) const {
+	return (*this)/resource_path(path);
 }
 
 std::string resource_path::str() const {
@@ -186,6 +268,10 @@ collision_shape::collision_shape() {
 }
 
 namespace util {
+
+static boost::optional<mix_channel> next_mix_channel() {
+	return boost::none;
+}
 
 static entity &entity_from_body(b2Body *body) {
 	return *static_cast<entity *>(body->GetUserData());
@@ -472,12 +558,15 @@ resource_pool::resource_pool(NVGcontext *vg) :
 }
 
 resource_pool::~resource_pool() {
+	for(const auto &p : samples_) {
+		Mix_FreeChunk(p.second);
+	}
 	for(const auto &p : images_) {
 		nvgDeleteImage(vg_, p.second);
 	}
 }
 
-const nm::json &resource_pool::json(const resource_path &path) const {
+const nm::json &resource_pool::load_json(const resource_path &path) const {
 	auto pathstr(path.str());
 	auto it(jsons_.find(pathstr));
 	if(it != jsons_.end()) {
@@ -490,7 +579,7 @@ const nm::json &resource_pool::json(const resource_path &path) const {
 	}
 }
 
-int resource_pool::image(const resource_path &path) const {
+int resource_pool::load_image(const resource_path &path) const {
 	auto pathstr(path.str());
 	auto it(images_.find(pathstr));
 	if(it != images_.end()) {
@@ -506,6 +595,27 @@ int resource_pool::image(const resource_path &path) const {
 		auto r(images_.emplace(pathstr, res));
 		assert(r.second);
 		return res;
+	}
+}
+
+Mix_Chunk *resource_pool::load_sample(const resource_path &path) const {
+	auto pathstr(path.str());
+	auto it(samples_.find(pathstr));
+	if(it != samples_.end()) {
+		return it->second;
+	} else {
+		auto data(get_resource(pathstr));
+		auto rw(SDL_RWFromConstMem(data.c_str(), data.size()));
+		BOOST_SCOPE_EXIT(rw) {
+			SDL_RWclose(rw);
+		} BOOST_SCOPE_EXIT_END
+		auto sample(Mix_LoadWAV_RW(rw, 0));
+		if(sample == nullptr) {
+			PODGE_THROW_MIX_ERROR();
+		}
+		auto r(samples_.emplace(pathstr, sample));
+		assert(r.second);
+		return sample;
 	}
 }
 
@@ -1541,7 +1651,8 @@ level::level(NVGcontext *vg, int width, int height, float dt) :
 	camera_width_(default_camera_width),
 	camera_height_(default_camera_height),
 	time_(0.0f),
-	dt_(dt)
+	dt_(dt),
+	rng_(std::random_device{}())
 {
 }
 
@@ -1599,6 +1710,7 @@ level::level(NVGcontext *vg, pugi::xml_node tmx_node, float dt, const resource_p
 
 level::~level() {
 	level::current(*this);
+	Mix_HaltChannel(-1); // halt all channels so the resource_pool destructor can free samples
 }
 
 NVGcontext *level::vg() const {
@@ -1811,6 +1923,10 @@ void level::exit(const level_exit &exit) {
 
 boost::optional<level_exit> level::exit_state() const {
 	return exit_state_;
+}
+
+std::default_random_engine &level::rng() {
+	return rng_;
 }
 
 void level::query_entities(const b2AABB &aabb, std::vector<entity *> &out) {

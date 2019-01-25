@@ -20,12 +20,30 @@ namespace podge { namespace systems { namespace glass {
 
 namespace podge { namespace systems { namespace glass {
 
+PODGE_COMPONENT(private_component) {
+	BOOST_HANA_DEFINE_STRUCT(private_component, 
+		(std::vector<Mix_Chunk *>, glass_taps));
+};
+PODGE_REGISTER_COMPONENT(private_component);
+
 struct system : entity_system {
 	const char *name() const {
 		return "glass";
 	}
 
+	std::vector<std::type_index> components() const {
+		return {
+			typeid(private_component)
+		};
+	}
+
 	void init(entity &e) const {
+		auto &lvl(level::current());
+		auto &pc(e.component<private_component>());
+		resource_path dir("audio/tap/glass");
+		for(auto name : {"1.ogg", "2.ogg", "3.ogg", "4.ogg"}) {
+			pc.glass_taps.push_back(lvl.pool().load_sample(dir/name));
+		}
 		e.body()->SetType(b2_staticBody);
 		e.body()->SetActive(false);
 	}
@@ -54,12 +72,19 @@ struct system : entity_system {
 	}
 
 	bool handle_input(entity &e, const input &in) const {
+		auto &lvl(level::current());
+		auto &pc(e.component<private_component>());
 		auto &cc(e.component<core_component>());
 		const auto &xf(e.body()->GetTransform());
 		b2Vec2 pt(in.x, in.y);
 		for(const auto &cs : cc.collision_shapes) {
 			auto shp(cs->shape.get());
 			if(shp->TestPoint(xf, pt)) {
+				if(in.type == input::DOWN) {
+					std::uniform_int_distribution<> dist(0, pc.glass_taps.size()-1);
+					auto sample(pc.glass_taps[dist(lvl.rng())]);
+					Mix_PlayChannel(-1, sample, 0);
+				}
 				return true;
 			}
 		}
