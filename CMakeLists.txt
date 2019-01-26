@@ -107,6 +107,7 @@ target_include_directories(podge PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/liquidfun/Box2D
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/json/single_include
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/nanovg/src
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/include
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2_mixer)
 target_link_libraries(podge pugixml Box2D nanovg SDL2-static SDL2_mixer)
 
@@ -127,7 +128,6 @@ if(NOT PODGE_LIBRARY)
 	endif()
 
 	target_include_directories(podge PRIVATE
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/include
 		${CMAKE_CURRENT_SOURCE_DIR}/lib/nuklear)
 	
 	if(ANDROID)
