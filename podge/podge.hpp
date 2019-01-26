@@ -15,6 +15,7 @@
 #include <initializer_list>
 #include <typeindex>
 
+#include <SDL.h>
 #include <SDL_mixer.h>
 #include <Box2D/Box2D.h>
 #include <pugixml.hpp>

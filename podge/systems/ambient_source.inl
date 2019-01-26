@@ -98,10 +98,10 @@ struct system : entity_system {
 		if(dsq > rsq) {
 			privc.channel->clear();
 		} else {
-			auto volume{int(dsq/rsq*128)};
+			auto volume{int((1.0f - dsq/rsq)*128)};
 			if(!*privc.channel) {
 				*privc.channel = mix_channel::next();
-				if(*privc.channel) { // if we failed to get a channel this time, too bad, we'll get a channel another time
+				if(*privc.channel) { // if we failed to get a channel this time, too bad, hopefully we'll get a channel on another step
 					Mix_Volume(privc.channel->id(), volume);
 					Mix_PlayChannel(privc.channel->id(), *privc.sample, -1);
 				}

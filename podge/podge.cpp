@@ -165,11 +165,18 @@ resource_path::resource_path(const std::vector<std::string> &parts) :
 }
 
 resource_path resource_path::parent() const {
-	assert(parts_.size() > 0);
+	assert(!empty());
 	return resource_path(std::vector<std::string>(parts_.begin(), parts_.begin() + parts_.size() - 1));
 }
 
 resource_path resource_path::canonical(const resource_path &base) const {
+	assert(!empty());
+	if(empty()) {
+		// we reserve the empty resource_path to mean a non-existent path, so it should not be used with canonical().
+		// if you want paths that refer to the current directory use resource_path(".").
+		// we check this in release mode as well since this function is typically used rarely and this error can be hard to debug.
+		PODGE_THROW_ERROR();
+	}
 	resource_path result(base);
 	for(const auto &part : parts_) {
 		if(part == "..") {
@@ -694,7 +701,12 @@ void object::load_properties_xml(pugi::xml_node properties_node, const resource_
 		} else if(strcmp(type, "float") == 0) {
 			registry.set_public_component_property(*this, name, strtof(value, nullptr));
 		} else if(strcmp(type, "file") == 0) {
-			registry.set_public_component_property(*this, name, resource_path(value).canonical(cwd));
+			resource_path path(value);
+			if(path.empty()) {
+				registry.set_public_component_property(*this, name, resource_path());
+			} else {
+				registry.set_public_component_property(*this, name, path.canonical(cwd));
+			}
 		} else if(strcmp(type, "int") == 0) {
 			registry.set_public_component_property(*this, name, int(strtol(value, nullptr, 10)));
 		} else {
