@@ -3,6 +3,8 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle1.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -42,6 +44,8 @@
  </tile>
  <tile id="1" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle2.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -81,6 +85,8 @@
  </tile>
  <tile id="2" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle3.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -119,6 +125,8 @@
  </tile>
  <tile id="3" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle4.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -157,6 +165,8 @@
  </tile>
  <tile id="5" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle6.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -196,6 +206,8 @@
  </tile>
  <tile id="9" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle5.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -234,6 +246,8 @@
  </tile>
  <tile id="11" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle7.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -272,6 +286,8 @@
  </tile>
  <tile id="13" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle8.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -325,6 +341,8 @@
  </tile>
  <tile id="16" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle9.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -370,6 +388,8 @@
  </tile>
  <tile id="17" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle10.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -451,6 +471,8 @@
  </tile>
  <tile id="18" type="obstacle">
   <properties>
+   <property name="ambient_radius" type="float" value="5"/>
+   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="waffle11.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>

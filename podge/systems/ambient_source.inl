@@ -7,21 +7,20 @@ namespace podge { namespace systems { namespace ambient_source {
 
 PODGE_PUBLIC_COMPONENT(public_component) {
 	public_component() :
-		ambient_sound(""),
 		ambient_radius(5.0f)
 	{
 	}
 
 	void validate(const context &ctx) const {
 		if(!ambient_sound.empty()) {
-			if(!resource_exists(ambient_sound)) {
+			if(!resource_exists(ambient_sound.str())) {
 				throw validation_error("the file specified by 'ambient_sound' does not exist");
 			}
 		}
 	}
 
 	BOOST_HANA_DEFINE_STRUCT(public_component,
-		(std::string, ambient_sound),
+		(resource_path, ambient_sound),
 		(float, ambient_radius));
 };
 PODGE_REGISTER_COMPONENT(public_component);
