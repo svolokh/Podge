@@ -8,7 +8,7 @@ namespace podge { namespace systems { namespace ambient_source {
 PODGE_PUBLIC_COMPONENT(public_component) {
 	public_component() :
 		ambient_sound(""),
-		ambient_radius(10.0f)
+		ambient_radius(5.0f)
 	{
 	}
 
@@ -83,7 +83,7 @@ struct system : entity_system {
 		auto &lvl(level::current());
 		auto &pubc(e.component<public_component>());
 		auto &privc(e.component<private_component>());
-		if(!*privc.sample) {
+		if(!privc.sample) {
 			return;
 		}
 		std::vector<entity *> podges_buf;
