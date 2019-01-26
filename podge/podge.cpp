@@ -50,7 +50,7 @@ struct mix_channel {
 	~mix_channel();
 
 	int id() const;
-	operator bool() const;
+	explicit operator bool() const;
 	void clear();
 
 	// Find an unused Mix channel.
@@ -87,7 +87,7 @@ int mix_channel::id() const {
 }
 
 mix_channel::operator bool() const {
-	return id_;
+	return bool(id_);
 }
 
 void mix_channel::clear() {
@@ -269,10 +269,6 @@ collision_shape::collision_shape() {
 }
 
 namespace util {
-
-static boost::optional<mix_channel> next_mix_channel() {
-	return boost::none;
-}
 
 static entity &entity_from_body(b2Body *body) {
 	return *static_cast<entity *>(body->GetUserData());
