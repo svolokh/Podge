@@ -150,10 +150,12 @@ resource_path::resource_path() {
 }
 
 resource_path::resource_path(const std::string &path) {
-	typedef boost::algorithm::split_iterator<std::string::const_iterator> string_split_iterator;
-	string_split_iterator last;
-	for(string_split_iterator it(boost::make_split_iterator<const std::string>(path, boost::algorithm::first_finder("/"))); it != last; ++it) {
-		parts_.emplace_back(it->begin(), it->end());
+	if(!path.empty()) {
+		typedef boost::algorithm::split_iterator<std::string::const_iterator> string_split_iterator;
+		string_split_iterator last;
+		for(string_split_iterator it(boost::make_split_iterator<const std::string>(path, boost::algorithm::first_finder("/"))); it != last; ++it) {
+			parts_.emplace_back(it->begin(), it->end());
+		}
 	}
 }
 
