@@ -19,6 +19,7 @@
 
 #include <pugixml.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/norm.hpp>
 #include <glm/gtx/matrix_transform_2d.hpp>
 #include <boost/scope_exit.hpp>
 #include <boost/mpl/transform.hpp>
