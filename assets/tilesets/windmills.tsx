@@ -3,8 +3,6 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="obstacle">
   <properties>
-   <property name="ambient_radius" type="float" value="5"/>
-   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="windmill1.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -61,8 +59,6 @@
  </tile>
  <tile id="1" type="obstacle">
   <properties>
-   <property name="ambient_radius" type="float" value="5"/>
-   <property name="ambient_sound" value=""/>
    <property name="keyframes" type="file" value="windmill2.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
