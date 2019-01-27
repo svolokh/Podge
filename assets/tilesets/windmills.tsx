@@ -39,8 +39,17 @@
      <property name="repulsive" type="bool" value="true"/>
     </properties>
    </object>
-   <object id="15" x="0" y="80" width="192" height="32"/>
+   <object id="15" x="0" y="80" width="192" height="32">
+    <properties>
+     <property name="damage" type="int" value="1"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+   </object>
    <object id="16" x="64" y="64" width="64" height="64">
+    <properties>
+     <property name="damage" type="int" value="1"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
     <ellipse/>
    </object>
   </objectgroup>
