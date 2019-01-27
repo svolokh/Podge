@@ -27,6 +27,16 @@ game::game() :
 {
 }
 
+// run this at the start of each frame
+static void pre_frame() {
+    // for all channels that are not playing, make sure their volume is set to maximum
+    for(auto i(0); i != PODGE_MIX_NUM_CHANNELS; ++i) {
+        if(!Mix_Playing(i)) {
+            Mix_Volume(i, MIX_MAX_VOLUME);
+        }
+    }
+}
+
 resource_path game::choose_level() {
     auto pctx(gctx->new_nk_context());
     auto ctx(pctx.get());
@@ -34,6 +44,7 @@ resource_path game::choose_level() {
     auto tmxs(list_resources("levels"));
     SDL_Event event;
     for(;;) {
+        pre_frame();
         gctx->nk_begin(ctx);
         nk_input_begin(ctx);
         while(SDL_PollEvent(&event)) {
@@ -112,6 +123,7 @@ void game::play_level(const resource_path &tmx_path) {
     auto last_frame_time(clock::now());
     SDL_Event event;
     while(!lvl.exit_state()) {
+        pre_frame();
         while(SDL_PollEvent(&event)) {
             switch(event.type) {
                 case SDL_WINDOWEVENT:
