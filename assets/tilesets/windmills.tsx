@@ -33,29 +33,15 @@
   </properties>
   <image width="192" height="192" source="windmill1.png"/>
   <objectgroup draworder="index">
-   <object id="3" x="64" y="0" width="64" height="64">
+   <object id="3" x="80" y="0" width="32" height="192">
     <properties>
      <property name="damage" type="int" value="1"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
    </object>
-   <object id="6" x="128" y="64" width="64" height="64">
-    <properties>
-     <property name="damage" type="int" value="1"/>
-     <property name="repulsive" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="11" x="64" y="128" width="64" height="64">
-    <properties>
-     <property name="damage" type="int" value="1"/>
-     <property name="repulsive" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="14" x="0" y="64" width="64" height="64">
-    <properties>
-     <property name="damage" type="int" value="1"/>
-     <property name="repulsive" type="bool" value="true"/>
-    </properties>
+   <object id="15" x="0" y="80" width="192" height="32"/>
+   <object id="16" x="64" y="64" width="64" height="64">
+    <ellipse/>
    </object>
   </objectgroup>
  </tile>
@@ -91,29 +77,10 @@
   </properties>
   <image width="320" height="320" source="windmill2.png"/>
   <objectgroup draworder="index">
-   <object id="3" x="0" y="128" width="129" height="64">
-    <properties>
-     <property name="damage" type="int" value="1"/>
-     <property name="repulsive" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="4" x="128" y="0" width="64" height="128">
-    <properties>
-     <property name="damage" type="int" value="1"/>
-     <property name="repulsive" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="5" x="192" y="128" width="128" height="63">
-    <properties>
-     <property name="damage" type="int" value="1"/>
-     <property name="repulsive" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="6" x="128" y="193" width="64" height="127">
-    <properties>
-     <property name="damage" type="int" value="1"/>
-     <property name="repulsive" type="bool" value="true"/>
-    </properties>
+   <object id="1" x="143" y="0" width="32" height="319"/>
+   <object id="2" x="1" y="144" width="318" height="32"/>
+   <object id="3" x="128" y="128" width="64" height="64">
+    <ellipse/>
    </object>
   </objectgroup>
  </tile>
