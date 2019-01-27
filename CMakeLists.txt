@@ -77,7 +77,10 @@ else()
 		${CMAKE_CURRENT_SOURCE_DIR}/podge/os/generic/resources.cpp)
 endif()
 
-if(NOT PODGE_LIBRARY)
+if(PODGE_LIBRARY)
+	file(GLOB PODGE_SDL2_PLACEHOLDER_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2_podge_placeholders/*.c)
+	set(PODGE_SOURCES ${PODGE_SOURCES} ${PODGE_SDL2_PLACEHOLDER_SOURCES})
+else()
 	list(APPEND PODGE_SOURCES 
 		${CMAKE_CURRENT_SOURCE_DIR}/podge/main.cpp)
 endif()
@@ -109,9 +112,14 @@ target_include_directories(podge PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/nanovg/src
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/include
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2_mixer)
-target_link_libraries(podge pugixml Box2D nanovg SDL2-static SDL2_mixer)
+target_link_libraries(podge pugixml Box2D nanovg)
 
-if(NOT PODGE_LIBRARY)
+if(PODGE_LIBRARY)
+	target_include_directories(podge PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2_podge_placeholders)
+else()
+	target_link_libraries(podge SDL2-static SDL2_mixer)
+
 	if(ANDROID)
 		target_link_libraries(podge GLESv2)
 	elseif(IOS)

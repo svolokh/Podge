@@ -1,0 +1,3 @@
+This directory is where we provide stub implementations of SDL2 functions so we can compile Podge as a library without needing to link against the actual SDL2 libraries and all their other system dependencies.
+
+The files are only updated here whenever we encounter linker errors when compiling with PODGE_LIBRARY (we are not aiming for a complete stub implementation of the SDL2 libraries).

@@ -1,0 +1,10 @@
+#include "common.h"
+
+PODGE_PLACEHOLDER(Mix_FadeOutChannel)
+PODGE_PLACEHOLDER(Mix_FreeChunk)
+PODGE_PLACEHOLDER(Mix_FreeMusic)
+PODGE_PLACEHOLDER(Mix_HaltChannel)
+PODGE_PLACEHOLDER(Mix_LoadWAV_RW)
+PODGE_PLACEHOLDER(Mix_PlayChannelTimed)
+PODGE_PLACEHOLDER(Mix_Playing)
+PODGE_PLACEHOLDER(Mix_Volume)
