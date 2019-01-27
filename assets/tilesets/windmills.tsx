@@ -86,9 +86,23 @@
   </properties>
   <image width="320" height="320" source="windmill2.png"/>
   <objectgroup draworder="index">
-   <object id="1" x="143" y="0" width="32" height="319"/>
-   <object id="2" x="1" y="144" width="318" height="32"/>
+   <object id="1" x="143" y="0" width="32" height="319">
+    <properties>
+     <property name="damage" type="int" value="1"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="2" x="1" y="144" width="318" height="32">
+    <properties>
+     <property name="damage" type="int" value="1"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+   </object>
    <object id="3" x="128" y="128" width="64" height="64">
+    <properties>
+     <property name="damage" type="int" value="1"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
     <ellipse/>
    </object>
   </objectgroup>

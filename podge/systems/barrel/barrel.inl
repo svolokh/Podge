@@ -53,7 +53,7 @@ struct system : entity_system {
 		e.handle_signal<activate_arg>(activate_, std::bind(&system::handle_activate, this, std::placeholders::_1, std::placeholders::_2));
 		e.body()->SetFixedRotation(true);
 		e.body()->SetActive(false);
-		e.body()->SetGravityScale(0.5f);
+		e.body()->SetGravityScale(0.25f);
 	}
 
 	void step(entity &e) const {
