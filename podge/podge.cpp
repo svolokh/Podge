@@ -1290,13 +1290,14 @@ void podge_registry_init::register_system_fn::operator()(entity_system *s) const
 
 void podge_registry_init::register_contact_handler_fn::operator()(entity_contact_handler *handler) const {
 	auto mask(handler->mask());
+	std::shared_ptr<entity_contact_handler> ptr(handler);
 	for(const auto &types : mask) {
 		switch(types.size()) {
 			case 1:
-				registry.wildcard_contact_handlers_[types[0]].emplace_back(handler);
+				registry.wildcard_contact_handlers_[types[0]].emplace_back(ptr);
 				break;
 			case 2:
-				registry.exact_contact_handlers_[std::make_pair(boost::string_view(types[0]), boost::string_view(types[1]))].emplace_back(handler);
+				registry.exact_contact_handlers_[std::make_pair(boost::string_view(types[0]), boost::string_view(types[1]))].emplace_back(ptr);
 				break;
 			default:
 				PODGE_THROW_ERROR();
