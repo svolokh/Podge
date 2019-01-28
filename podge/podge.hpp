@@ -117,10 +117,10 @@ struct resource_pool {
     resource_pool(NVGcontext *vg);
     ~resource_pool();
 
-	// functions to load resources (if the resource is already loaded the already loaded one is returned)
-	// use these sparingly and as early as possible (e.g. systems should obtain the resource in their init() function)
-	const nm::json &load_json(const resource_path &path) const;
-	int load_image(const resource_path &path) const;
+    // functions to load resources (if the resource is already loaded the already loaded one is returned)
+    // use these sparingly and as early as possible (e.g. systems should obtain the resource in their init() function)
+    const nm::json &load_json(const resource_path &path) const;
+    int load_image(const resource_path &path) const;
     Mix_Chunk *load_sample(const resource_path &path) const;
 
 private:
@@ -848,10 +848,10 @@ private:
 };
 
 struct collision_shape {
-	collision_shape();
+    collision_shape();
 
-	std::unique_ptr<b2Shape> shape;
-	object properties;
+    std::unique_ptr<b2Shape> shape;
+    object properties;
 };
 
 #define PODGE_COMPONENT(NAME) struct NAME : detail::object_component_impl<NAME>
