@@ -73,10 +73,31 @@ gl_gfx_context::gl_gfx_context() :
 	gl_ctx(nullptr)
 {
 	try {
-		int window_flags(SDL_WINDOW_OPENGL);
+		int window_flags(SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS);
 #ifdef PODGE_SUPPORTS_HIGHDPI
 		window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 #endif
+        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 0);
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
+        SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
+        SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
+        SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
+        SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
+        SDL_GL_SetAttribute(SDL_GL_STEREO, 0);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
+        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+        SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+
 		sdl_window = SDL_CreateWindow("Podge", 0, 0, 0, 0, window_flags);
 		if(sdl_window == nullptr) {
 			PODGE_THROW_SDL_ERROR();
