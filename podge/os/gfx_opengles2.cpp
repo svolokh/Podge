@@ -68,6 +68,13 @@ private:
 	SDL_GLContext gl_ctx;
 };
 
+// exception-throwing version of SDL_GL_SetAttribute
+static void sdl_gl_set_attribute(SDL_GLattr attr, int value) {
+    if(SDL_GL_SetAttribute(attr, value) < 0) {
+        PODGE_THROW_SDL_ERROR();
+    }
+}
+
 gl_gfx_context::gl_gfx_context() :
 	sdl_window(nullptr),
 	gl_ctx(nullptr)
@@ -77,37 +84,30 @@ gl_gfx_context::gl_gfx_context() :
 #ifdef PODGE_SUPPORTS_HIGHDPI
 		window_flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 #endif
-        SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-        SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-        SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 0);
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
-        SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 0);
-        SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
-        SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
-        SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
-        SDL_GL_SetAttribute(SDL_GL_STEREO, 0);
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
-        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-        SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+
+		sdl_gl_set_attribute(SDL_GL_RED_SIZE, 8);
+		sdl_gl_set_attribute(SDL_GL_GREEN_SIZE, 8);
+		sdl_gl_set_attribute(SDL_GL_BLUE_SIZE, 8);
+		sdl_gl_set_attribute(SDL_GL_ALPHA_SIZE, 0);
+		sdl_gl_set_attribute(SDL_GL_DOUBLEBUFFER, 1);
+		sdl_gl_set_attribute(SDL_GL_BUFFER_SIZE, 0);
+		sdl_gl_set_attribute(SDL_GL_DEPTH_SIZE, 16);
+		sdl_gl_set_attribute(SDL_GL_STENCIL_SIZE, 0);
+		sdl_gl_set_attribute(SDL_GL_ACCUM_RED_SIZE, 0);
+		sdl_gl_set_attribute(SDL_GL_ACCUM_GREEN_SIZE, 0);
+		sdl_gl_set_attribute(SDL_GL_ACCUM_BLUE_SIZE, 0);
+		sdl_gl_set_attribute(SDL_GL_ACCUM_ALPHA_SIZE, 0);
+		sdl_gl_set_attribute(SDL_GL_STEREO, 0);
+		sdl_gl_set_attribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+		sdl_gl_set_attribute(SDL_GL_MULTISAMPLESAMPLES, 0);
+		sdl_gl_set_attribute(SDL_GL_ACCELERATED_VISUAL, 1);
+		sdl_gl_set_attribute(SDL_GL_RETAINED_BACKING, 1);
+		sdl_gl_set_attribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		sdl_gl_set_attribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+		sdl_gl_set_attribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 
 		sdl_window = SDL_CreateWindow("Podge", 0, 0, 0, 0, window_flags);
 		if(sdl_window == nullptr) {
-			PODGE_THROW_SDL_ERROR();
-		}
-
-		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2) < 0) {
-			PODGE_THROW_SDL_ERROR();
-		}
-
-		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0) < 0) {
 			PODGE_THROW_SDL_ERROR();
 		}
 
@@ -120,10 +120,6 @@ gl_gfx_context::gl_gfx_context() :
 		}
 		update_window_size();
 #endif
-
-		if(SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES) < 0) {
-			PODGE_THROW_SDL_ERROR();
-		}
 
 		gl_ctx = SDL_GL_CreateContext(sdl_window);
 		if(!gl_ctx) {
