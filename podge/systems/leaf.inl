@@ -141,6 +141,19 @@ struct system : entity_system {
 };
 PODGE_REGISTER_SYSTEM(system);
 
+struct contact_handler : entity_contact_handler {
+	entity_system_mask mask() const {
+		return {
+			{"leaf"}
+		};
+	}
+
+	bool should_collide(entity &a, entity &b) const {
+		return false;
+	}
+};
+PODGE_REGISTER_CONTACT_HANDLER(contact_handler);
+
 } } }
 
 #endif

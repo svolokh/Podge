@@ -1236,9 +1236,9 @@ bool podge_registry::ShouldCollide(b2Fixture *fixtureA, b2Fixture *fixtureB) {
 	auto res(true);
 	iterate_handlers(a, b, [&](const entity_contact_handler &handler, bool swap) {
 		if(swap) {
-			res = handler.should_collide(b, a);
+			res = res && handler.should_collide(b, a);
 		} else {
-			res = handler.should_collide(a, b);
+			res = res && handler.should_collide(a, b);
 		}
 	});
 	return res;
