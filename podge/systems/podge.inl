@@ -8,7 +8,6 @@
 namespace podge { namespace systems { namespace podge {
 
 static const auto buoyant_force(0.25f);
-static const auto drag_constant(0.4f);
 
 enum signals : signal_t {
 	hit_,
@@ -232,8 +231,8 @@ struct system : entity_system {
 				if(hit) {
 					auto hit_pos(to_vec2(*hit));
 					auto len(glm::length(hit_pos - in_pos));
-					auto perc(glm::clamp(1.0f - len/(lvl.camera_width()/2.0f - cc.width/2.0f), 0.0f, 1.0f));
-					auto strength(75.0f*perc);
+					auto perc(glm::clamp(1.0f - len/(lvl.camera_height()/2.0f - cc.height/2.0f), 0.25f, 1.0f));
+					auto strength(150.0f*perc);
 					auto dir(glm::normalize(hit_pos - in_pos));
 					auto force(to_b2Vec2(strength*dir));
 					e.body()->ApplyForce(force, to_b2Vec2(hit_pos), true);

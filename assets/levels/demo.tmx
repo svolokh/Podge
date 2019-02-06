@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="21" height="135" tilewidth="64" tileheight="64" infinite="0" backgroundcolor="#392410" nextlayerid="5" nextobjectid="290">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="21" height="135" tilewidth="64" tileheight="64" infinite="0" backgroundcolor="#392410" nextlayerid="6" nextobjectid="294">
  <tileset firstgid="1" source="../tilesets/walls.tsx"/>
  <tileset firstgid="8" source="../tilesets/podge.tsx"/>
  <tileset firstgid="9" source="../tilesets/waffles.tsx"/>
@@ -9,7 +9,7 @@
  <tileset firstgid="33" source="../tilesets/bump_bat.tsx"/>
  <tileset firstgid="34" source="../tilesets/balloons.tsx"/>
  <tileset firstgid="35" source="../tilesets/leaf.tsx"/>
- <objectgroup id="1" name="BackgroundObject">
+ <objectgroup id="1" name="1">
   <properties>
    <property name="world" type="int" value="0"/>
   </properties>
@@ -156,15 +156,8 @@
    <point/>
   </object>
   <object id="266" gid="29" x="512" y="7104" width="320" height="320"/>
-  <object id="282" gid="11" x="608" y="4864" width="128" height="128">
-   <properties>
-    <property name="oscillate" type="bool" value="true"/>
-    <property name="oscillate_distance" type="float" value="1.5"/>
-    <property name="oscillate_phase" type="float" value="5"/>
-   </properties>
-  </object>
  </objectgroup>
- <objectgroup id="3" name="MainObject">
+ <objectgroup id="3" name="2">
   <properties>
    <property name="world" type="int" value="0"/>
   </properties>
@@ -242,15 +235,24 @@
     <property name="spin_ccw" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="285" gid="35" x="448" y="4896" width="320" height="128"/>
-  <object id="286" gid="2147483683" x="576" y="4832" width="320" height="128">
+  <object id="292" gid="11" x="608" y="4864" width="128" height="128">
+   <properties>
+    <property name="oscillate" type="bool" value="true"/>
+    <property name="oscillate_distance" type="float" value="1.5"/>
+    <property name="oscillate_phase" type="float" value="5"/>
+   </properties>
+  </object>
+  <object id="293" gid="8" x="640" y="8448" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup id="5" name="3">
+  <object id="290" gid="35" x="448" y="4896" width="320" height="128"/>
+  <object id="291" gid="2147483683" x="576" y="4832" width="320" height="128">
    <properties>
     <property name="ccw" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="287" gid="8" x="640" y="5504" width="64" height="64"/>
  </objectgroup>
- <layer id="2" name="MainTile" width="21" height="135">
+ <layer id="2" name="4" width="21" height="135">
   <properties>
    <property name="world" type="int" value="0"/>
   </properties>
@@ -392,7 +394,7 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
- <objectgroup id="4" name="ForegroundObject">
+ <objectgroup id="4" name="5">
   <properties>
    <property name="world" type="int" value="0"/>
   </properties>

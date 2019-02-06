@@ -330,8 +330,7 @@ static boost::optional<b2Vec2> ray_cast(const b2Vec2 &from, b2Body *body) {
 
 // Applies a drag force to the entity's body.
 // csl: The approximate cross-sectional length of the body (e.g. for a fixed-rotation body this could be the width).
-static void apply_air_drag(entity &e, float csl) {
-	static const float drag_constant(0.1f);
+static void apply_air_drag(entity &e, float csl, float drag_constant = 0.5f) {
 	auto vel(to_vec2(e.body()->GetLinearVelocity()));
 	auto v(glm::length(vel));
 	if(v > 0.0f) {
