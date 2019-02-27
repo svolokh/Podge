@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.1" name="windmills" tilewidth="320" tileheight="320" tilecount="2" columns="0">
+<tileset version="1.2" tiledversion="1.2.2" name="windmills" tilewidth="320" tileheight="320" tilecount="2" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="obstacle">
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value="../audio/ambient/windmill/windmill.ogg"/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="windmill1.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -58,6 +62,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value="../audio/ambient/windmill/windmill.ogg"/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="windmill2.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>

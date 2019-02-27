@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.1" name="waffles" tilewidth="352" tileheight="256" tilecount="11" columns="0">
+<tileset version="1.2" tiledversion="1.2.2" name="waffles" tilewidth="352" tileheight="256" tilecount="11" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="obstacle">
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle1.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -46,6 +50,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle2.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -87,6 +95,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle3.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -127,6 +139,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle4.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -167,6 +183,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle6.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -208,6 +228,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle5.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -248,6 +272,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle7.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -288,6 +316,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle8.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -343,6 +375,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle9.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -390,6 +426,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle10.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -473,6 +513,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="waffle11.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>

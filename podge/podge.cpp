@@ -1576,9 +1576,11 @@ void layer::remove_all_marked_removed() {
 template <typename Entity>
 boost::optional<Entity &> layer::entity_by_name_(const std::string &name) {
 	for(auto &e : entities_) {
-		auto &cc(e->component<core_component>());
-		if(cc.name && *cc.name == name) {
-			return *e;
+		if(e->has_component<core_component>()) {
+			auto &cc(e->component<core_component>());
+			if(cc.name && *cc.name == name) {
+				return *e;
+			}
 		}
 	}
 	return {};

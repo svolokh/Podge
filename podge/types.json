@@ -99,6 +99,13 @@
             "anchor"
         ]
     },
+    "follow_path": {
+        "has_body": true,
+        "systems": [
+            "anchor",
+            "glass"
+        ]
+    },
     "obstacle": {
         "has_body": true,
         "systems": [

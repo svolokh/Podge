@@ -212,37 +212,44 @@ struct system : entity_system {
 		if(c.follow_path) {
 			pc.follow_path_st.emplace();
 			auto &st(*pc.follow_path_st);
-			b2Fixture *fixture(lvl.entity_by_name(c.follow_path_shape)->body()->GetFixtureList());
+			auto &path(*lvl.entity_by_name(c.follow_path_shape));
+			if(std::strcmp(path.type().name(), "follow_path") != 0) {
+				PODGE_THROW_ERROR();
+			}
+			const auto &shape(*path.component<core_component>().collision_shapes[0]->shape);
 			boost::optional<const b2Vec2 *> verts;
 			std::size_t verts_count;
 			boost::optional<float> phase_perc;
-			switch(fixture->GetType()) {
+			switch(shape.GetType()) {
 				case b2Shape::e_circle: {
-					auto shp(static_cast<b2CircleShape *>(fixture->GetShape()));
+					const auto &shp(static_cast<const b2CircleShape &>(shape));
 					follow_path_state::circle circ;
-					circ.center = to_vec2(shp->m_p);
-					circ.radius = shp->m_radius;
+					circ.center = to_vec2(b2Mul(path.body()->GetTransform(), shp.m_p));
+					circ.radius = shp.m_radius;
 					auto p(to_vec2(e.body()->GetPosition()));
 					auto v(p - circ.center);
 					if(glm::length2(v) < std::numeric_limits<float>::epsilon()) {
 						phase_perc = 0.0f;
 					} else {
 						auto theta0(std::atan2f(v.y, v.x));
+						if(theta0 < 0) {
+							theta0 += 2.0f*b2_pi;
+						}
 						phase_perc = theta0/(2.0f*b2_pi);
 					}
 					st.path = std::move(circ);
 					break;
 				}
 				case b2Shape::e_chain: {
-					auto shp(static_cast<b2ChainShape *>(fixture->GetShape()));
-					verts = shp->m_vertices;
-					verts_count = shp->m_count;
+					const auto &shp(static_cast<const b2ChainShape &>(shape));
+					verts = shp.m_vertices;
+					verts_count = shp.m_count;
 					break;
 				}
 				case b2Shape::e_polygon: {
-					auto shp(static_cast<b2PolygonShape *>(fixture->GetShape()));
-					verts = shp->m_vertices;
-					verts_count = shp->m_count;
+					const auto &shp(static_cast<const b2PolygonShape &>(shape)); 
+					verts = shp.m_vertices;
+					verts_count = shp.m_count;
 					break;
 				}
 				default:
@@ -253,14 +260,15 @@ struct system : entity_system {
 					throw std::runtime_error("expected at least 2 points in polyline");
 				}
 				auto vs(*verts);
+				const auto &xf(path.body()->GetTransform());
 				// chain or polygon
 				follow_path_state::polyline pl;
 				for(auto i(0); i != verts_count; ++i) {
 					auto i0(i);
 					auto i1((i0 + 1) % verts_count);
-					auto &v0(vs[i0]);
-					auto &v1(vs[i1]);
-					follow_path_state::edge e{to_vec2(v0), to_vec2(v1)};
+					auto v0(to_vec2(b2Mul(xf, vs[i0])));
+					auto v1(to_vec2(b2Mul(xf, vs[i1])));
+					follow_path_state::edge e{v0, v1};
 					pl.edges.emplace_back(std::move(e));
 				}
 				auto tot(0.0f);
@@ -296,8 +304,8 @@ struct system : entity_system {
 					phase_perc = (float(i0) + s0)/pl.edges.size();
 				}
 				st.path = std::move(pl);
-				st.phase_perc = *phase_perc;
 			}
+			st.phase_perc = *phase_perc;
 		}
 		if(c.orbit) {
 			pc.orbit_st.emplace();
