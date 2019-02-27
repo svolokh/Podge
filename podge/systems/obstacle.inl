@@ -10,36 +10,6 @@
 
 namespace podge { namespace systems { namespace obstacle {
 
-struct obstacle_state {
-	int z0;
-};
-
-struct orbit_state {
-	entity *anchor;
-	float theta0;
-	float d;
-};
-
-struct oscillate_state {
-	b2Vec2 p0;
-};
-
-struct pulsate_state {
-	float w0;
-	float h0;
-};
-
-struct smash_state {
-	glm::vec2 initial_center;
-	glm::vec2 dir; // the direction to the anchor
-	float initial_dist; // initial distance from pos to the anchor
-	entity *anchor;
-};
-
-struct spin_state {
-	float theta0;
-};
-
 PODGE_PUBLIC_COMPONENT(component) {
 	component() :
 		orbit(false),
@@ -50,6 +20,10 @@ PODGE_PUBLIC_COMPONENT(component) {
 		oscillate_distance(1.0f),
 		oscillate_period(10.0f),
 		oscillate_phase(0.0f),
+		follow_path(false),
+		follow_path_shape(""),
+		follow_path_ccw(false),
+		follow_path_period(10.0f),
 		pulsate(false),
 		pulsate_phase(0.0f),
 		pulsate_time_advanced(1.0f),
@@ -69,6 +43,16 @@ PODGE_PUBLIC_COMPONENT(component) {
 
 	void validate(const context &ctx) const {
 		if(ctx.is_map()) {
+			if(follow_path) {
+				if(follow_path_shape.empty()) {
+					throw validation_error("follow_path_shape must be defined");
+				}
+				if(!ctx.entity_exists(follow_path_shape)) {
+					std::ostringstream oss;
+					oss << "follow_path_shape object '" << follow_path_shape << "' does not exist";
+					throw validation_error(oss.str());
+				}
+			}
 			if(orbit) {
 				if(orbit_anchor.empty()) {
 					throw validation_error("orbit_anchor must be defined");
@@ -102,6 +86,10 @@ PODGE_PUBLIC_COMPONENT(component) {
 		(float, oscillate_distance),
 		(float, oscillate_period),
 		(float, oscillate_phase),
+		(bool, follow_path),
+		(std::string, follow_path_shape),
+		(bool, follow_path_ccw),
+		(float, follow_path_period),
 		(bool, pulsate),
 		(float, pulsate_phase),
 		(float, pulsate_time_advanced),
@@ -133,11 +121,64 @@ PODGE_REGISTER_COMPONENT(component);
 
 namespace podge { namespace systems { namespace obstacle {
 
+struct obstacle_state {
+	int z0;
+};
+
+struct orbit_state {
+	entity *anchor;
+	float theta0;
+	float d;
+};
+
+struct oscillate_state {
+	b2Vec2 p0;
+};
+
+struct follow_path_state {
+	struct circle {
+		glm::vec2 center;
+		float radius;
+	};
+
+	struct edge {
+		glm::vec2 p0;
+		glm::vec2 p1;
+		float weight;
+	};
+
+	struct polyline {
+		std::vector<edge> edges;
+	};
+
+	typedef boost::variant<circle, polyline> path_type;
+
+	path_type path;
+	float phase_perc; // phase as a percentage of the period
+};
+
+struct pulsate_state {
+	float w0;
+	float h0;
+};
+
+struct smash_state {
+	glm::vec2 initial_center;
+	glm::vec2 dir; // the direction to the anchor
+	float initial_dist; // initial distance from pos to the anchor
+	entity *anchor;
+};
+
+struct spin_state {
+	float theta0;
+};
+
 PODGE_COMPONENT(private_component) {
 	BOOST_HANA_DEFINE_STRUCT(private_component,
 		(obstacle_state, obstacle_st),
 		(boost::optional<orbit_state>, orbit_st),
 		(boost::optional<oscillate_state>, oscillate_st),
+		(boost::optional<follow_path_state>, follow_path_st),
 		(boost::optional<pulsate_state>, pulsate_st),
 		(boost::optional<smash_state>, smash_st),
 		(boost::optional<spin_state>, spin_st));
@@ -168,6 +209,96 @@ struct system : entity_system {
 		auto &pc(e.component<private_component>());
 		auto &cc(e.component<core_component>());
 		pc.obstacle_st.z0 = e.z_index();
+		if(c.follow_path) {
+			pc.follow_path_st.emplace();
+			auto &st(*pc.follow_path_st);
+			b2Fixture *fixture(lvl.entity_by_name(c.follow_path_shape)->body()->GetFixtureList());
+			boost::optional<const b2Vec2 *> verts;
+			std::size_t verts_count;
+			boost::optional<float> phase_perc;
+			switch(fixture->GetType()) {
+				case b2Shape::e_circle: {
+					auto shp(static_cast<b2CircleShape *>(fixture->GetShape()));
+					follow_path_state::circle circ;
+					circ.center = to_vec2(shp->m_p);
+					circ.radius = shp->m_radius;
+					auto p(to_vec2(e.body()->GetPosition()));
+					auto v(p - circ.center);
+					if(glm::length2(v) < std::numeric_limits<float>::epsilon()) {
+						phase_perc = 0.0f;
+					} else {
+						auto theta0(std::atan2f(v.y, v.x));
+						phase_perc = theta0/(2.0f*b2_pi);
+					}
+					st.path = std::move(circ);
+					break;
+				}
+				case b2Shape::e_chain: {
+					auto shp(static_cast<b2ChainShape *>(fixture->GetShape()));
+					verts = shp->m_vertices;
+					verts_count = shp->m_count;
+					break;
+				}
+				case b2Shape::e_polygon: {
+					auto shp(static_cast<b2PolygonShape *>(fixture->GetShape()));
+					verts = shp->m_vertices;
+					verts_count = shp->m_count;
+					break;
+				}
+				default:
+					throw std::runtime_error("unexpected fixture type");
+			}
+			if(verts) {
+				if(verts_count < 2) {
+					throw std::runtime_error("expected at least 2 points in polyline");
+				}
+				auto vs(*verts);
+				// chain or polygon
+				follow_path_state::polyline pl;
+				for(auto i(0); i != verts_count; ++i) {
+					auto i0(i);
+					auto i1((i0 + 1) % verts_count);
+					auto &v0(vs[i0]);
+					auto &v1(vs[i1]);
+					follow_path_state::edge e{to_vec2(v0), to_vec2(v1)};
+					pl.edges.emplace_back(std::move(e));
+				}
+				auto tot(0.0f);
+				for(const auto &e : pl.edges) {
+					tot += glm::distance(e.p0, e.p1);
+				}
+				for(auto &e : pl.edges) {
+					e.weight = glm::distance(e.p0, e.p1)/tot;
+				}
+				{
+					// compute i0, s0
+					int i0;
+					float s0;
+					assert(pl.edges.size() > 0);
+					auto min_dist2(std::numeric_limits<float>::infinity());
+					auto p(to_vec2(e.body()->GetPosition()));
+					for(std::size_t i(0), n(pl.edges.size()); i != n; ++i) {
+						const auto &e(pl.edges[i]);
+						auto l(e.p1 - e.p0);
+						auto x(p - e.p0);
+						auto s(glm::dot(x, l)/glm::length(l));
+						if(s >= 0.0f && s <= 1.0f) {
+							auto xp(s*l);
+							auto dist2(glm::distance2(x, xp));
+							if(dist2 < min_dist2) {
+								min_dist2 = dist2;
+								i0 = i;
+								s0 = s;
+							}
+						}
+					}
+					// compute phase_perc from i0, s0
+					phase_perc = (float(i0) + s0)/pl.edges.size();
+				}
+				st.path = std::move(pl);
+				st.phase_perc = *phase_perc;
+			}
+		}
 		if(c.orbit) {
 			pc.orbit_st.emplace();
 			auto &st(*pc.orbit_st);
@@ -249,6 +380,42 @@ struct system : entity_system {
 			b2Vec2 dir(std::cos(theta), std::sin(theta));
 			b2Vec2 pos(st.p0.x + d*dir.x, st.p0.y  + d*dir.y);
 			e.body()->SetTransform(pos, e.body()->GetAngle());
+		}
+		if(c.follow_path) {
+			auto &st(*pc.follow_path_st);
+			auto T(c.follow_path_period);
+			float t;
+			if(c.follow_path_ccw) {
+				t = std::fmod(st.phase_perc*T + lvl.time(), T);
+			} else {
+				t = std::fmod(st.phase_perc*T - lvl.time(), T);
+			}
+			boost::optional<glm::vec2> p;
+			if(st.path.type() == typeid(follow_path_state::circle)) {
+				auto &circ(boost::get<follow_path_state::circle>(st.path));
+				auto theta(2.0f*b2_pi*t/T);
+				auto v(circ.radius*glm::vec2(std::cos(theta), std::sin(theta)));
+				p = circ.center + v;
+			} else if(st.path.type() == typeid(follow_path_state::polyline)) {
+				auto &pl(boost::get<follow_path_state::polyline>(st.path));
+				float ts(0.0f);
+				for(std::size_t i(0), n(pl.edges.size()); i != n; ++i) {
+					const auto &e(pl.edges[i]);
+					auto tp(ts);
+					ts += T*e.weight;
+					if(t < ts) {
+						auto s((t - tp)/(tp - ts));
+						p = e.p0 + s*(e.p1 - e.p0);
+						break;
+					}
+				}
+				if(!p) {
+					PODGE_THROW_ERROR();
+				}
+			} else {
+				PODGE_THROW_ERROR();
+			}
+			e.body()->SetTransform(to_b2Vec2(*p), e.body()->GetAngle());
 		}
 		if(c.pulsate) { 
 			auto &st(*pc.pulsate_st);
