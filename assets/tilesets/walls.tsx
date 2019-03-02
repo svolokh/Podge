@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.1" name="walls" tilewidth="64" tileheight="64" tilecount="7" columns="0">
+<tileset version="1.2" tiledversion="1.2.2" name="walls" tilewidth="64" tileheight="64" tilecount="7" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="obstacle">
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
-   <property name="keyframes" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
+   <property name="keyframes" type="file" value="wall1.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
    <property name="orbit_ccw" type="bool" value="false"/>
@@ -45,6 +49,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="wall2.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -86,6 +94,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="wall3.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -127,6 +139,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="wall4.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -168,6 +184,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="wall5.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -209,6 +229,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="wall6.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
@@ -250,6 +274,10 @@
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
    <property name="ambient_sound" type="file" value=""/>
+   <property name="follow_path" type="bool" value="false"/>
+   <property name="follow_path_ccw" type="bool" value="false"/>
+   <property name="follow_path_period" type="float" value="10"/>
+   <property name="follow_path_shape" value=""/>
    <property name="keyframes" type="file" value="wall7.json"/>
    <property name="orbit" type="bool" value="false"/>
    <property name="orbit_anchor" value=""/>
