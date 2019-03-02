@@ -80,13 +80,6 @@
             "leaf"
         ]
     },
-    "wall": {
-        "has_body": true,
-        "systems": [
-            "basic",
-            "wall"
-        ]
-    },
     "smash_anchor": {
         "has_body": true,
         "systems": [
@@ -99,11 +92,10 @@
             "anchor"
         ]
     },
-    "follow_path": {
+    "path_shape": {
         "has_body": true,
         "systems": [
-            "anchor",
-            "glass"
+            "anchor"
         ]
     },
     "obstacle": {

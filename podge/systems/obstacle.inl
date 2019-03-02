@@ -213,7 +213,7 @@ struct system : entity_system {
 			pc.follow_path_st.emplace();
 			auto &st(*pc.follow_path_st);
 			auto &path(*lvl.entity_by_name(c.follow_path_shape));
-			if(std::strcmp(path.type().name(), "follow_path") != 0) {
+			if(std::strcmp(path.type().name(), "path_shape") != 0) {
 				PODGE_THROW_ERROR();
 			}
 			const auto &shape(*path.component<core_component>().collision_shapes[0]->shape);
@@ -397,6 +397,9 @@ struct system : entity_system {
 				t = std::fmod(st.phase_perc*T + lvl.time(), T);
 			} else {
 				t = std::fmod(st.phase_perc*T - lvl.time(), T);
+				if(t < 0.0f) {
+					t += T;
+				}
 			}
 			boost::optional<glm::vec2> p;
 			if(st.path.type() == typeid(follow_path_state::circle)) {
@@ -406,13 +409,13 @@ struct system : entity_system {
 				p = circ.center + v;
 			} else if(st.path.type() == typeid(follow_path_state::polyline)) {
 				auto &pl(boost::get<follow_path_state::polyline>(st.path));
-				float ts(0.0f);
+				float t1(0.0f);
 				for(std::size_t i(0), n(pl.edges.size()); i != n; ++i) {
 					const auto &e(pl.edges[i]);
-					auto tp(ts);
-					ts += T*e.weight;
-					if(t < ts) {
-						auto s((t - tp)/(tp - ts));
+					auto t0(t1);
+					t1 += T*e.weight;
+					if(t < t1) {
+						auto s((t - t0)/(t1 - t0));
 						p = e.p0 + s*(e.p1 - e.p0);
 						break;
 					}
