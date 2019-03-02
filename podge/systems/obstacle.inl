@@ -175,6 +175,7 @@ struct spin_state {
 
 PODGE_COMPONENT(private_component) {
 	BOOST_HANA_DEFINE_STRUCT(private_component,
+		(bool, inactive),
 		(obstacle_state, obstacle_st),
 		(boost::optional<orbit_state>, orbit_st),
 		(boost::optional<oscillate_state>, oscillate_st),
@@ -208,8 +209,10 @@ struct system : entity_system {
 		auto &c(e.component<component>());
 		auto &pc(e.component<private_component>());
 		auto &cc(e.component<core_component>());
+		auto active(false);
 		pc.obstacle_st.z0 = e.z_index();
 		if(c.follow_path) {
+			active = true;
 			pc.follow_path_st.emplace();
 			auto &st(*pc.follow_path_st);
 			auto &path(*lvl.entity_by_name(c.follow_path_shape));
@@ -308,6 +311,7 @@ struct system : entity_system {
 			st.phase_perc = *phase_perc;
 		}
 		if(c.orbit) {
+			active = true;
 			pc.orbit_st.emplace();
 			auto &st(*pc.orbit_st);
 			st.anchor = &*lvl.entity_by_name(c.orbit_anchor);
@@ -318,17 +322,20 @@ struct system : entity_system {
 			st.d = glm::length(glm::vec2(pe.x - pa.x, pe.y - pa.y));
 		}
 		if(c.oscillate) {
+			active = true;
 			pc.oscillate_st.emplace();
 			auto &st(*pc.oscillate_st);
 			st.p0 = e.body()->GetPosition();
 		}
 		if(c.pulsate) {
+			active = true;
 			pc.pulsate_st.emplace();
 			auto &st(*pc.pulsate_st);
 			st.w0 = cc.width;
 			st.h0 = cc.height; 
 		}
 		if(c.smash) {
+			active = true;
 			pc.smash_st.emplace();
 			auto &st(*pc.smash_st);
 			st.anchor = &*lvl.entity_by_name(c.smash_anchor);
@@ -344,18 +351,24 @@ struct system : entity_system {
 			st.initial_dist = glm::length(dir);
 		}
 		if(c.spin) {
+			active = true;
 			pc.spin_st.emplace();
 			auto &st(*pc.spin_st);
 			st.theta0 = e.body()->GetAngle();
 		}
+		pc.inactive = !active;
 	}
 
 	void step(entity &e) const {
+		auto &pc(e.component<private_component>());
+		if(pc.inactive) {
+			return;
+		}
+
 		auto &lvl(level::current());
 		bool fatal = false;
 		bool collides = true;
 		int z_offset = 0;
-		auto &pc(e.component<private_component>());
 		auto &c(e.component<component>());
 		auto &bc(e.component<basic::component>());
 		auto &cc(e.component<core_component>());
