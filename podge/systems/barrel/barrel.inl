@@ -60,7 +60,7 @@ struct system : entity_system {
 		auto &pc(e.component<private_component>());
 		auto &lvl(level::current());
 		auto camb(lvl.camera_bounds());
-		auto bounds(compute_body_bounds(e.body()));
+		auto bounds(util::compute_body_bounds(e.body()));
 		if(bounds.upperBound.y < camb.lowerBound.y) {
 			e.remove();
 		}

@@ -75,7 +75,7 @@ struct system : entity_system {
 			glm::vec2 v(std::cos(angle), std::sin(angle));
 			auto p(to_vec2(e.body()->GetPosition()) + lvl.dt()*c.speed*v);
 			e.body()->SetTransform(to_b2Vec2(p), e.body()->GetAngle());
-			if(!lvl.bounds().Contains(compute_body_bounds(e.body()))) {
+			if(!lvl.bounds().Contains(util::compute_body_bounds(e.body()))) {
 				e.remove();
 			}
 		}

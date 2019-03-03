@@ -40,6 +40,13 @@
             "camera"
         ]
     },
+    "camera_zone": {
+        "has_body": true,
+        "systems": [
+            "sensor",
+            "camera_zone"
+        ]
+    },
     "glass": {
         "has_body": true,
         "systems": [

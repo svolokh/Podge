@@ -9,7 +9,8 @@ namespace podge { namespace systems { namespace camera {
 
 PODGE_COMPONENT(component) {
 	BOOST_HANA_DEFINE_STRUCT(component,
-		(entity *, podge));
+		(boost::optional<glm::vec2>, target_pos),
+		(boost::optional<float>, target_width));
 };
 PODGE_REGISTER_COMPONENT(component);
 
@@ -28,7 +29,8 @@ namespace podge { namespace systems { namespace camera {
 
 PODGE_COMPONENT(private_component) {
 	BOOST_HANA_DEFINE_STRUCT(private_component,
-		(glm::vec2, pos));
+		(boost::optional<glm::vec2>, current_pos),
+		(boost::optional<float>, current_width));
 };
 PODGE_REGISTER_COMPONENT(private_component);
 
@@ -44,18 +46,34 @@ struct system : entity_system {
 		};
 	}
 
-	void add(entity &e) const {
-		auto &c(e.component<component>());
-		auto &pc(e.component<private_component>());
-		pc.pos = to_vec2(c.podge->body()->GetPosition());
-	}
-
 	void step(entity &e) const {
+		auto &lvl(level::current());
 		auto &c(e.component<component>());
 		auto &pc(e.component<private_component>());
-		auto &lvl(level::current());
-		pc.pos = 0.1f*to_vec2(c.podge->body()->GetPosition()) + 0.9f*pc.pos;
-		lvl.camera_position(pc.pos);
+		if(c.target_pos) {
+			if(!pc.current_pos) {
+				pc.current_pos = *c.target_pos;
+			} else {
+				pc.current_pos = 0.1f*(*c.target_pos) + 0.9f*(*pc.current_pos);
+			}
+		}
+		if(c.target_width) {
+			if(!pc.current_width) {
+				pc.current_width = *c.target_width;
+			} else {
+				pc.current_width = 0.1f*(*c.target_width) + 0.9f*(*pc.current_width);
+			}
+		}
+		if(pc.current_pos) {
+			lvl.camera_position(*pc.current_pos);
+		}
+		if(pc.current_width) {
+			auto aspect(lvl.camera_height()/lvl.camera_width()); 
+			auto w(*pc.current_width);
+			auto h(w*aspect);
+			lvl.camera_width(w);
+			lvl.camera_height(h);
+		}
 	}
 };
 PODGE_REGISTER_SYSTEM(system);

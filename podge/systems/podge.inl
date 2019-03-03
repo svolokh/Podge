@@ -130,8 +130,6 @@ struct system : entity_system {
 			}
 		});
 		entity_spec camera_spec(registry.type("camera"));
-		auto &cc(camera_spec.component<camera::component>());
-		cc.podge = &e;
 		auto &cam(e.lyr().create_entity({0.0f, 0.0f}, std::move(camera_spec)));
 		cam.bind(e);
 		e.z_index(-1);

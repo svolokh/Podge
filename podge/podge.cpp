@@ -118,25 +118,6 @@ glm::vec2 to_vec2(const b2Vec2 &v) {
 	return {v.x, v.y};
 }
 
-b2AABB compute_body_bounds(b2Body *body) {
-	assert(body->GetFixtureList() != nullptr);
-	b2AABB aabb;
-	aabb.lowerBound.x = std::numeric_limits<float>::infinity();
-	aabb.lowerBound.y = std::numeric_limits<float>::infinity();
-	aabb.upperBound.x = -std::numeric_limits<float>::infinity();
-	aabb.upperBound.y = -std::numeric_limits<float>::infinity();
-	b2AABB temp;
-	const auto &xform(body->GetTransform());
-	for(auto fixture(body->GetFixtureList()); fixture != nullptr; fixture = fixture->GetNext()) {
-		auto shp(fixture->GetShape());
-		for(auto i(0), n(shp->GetChildCount()); i != n; ++i) {
-			shp->ComputeAABB(&temp, xform, i);
-			aabb.Combine(temp);
-		}
-	}
-	return aabb;
-}
-
 void to_nvg_xform(const glm::mat3 &m, float *xform) {
 	xform[0] = m[0][0];
 	xform[1] = m[0][1];
@@ -281,6 +262,25 @@ namespace util {
 
 static entity &entity_from_body(b2Body *body) {
 	return *static_cast<entity *>(body->GetUserData());
+}
+
+b2AABB compute_body_bounds(b2Body *body) {
+	assert(body->GetFixtureList() != nullptr);
+	b2AABB aabb;
+	aabb.lowerBound.x = std::numeric_limits<float>::infinity();
+	aabb.lowerBound.y = std::numeric_limits<float>::infinity();
+	aabb.upperBound.x = -std::numeric_limits<float>::infinity();
+	aabb.upperBound.y = -std::numeric_limits<float>::infinity();
+	b2AABB temp;
+	const auto &xform(body->GetTransform());
+	for(auto fixture(body->GetFixtureList()); fixture != nullptr; fixture = fixture->GetNext()) {
+		auto shp(fixture->GetShape());
+		for(auto i(0), n(shp->GetChildCount()); i != n; ++i) {
+			shp->ComputeAABB(&temp, xform, i);
+			aabb.Combine(temp);
+		}
+	}
+	return aabb;
 }
 
 // parses a comma-separated list of names
