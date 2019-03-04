@@ -12,13 +12,15 @@ PODGE_PUBLIC_COMPONENT(component) {
     }
 
     void validate(const context &ctx) const {
-        if(path.empty()) {
-            throw validation_error("must specify path");
-        }
-        if(!ctx.entity_exists(path)) {
-            std::ostringstream oss;
-            oss << "path '" << path << "' does not exist";
-            throw validation_error(oss.str());
+        if(ctx.is_map()) {
+            if(path.empty()) {
+                throw validation_error("must specify path");
+            }
+            if(!ctx.entity_exists(path)) {
+                std::ostringstream oss;
+                oss << "path '" << path << "' does not exist";
+                throw validation_error(oss.str());
+            }
         }
     }
 
