@@ -3,6 +3,7 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="1" type="bird">
   <properties>
+   <property name="delay" type="float" value="0"/>
    <property name="keyframes" type="file" value="bird.json"/>
    <property name="path" value=""/>
    <property name="time" type="float" value="5"/>
