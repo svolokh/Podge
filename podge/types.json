@@ -50,7 +50,7 @@
     "camera_path": {
         "has_body": true,
         "systems": [
-            "sensor"
+            "anchor"
         ]
     },
     "glass": {
@@ -116,6 +116,19 @@
         "systems": [
             "basic",
             "bird"
+        ]
+    },
+    "bird_path": {
+        "has_body": true,
+        "systems": [
+            "anchor"
+        ]
+    },
+    "bird_trigger": {
+        "has_body": true,
+        "systems": [
+            "sensor",
+            "bird_trigger"
         ]
     },
     "obstacle": {

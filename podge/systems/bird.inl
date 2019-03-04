@@ -30,6 +30,17 @@ PODGE_PUBLIC_COMPONENT(component) {
 };
 PODGE_REGISTER_COMPONENT(component);
 
+PODGE_COMPONENT(internal_component) {
+    internal_component() :
+        active(false)
+    {
+    }
+
+    BOOST_HANA_DEFINE_STRUCT(internal_component,
+        (bool, active));
+};
+PODGE_REGISTER_COMPONENT(internal_component);
+
 } } }
 
 #endif
@@ -57,7 +68,8 @@ struct system : entity_system {
     std::vector<std::type_index> components() const {
         return {
             typeid(component),
-            typeid(private_component)
+            typeid(private_component),
+            typeid(internal_component)
         };
     }
 
@@ -70,6 +82,7 @@ struct system : entity_system {
         auto &c(e.component<component>());
         auto &pc(e.component<private_component>());
         auto &path(*lvl.entity_with_name(c.path));
+        assert(std::strcmp(path.type().name(), "bird_path") == 0);
         auto shp(path.body()->GetFixtureList()->GetShape());
         if(shp->GetType() != b2Shape::e_chain) {
             PODGE_THROW_ERROR();
@@ -90,6 +103,10 @@ struct system : entity_system {
     void step(entity &e) const {
         auto &lvl(level::current());
         auto &pc(e.component<private_component>());
+        auto &ic(e.component<internal_component>());
+        if(!ic.active) {
+            return;
+        }
         const auto angle_per_sec(glm::radians(90.0f));
         auto angle(e.body()->GetAngle());
         auto pos(to_vec2(e.body()->GetPosition()));
