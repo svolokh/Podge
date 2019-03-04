@@ -16,5 +16,6 @@
     "systems/spike/spike.inl",
     "systems/spike/spike_trigger.inl",
     "systems/leaf.inl",
-    "systems/debug_shapes.inl"
+    "systems/debug_shapes.inl",
+    "systems/bird.inl"
 ]

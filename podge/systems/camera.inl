@@ -46,24 +46,25 @@ struct system : entity_system {
 		};
 	}
 
+private:
+	template <typename T>
+	void approach(boost::optional<T> &current, const boost::optional<T> &target) const {
+		if(target) {
+			if(!current) {
+				current = *target;
+			} else {
+				current = (*current)*0.95f + (*target)*0.05f;
+			}
+		}
+	}
+
+public:
 	void step(entity &e) const {
 		auto &lvl(level::current());
 		auto &c(e.component<component>());
 		auto &pc(e.component<private_component>());
-		if(c.target_pos) {
-			if(!pc.current_pos) {
-				pc.current_pos = *c.target_pos;
-			} else {
-				pc.current_pos = 0.05f*(*c.target_pos) + 0.95f*(*pc.current_pos);
-			}
-		}
-		if(c.target_width) {
-			if(!pc.current_width) {
-				pc.current_width = *c.target_width;
-			} else {
-				pc.current_width = 0.05f*(*c.target_width) + 0.95f*(*pc.current_width);
-			}
-		}
+		approach(pc.current_pos, c.target_pos);
+		approach(pc.current_width, c.target_width);
 		if(pc.current_pos) {
 			lvl.camera_position(*pc.current_pos);
 		}

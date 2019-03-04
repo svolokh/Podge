@@ -111,6 +111,13 @@
             "anchor"
         ]
     },
+    "bird": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "bird"
+        ]
+    },
     "obstacle": {
         "has_body": true,
         "systems": [

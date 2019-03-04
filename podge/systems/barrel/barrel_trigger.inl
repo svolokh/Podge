@@ -68,7 +68,7 @@ struct system : entity_system {
 		std::vector<std::string> names;
 		util::parse_names(c.barrels, names);
 		for(const auto &name : names) {
-			auto &e(*lvl.entity_by_name(name));
+			auto &e(*lvl.entity_with_name(name));
 			pc.barrels.emplace_back(&e);
 		}
 	}

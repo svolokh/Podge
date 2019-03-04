@@ -838,8 +838,8 @@ public:
     void z_indices(std::set<int> &out) const;
     void render(int z_index) const;
 
-    boost::optional<entity &> entity_by_name(const std::string &name);
-    boost::optional<const entity &> entity_by_name(const std::string &name) const;
+    boost::optional<entity &> entity_with_name(const std::string &name);
+    boost::optional<const entity &> entity_with_name(const std::string &name) const;
 
     void entities_with_system(const std::string &name, std::vector<entity *> &out);
     void entities_with_system(const std::string &name, std::vector<const entity *> &out) const;
@@ -853,7 +853,7 @@ private:
     void remove_all_marked_removed();
 
     template <typename Entity>
-    boost::optional<Entity &> entity_by_name_(const std::string &name);
+    boost::optional<Entity &> entity_with_name_(const std::string &name);
 
     template <typename Entity>
     void entities_with_system_(const std::string &name, std::vector<Entity *> &out);
@@ -975,8 +975,8 @@ public:
     const layer &layer_by_name(const std::string &name) const;
     boost::iterator_range<layer_iterator> layers();
     boost::iterator_range<const_layer_iterator> layers() const;
-    boost::optional<entity &> entity_by_name(const std::string &name);
-    boost::optional<const entity &> entity_by_name(const std::string &name) const;
+    boost::optional<entity &> entity_with_name(const std::string &name);
+    boost::optional<const entity &> entity_with_name(const std::string &name) const;
     void entities_with_system(const std::string &name, std::vector<entity *> &out);
     void entities_with_system(const std::string &name, std::vector<const entity *> &out) const;
     std::size_t num_layers() const;

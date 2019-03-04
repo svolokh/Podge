@@ -65,7 +65,7 @@ struct system : entity_system {
         std::vector<std::string> spike_names;
         util::parse_names(c.spikes, spike_names);
         for(const auto &name : spike_names) {
-            auto &spike(*lvl.entity_by_name(name));
+            auto &spike(*lvl.entity_with_name(name));
             e.bind(spike);
             pc.spikes.push_back(&spike);
         }

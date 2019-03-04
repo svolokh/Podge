@@ -1540,12 +1540,12 @@ void layer::render(int z_index) const {
 	}
 }
 
-boost::optional<entity &> layer::entity_by_name(const std::string &name) {
-	return entity_by_name_<entity>(name);
+boost::optional<entity &> layer::entity_with_name(const std::string &name) {
+	return entity_with_name_<entity>(name);
 }
 
-boost::optional<const entity &> layer::entity_by_name(const std::string &name) const {
-	return const_cast<layer *>(this)->entity_by_name_<const entity>(name);
+boost::optional<const entity &> layer::entity_with_name(const std::string &name) const {
+	return const_cast<layer *>(this)->entity_with_name_<const entity>(name);
 }
 
 void layer::entities_with_system(const std::string &name, std::vector<entity *> &out) {
@@ -1587,7 +1587,7 @@ void layer::remove_all_marked_removed() {
 }
 
 template <typename Entity>
-boost::optional<Entity &> layer::entity_by_name_(const std::string &name) {
+boost::optional<Entity &> layer::entity_with_name_(const std::string &name) {
 	for(auto &e : entities_) {
 		if(e->has_component<core_component>()) {
 			auto &cc(e->component<core_component>());
@@ -1599,8 +1599,8 @@ boost::optional<Entity &> layer::entity_by_name_(const std::string &name) {
 	return {};
 }
 
-template boost::optional<entity &> layer::entity_by_name_<entity>(const std::string &);
-template boost::optional<const entity &> layer::entity_by_name_<const entity>(const std::string &);
+template boost::optional<entity &> layer::entity_with_name_<entity>(const std::string &);
+template boost::optional<const entity &> layer::entity_with_name_<const entity>(const std::string &);
 
 template <typename Entity>
 void layer::entities_with_system_(const std::string &name, std::vector<Entity *> &out) {
@@ -1799,9 +1799,9 @@ boost::iterator_range<level::const_layer_iterator> level::layers() const {
 	};
 }
 
-boost::optional<entity &> level::entity_by_name(const std::string &name) {
+boost::optional<entity &> level::entity_with_name(const std::string &name) {
 	for(auto &lyr : layers_) {
-		auto e(lyr->entity_by_name(name));
+		auto e(lyr->entity_with_name(name));
 		if(e) {
 			return e;
 		}
@@ -1809,9 +1809,9 @@ boost::optional<entity &> level::entity_by_name(const std::string &name) {
 	return {};
 }
 
-boost::optional<const entity &> level::entity_by_name(const std::string &name) const {
+boost::optional<const entity &> level::entity_with_name(const std::string &name) const {
 	for(const auto &lyr : layers_) {
-		auto e(lyr->entity_by_name(name));
+		auto e(lyr->entity_with_name(name));
 		if(e) {
 			return *e;
 		}

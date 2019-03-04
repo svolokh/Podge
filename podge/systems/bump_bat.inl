@@ -88,7 +88,7 @@ struct system : entity_system {
 		}
 		pc.st.home = to_vec2(e.body()->GetPosition());
 		pc.st.podge = podges[0];
-		pc.st.bounds = &*lvl.entity_by_name(c.bounds);
+		pc.st.bounds = &*lvl.entity_with_name(c.bounds);
 	}
 
 private:

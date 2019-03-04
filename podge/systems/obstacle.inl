@@ -215,7 +215,7 @@ struct system : entity_system {
 			active = true;
 			pc.follow_path_st.emplace();
 			auto &st(*pc.follow_path_st);
-			auto &path(*lvl.entity_by_name(c.follow_path_shape));
+			auto &path(*lvl.entity_with_name(c.follow_path_shape));
 			if(std::strcmp(path.type().name(), "path_shape") != 0) {
 				PODGE_THROW_ERROR();
 			}
@@ -314,7 +314,7 @@ struct system : entity_system {
 			active = true;
 			pc.orbit_st.emplace();
 			auto &st(*pc.orbit_st);
-			st.anchor = &*lvl.entity_by_name(c.orbit_anchor);
+			st.anchor = &*lvl.entity_with_name(c.orbit_anchor);
 			e.bind(*st.anchor);
 			auto pa(st.anchor->body()->GetPosition());
 			auto pe(e.body()->GetPosition());
@@ -338,7 +338,7 @@ struct system : entity_system {
 			active = true;
 			pc.smash_st.emplace();
 			auto &st(*pc.smash_st);
-			st.anchor = &*lvl.entity_by_name(c.smash_anchor);
+			st.anchor = &*lvl.entity_with_name(c.smash_anchor);
 			e.bind(*st.anchor);
 			auto pa(st.anchor->body()->GetPosition());
 			auto pb(util::ray_cast(pa, e.body()));
