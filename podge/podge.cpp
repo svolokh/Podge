@@ -414,7 +414,7 @@ static std::vector<b2Vec2> parse_points(const char *points, float x0, float y0) 
 	std::vector<b2Vec2> result;
 	std::istringstream points_iss(points);
 	while(!points_iss.eof()) {
-		int dx_px, dy_px;
+		float dx_px, dy_px;
 		points_iss >> dx_px;
 		if(points_iss.get() != ',') {
 			PODGE_THROW_ERROR();
@@ -851,16 +851,16 @@ entity_spec entity_spec::from_tile_xml(pugi::xml_node tile_node, pugi::xml_node 
 	return spec;
 }
 
-entity_spec entity_spec::from_object_xml(pugi::xml_node object_node, const resource_path &cwd) {
+entity_spec::from_object_xml_result entity_spec::from_object_xml(pugi::xml_node object_node, const resource_path &cwd) {
 	const auto &type(registry.type(object_node.attribute("type").value()));
-	entity_spec spec(type);
-	spec.add_component<core_component>();
-	auto &cc(spec.component<core_component>());
+	from_object_xml_result r(type); 
+	r.spec.add_component<core_component>();
+	auto &cc(r.spec.component<core_component>());
 	cc.flip_horizontal = false;
 	cc.flip_vertical = false;
 	auto properties_xpn(object_node.select_node("./properties"));
 	if(properties_xpn) {
-		spec.load_properties_xml(properties_xpn.node(), cwd);
+		r.spec.load_properties_xml(properties_xpn.node(), cwd);
 	}
 	auto &collision_shapes(cc.collision_shapes);
 	if(object_node.select_node("./polygon") || object_node.select_node("./polyline")) {
@@ -869,14 +869,22 @@ entity_spec entity_spec::from_object_xml(pugi::xml_node object_node, const resou
 		auto points(util::parse_points(polygon_xpn 
 			? polygon_xpn.node().attribute("points").value() 
 			: polyline_xpn.node().attribute("points").value(), 0.0f, 0.0f));
+		assert(!points.empty());
 		auto mm(util::points_minmax(points));
 		auto w(mm.second.x - mm.first.x);
 		auto h(mm.second.y - mm.first.y);
-		auto dx(-w/2.0f);
-		auto dy(h/2.0f);
+		b2Vec2 center(0.0f, 0.0f);
+		for(const auto &p : points) {
+			center.x += p.x;
+			center.y += p.y;
+		}
+		center.x /= points.size();
+		center.y /= points.size();
+		r.dx = center.x;
+		r.dy = center.y;
 		for(auto &p : points) {
-			p.x += dx;
-			p.y += dy;
+			p.x -= center.x;
+			p.y -= center.y;
 		}
 		cc.width = w;
 		cc.height = h;
@@ -902,6 +910,8 @@ entity_spec entity_spec::from_object_xml(pugi::xml_node object_node, const resou
 		auto h(object_node.attribute("height").as_float() * pixels_to_meters);
 		cc.width = w;
 		cc.height = h;
+		r.dx = w/2.0f;
+		r.dy = -h/2.0f;
 		if(ellipse && w != h) {
 			PODGE_THROW_ERROR();
 		}
@@ -919,7 +929,7 @@ entity_spec entity_spec::from_object_xml(pugi::xml_node object_node, const resou
 			collision_shapes.emplace_back(std::move(cs));
 		}
 	}
-	return spec;
+	return r;
 }
 
 entity_spec::entity_spec(const entity_type &type) : 
@@ -1426,9 +1436,12 @@ std::unique_ptr<layer> layer::from_object_layer_xml(pugi::xml_node objectgroup_n
 			const auto &ts_cc(ts_spec.component<core_component>());
 			scale = glm::vec2(cc.width/ts_cc.width, cc.height/ts_cc.height);
 		} else {
-			spec = entity_spec::from_object_xml(object_node, cwd);
+			auto r(entity_spec::from_object_xml(object_node, cwd));
+			spec = std::move(r.spec);
 			auto &cc(spec->component<core_component>());
-			Pc = glm::vec2(P.x + cc.width/2.0f, P.y - cc.height/2.0f); // non-tile objects' (x, y) refers to the top-left point on the object
+			Pc = glm::vec2(P.x + r.dx, P.y + r.dy); // non-tile objects' (x, y) refers to the top-left point on the object
+			cc.width = std::abs(cc.width);
+			cc.height = std::abs(cc.height);
 		}
 		auto angle(0.0f);
 		{

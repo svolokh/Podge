@@ -47,6 +47,12 @@
             "camera_zone"
         ]
     },
+    "camera_path": {
+        "has_body": true,
+        "systems": [
+            "sensor"
+        ]
+    },
     "glass": {
         "has_body": true,
         "systems": [

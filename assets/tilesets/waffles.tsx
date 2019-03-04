@@ -355,19 +355,47 @@
     </properties>
     <ellipse/>
    </object>
-   <object id="2" x="100" y="19">
+   <object id="4" x="21" y="108">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 14,-11 16,6 32,1 29,17 46,17 39,34"/>
+    <polygon points="0,0 -9,16 11,15"/>
    </object>
-   <object id="3" x="22" y="109">
+   <object id="5" x="32" y="124">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 -8,12 8,13 6,31 21,24 24,43 39,32"/>
+    <polygon points="0,0 -4,15 13,10"/>
+   </object>
+   <object id="6" x="45" y="134">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 1,18 16,7"/>
+   </object>
+   <object id="7" x="138" y="52">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 9,-17 -9,-14"/>
+   </object>
+   <object id="8" x="129" y="38">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 3,-20 -15,-11"/>
+   </object>
+   <object id="9" x="114" y="25">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 0,-17 -16,-6"/>
    </object>
   </objectgroup>
  </tile>
@@ -465,47 +493,68 @@
     </properties>
     <ellipse/>
    </object>
-   <object id="5" x="17" y="72">
+   <object id="11" x="119" y="30">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 -14,-13 5,-17 -5,-34 12,-33"/>
+    <polygon points="0,0 17,-7 12,11"/>
    </object>
-   <object id="6" x="30" y="39">
+   <object id="12" x="132" y="41">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 -5,-19 12,-11"/>
+    <polygon points="0,0 18,1 6,15"/>
    </object>
-   <object id="7" x="121" y="29">
+   <object id="13" x="140" y="56">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 15,-6 11,11 28,12 19,26"/>
+    <polygon points="0,0 17,6 3,18"/>
    </object>
-   <object id="8" x="141" y="55">
+   <object id="14" x="104" y="139">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 15,6 3,18"/>
+    <polygon points="0,0 -3,19 -15,4"/>
    </object>
-   <object id="9" x="53" y="140">
+   <object id="15" x="87" y="143">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 4,17 17,4 25,18 34,3"/>
+    <polygon points="0,0 -9,16 -16,-1"/>
    </object>
-   <object id="10" x="89" y="144">
+   <object id="16" x="70" y="142">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 12,14 15,-6"/>
+    <polygon points="0,0 -14,14 -17,-5"/>
+   </object>
+   <object id="17" x="17" y="72">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 -15,-12 4,-18"/>
+   </object>
+   <object id="18" x="21" y="56">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 -10,-17 11,-17"/>
+   </object>
+   <object id="19" x="31" y="39">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 -6,-17 15,-10"/>
    </object>
   </objectgroup>
  </tile>
@@ -551,33 +600,61 @@
      <property name="repulsive" type="bool" value="true"/>
     </properties>
    </object>
-   <object id="5" x="17" y="62">
+   <object id="9" x="16" y="3">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 -16,-5 0,-14 -16,-21 -1,-30"/>
+    <polygon points="0,0 -15,6 1,14"/>
    </object>
-   <object id="6" x="17" y="4">
+   <object id="10" x="16" y="17">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 -16,5 0,12 -16,21 -1,29"/>
+    <polygon points="0,0 -16,8 0,15"/>
    </object>
-   <object id="7" x="337" y="5">
+   <object id="11" x="17" y="31">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 14,4 -1,11 14,20 -1,27"/>
+    <polygon points="0,0 -17,10 -1,16"/>
    </object>
-   <object id="8" x="336" y="62">
+   <object id="12" x="18" y="48">
     <properties>
      <property name="damage" type="int" value="2"/>
      <property name="repulsive" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 14,-5 1,-14 15,-20 0,-31"/>
+    <polygon points="0,0 -19,8 0,15"/>
+   </object>
+   <object id="13" x="334" y="2">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 18,6 1,14"/>
+   </object>
+   <object id="14" x="336" y="16">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 15,9 -1,16"/>
+   </object>
+   <object id="15" x="336" y="33">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 15,8 0,16"/>
+   </object>
+   <object id="16" x="337" y="49">
+    <properties>
+     <property name="damage" type="int" value="2"/>
+     <property name="repulsive" type="bool" value="true"/>
+    </properties>
+    <polygon points="0,0 14,8 -1,14"/>
    </object>
   </objectgroup>
  </tile>

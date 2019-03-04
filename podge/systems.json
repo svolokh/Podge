@@ -15,5 +15,6 @@
     "systems/podge.inl",
     "systems/spike/spike.inl",
     "systems/spike/spike_trigger.inl",
-    "systems/leaf.inl"
+    "systems/leaf.inl",
+    "systems/debug_shapes.inl"
 ]

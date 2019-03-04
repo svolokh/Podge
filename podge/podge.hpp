@@ -399,8 +399,10 @@ private:
 };
 
 struct entity_spec : object {
+    struct from_object_xml_result;
+
     static entity_spec from_tile_xml(pugi::xml_node tile_node, pugi::xml_node tileset_node, const resource_path &cwd);
-    static entity_spec from_object_xml(pugi::xml_node object_node, const resource_path &cwd);
+    static from_object_xml_result from_object_xml(pugi::xml_node object_node, const resource_path &cwd);
 
     entity_spec(const entity_type &type);
     virtual ~entity_spec() = default;
@@ -415,6 +417,20 @@ protected:
     const entity_type *type_;
     int z_index_;
     bool visible_;
+};
+
+struct entity_spec::from_object_xml_result {
+    entity_spec spec;
+    float dx;
+    float dy;
+
+    template <typename Arg>
+    from_object_xml_result(Arg &&arg) :
+        spec(std::forward<Arg>(arg)),
+        dx(0.0f),
+        dy(0.0f)
+    {
+    }
 };
 
 struct entity : entity_spec {

@@ -54,14 +54,14 @@ struct system : entity_system {
 			if(!pc.current_pos) {
 				pc.current_pos = *c.target_pos;
 			} else {
-				pc.current_pos = 0.1f*(*c.target_pos) + 0.9f*(*pc.current_pos);
+				pc.current_pos = 0.05f*(*c.target_pos) + 0.95f*(*pc.current_pos);
 			}
 		}
 		if(c.target_width) {
 			if(!pc.current_width) {
 				pc.current_width = *c.target_width;
 			} else {
-				pc.current_width = 0.1f*(*c.target_width) + 0.9f*(*pc.current_width);
+				pc.current_width = 0.05f*(*c.target_width) + 0.95f*(*pc.current_width);
 			}
 		}
 		if(pc.current_pos) {
