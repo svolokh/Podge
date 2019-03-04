@@ -47,12 +47,6 @@
             "camera_zone"
         ]
     },
-    "camera_path": {
-        "has_body": true,
-        "systems": [
-            "anchor"
-        ]
-    },
     "glass": {
         "has_body": true,
         "systems": [
@@ -121,7 +115,7 @@
     "bird_path": {
         "has_body": true,
         "systems": [
-            "anchor"
+            "path"
         ]
     },
     "bird_trigger": {

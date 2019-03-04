@@ -18,5 +18,6 @@
     "systems/leaf.inl",
     "systems/debug_shapes.inl",
     "systems/bird.inl",
-    "systems/bird_trigger.inl"
+    "systems/bird_trigger.inl",
+    "systems/path.inl"
 ]

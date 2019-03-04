@@ -7,7 +7,8 @@ namespace podge { namespace systems { namespace bird {
 
 PODGE_PUBLIC_COMPONENT(component) {
     component() :
-        time(5.0f)
+        time(5.0f),
+        delay(0.0f)
     {
     }
 
@@ -26,7 +27,8 @@ PODGE_PUBLIC_COMPONENT(component) {
 
     BOOST_HANA_DEFINE_STRUCT(component,
         (std::string, path),
-        (float, time)); // desired time to reach the end of the path (may end up being slightly more due to how bird turning works)
+        (float, time), // desired time to reach the end of the path (may end up being slightly more due to how bird turning works)
+        (float, delay));  // time to delay before taking flight (useful if you want to have multiple birds fly along a path)
 };
 PODGE_REGISTER_COMPONENT(component);
 
@@ -53,10 +55,16 @@ PODGE_REGISTER_COMPONENT(internal_component);
 namespace podge { namespace systems { namespace bird {
 
 PODGE_COMPONENT(private_component) {
+    private_component() :
+        start_timer(0.0f)
+    {
+    }
+
     BOOST_HANA_DEFINE_STRUCT(private_component,
+        (float, start_timer),
         (std::size_t, index),
         (float, speed),
-        (const b2ChainShape *, path));
+        (std::vector<glm::vec2>, path));
 };
 PODGE_REGISTER_COMPONENT(private_component);
 
@@ -87,48 +95,68 @@ struct system : entity_system {
         if(shp->GetType() != b2Shape::e_chain) {
             PODGE_THROW_ERROR();
         }
-        pc.path = static_cast<const b2ChainShape *>(shp);
-        assert(pc.path->m_count > 1);
-        e.body()->SetTransform(pc.path->m_vertices[0], e.body()->GetAngle());
+        auto chain(static_cast<const b2ChainShape *>(shp));
+        const auto &xform(path.body()->GetTransform());
+        for(auto i(0); i != chain->m_count; ++i) {
+            auto pos(b2Mul(xform, chain->m_vertices[i]));
+            pc.path.emplace_back(pos.x, pos.y);
+        }
+        assert(pc.path.size() > 1);
+        e.body()->SetTransform(to_b2Vec2(pc.path[0]), e.body()->GetAngle());
         pc.index = 1;
         auto dist(0.0f);
-        for(std::size_t i(0); i != pc.path->m_count - 1; ++i) {
-            const auto &v1(pc.path->m_vertices[i]);
-            const auto &v2(pc.path->m_vertices[i + 1]);
-            dist += glm::distance(to_vec2(v1), to_vec2(v2));
+        for(std::size_t i(0); i != pc.path.size() - 1; ++i) {
+            const auto &v1(pc.path[i]);
+            const auto &v2(pc.path[i + 1]);
+            dist += glm::distance(v1, v2);
         }
         pc.speed = dist/c.time;
     }
 
     void step(entity &e) const {
         auto &lvl(level::current());
+        auto &c(e.component<component>());
+        auto &cc(e.component<core_component>());
         auto &pc(e.component<private_component>());
         auto &ic(e.component<internal_component>());
         if(!ic.active) {
+            auto pos(e.body()->GetPosition());
+            return;
+        } else if(pc.start_timer < c.delay) {
+            pc.start_timer += lvl.dt();
             return;
         }
-        const auto angle_per_sec(glm::radians(90.0f));
+        const auto angle_per_sec(glm::radians(120.0f));
         auto angle(e.body()->GetAngle());
         auto pos(to_vec2(e.body()->GetPosition()));
-        if(pc.index >= pc.path->m_count) {
+        if(pc.index >= pc.path.size()) {
             e.remove();
             return;
         } 
         auto max_angle_delta(lvl.dt()*angle_per_sec);
-        const auto &target_pos(to_vec2(pc.path->m_vertices[pc.index]));
-        auto target_angle(std::atan2(target_pos.y - pos.y, target_pos.x - pos.x));
+        const auto &target_pos(pc.path[pc.index]); 
+        float target_angle;
+        if(cc.flip_horizontal) {
+            target_angle = std::atan2(-(target_pos.y - pos.y), -(target_pos.x - pos.x));
+        } else {
+            target_angle = std::atan2(target_pos.y - pos.y, target_pos.x - pos.x);
+        }
         auto angle_delta(target_angle - angle);
         if(std::abs(angle_delta) >= max_angle_delta) {
             angle_delta = std::copysign(max_angle_delta, angle_delta);
         }
         angle += angle_delta;
         glm::vec2 v(std::cos(angle), std::sin(angle));
-        pos += pc.speed*v;
-        e.body()->SetTransform(to_b2Vec2(pos), e.body()->GetAngle());
+        if(cc.flip_horizontal) {
+            v.x *= -1.0f;
+            v.y *= -1.0f;
+        }
+        pos += pc.speed*v*lvl.dt();
+        e.body()->SetTransform(to_b2Vec2(pos), angle);
         {
             // check if we need to increment the index
-            auto v1(to_vec2(pc.path->m_vertices[pc.index - 1]));
-            auto v2(to_vec2(pc.path->m_vertices[pc.index]));
+            auto v1(pc.path[pc.index - 1]); 
+            auto v2(pc.path[pc.index]);
             auto v(v2 - v1);
             auto x(pos - v1);
             auto l(glm::length(v));

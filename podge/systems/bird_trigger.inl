@@ -8,19 +8,20 @@ namespace podge { namespace systems { namespace bird_trigger {
 PODGE_PUBLIC_COMPONENT(public_component) {
     void validate(const context &ctx) const {
         if(ctx.is_map()) {
-            if(bird.empty()) {
-                throw validation_error("'bird' must be specified");
-            }
-            if(!ctx.entity_exists(bird)) {
-                std::ostringstream oss;
-                oss << "bird '" << bird << "' does not exist";
-                throw validation_error(oss.str());
+            std::vector<std::string> bird_names;
+            util::parse_names(birds, bird_names);
+            for(const auto &name : bird_names) {
+                if(!ctx.entity_exists(name)) {
+                    std::ostringstream oss;
+                    oss << "bird '" << name << "' does not exist";
+                    throw validation_error(oss.str());
+                }
             }
         }
     }
 
     BOOST_HANA_DEFINE_STRUCT(public_component,
-        (std::string, bird));
+        (std::string, birds));
 };
 PODGE_REGISTER_COMPONENT(public_component);
 
@@ -37,7 +38,7 @@ namespace podge { namespace systems { namespace bird_trigger {
 
 PODGE_COMPONENT(component) {
     BOOST_HANA_DEFINE_STRUCT(component,
-        (entity *, bird));
+        (std::vector<entity *>, birds));
 };
 PODGE_REGISTER_COMPONENT(component);
 
@@ -51,6 +52,19 @@ struct system : entity_system {
             typeid(public_component),
             typeid(component)
         };
+    }
+
+    void add(entity &e) const {
+        auto &lvl(level::current());
+        auto &pc(e.component<public_component>());
+        auto &c(e.component<component>());
+        std::vector<std::string> bird_names;
+        util::parse_names(pc.birds, bird_names);
+        for(const auto &name : bird_names) {
+            auto &bird(*lvl.entity_with_name(name));
+            c.birds.emplace_back(&bird);
+            e.bind(bird);
+        }
     }
 };
 PODGE_REGISTER_SYSTEM(system);
@@ -67,8 +81,11 @@ struct contact_handler : entity_contact_handler {
         auto &lvl(level::current());
         auto &e(contact.entity_a());
         auto &c(e.component<component>());
-        auto &ic(c.bird->component<bird::internal_component>());
-        ic.active = true;
+        for(auto bird : c.birds) {
+            auto &ic(bird->component<bird::internal_component>());
+            ic.active = true;
+        }
+        e.remove();
     }
 };
 PODGE_REGISTER_CONTACT_HANDLER(contact_handler);
