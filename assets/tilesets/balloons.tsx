@@ -3,8 +3,8 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="balloon">
   <properties>
-   <property name="keyframes" type="file" value="balloon.json"/>
+    <property name="keyframes" type="file" value="balloons/balloon.json"/>
   </properties>
-  <image width="64" height="64" source="balloon.png"/>
+  <image width="64" height="64" source="balloons/balloon.png"/>
  </tile>
 </tileset>

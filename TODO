@@ -1,0 +1,2 @@
+- Implement an automatic PNG generator for the SVG files
+    - This will be especially important once we start generating PNGs for different device sizes

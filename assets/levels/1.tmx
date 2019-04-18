@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="15" height="136" tilewidth="64" tileheight="64" infinite="0" backgroundcolor="#392410" nextlayerid="11" nextobjectid="56">
+ <tileset firstgid="1" source="../tilesets/walls.tsx"/>
+ <tileset firstgid="22" source="../tilesets/podge.tsx"/>
+ <tileset firstgid="23" source="../tilesets/waffles.tsx"/>
+ <tileset firstgid="53" source="../tilesets/bumpers.tsx"/>
+ <tileset firstgid="54" source="../tilesets/windmills.tsx"/>
+ <objectgroup id="5" name="0">
+  <object id="2" gid="50" x="512" y="8192" width="256" height="256">
+   <properties>
+    <property name="spin" type="bool" value="true"/>
+    <property name="spin_ccw" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="3" gid="50" x="192" y="7872" width="256" height="256">
+   <properties>
+    <property name="spin" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="9" gid="46" x="608" y="7296" width="320" height="64">
+   <properties>
+    <property name="smash" type="bool" value="true"/>
+    <property name="smash_anchor" value="smash1"/>
+    <property name="smash_hover_time" type="float" value="4"/>
+   </properties>
+  </object>
+  <object id="10" gid="46" x="32" y="7296" width="320" height="64">
+   <properties>
+    <property name="smash" type="bool" value="true"/>
+    <property name="smash_anchor" value="smash1"/>
+    <property name="smash_hover_time" type="float" value="4"/>
+   </properties>
+  </object>
+  <object id="11" name="smash1" type="smash_anchor" x="480" y="7264">
+   <point/>
+  </object>
+  <object id="12" gid="57" x="320" y="7104" width="320" height="320"/>
+  <object id="13" gid="24" x="512" y="6688" width="256" height="256"/>
+  <object id="14" gid="24" x="192" y="6368" width="256" height="256"/>
+  <object id="15" gid="23" x="352" y="5856" width="128" height="128">
+   <properties>
+    <property name="orbit" type="bool" value="true"/>
+    <property name="orbit_anchor" value="orbit1"/>
+    <property name="smash" type="bool" value="false"/>
+    <property name="smash_anchor" value=""/>
+   </properties>
+  </object>
+  <object id="16" gid="23" x="480" y="5984" width="128" height="128">
+   <properties>
+    <property name="orbit" type="bool" value="true"/>
+    <property name="orbit_anchor" value="orbit1"/>
+    <property name="smash" type="bool" value="false"/>
+    <property name="smash_anchor" value=""/>
+   </properties>
+  </object>
+  <object id="17" name="orbit1" type="orbit_anchor" x="480" y="5856">
+   <point/>
+  </object>
+  <object id="21" gid="23" x="352" y="5472" width="128" height="128">
+   <properties>
+    <property name="orbit" type="bool" value="true"/>
+    <property name="orbit_anchor" value="orbit2"/>
+    <property name="orbit_ccw" type="bool" value="true"/>
+    <property name="smash" type="bool" value="false"/>
+    <property name="smash_anchor" value=""/>
+   </properties>
+  </object>
+  <object id="22" gid="23" x="480" y="5600" width="128" height="128">
+   <properties>
+    <property name="orbit" type="bool" value="true"/>
+    <property name="orbit_anchor" value="orbit2"/>
+    <property name="orbit_ccw" type="bool" value="true"/>
+    <property name="smash" type="bool" value="false"/>
+    <property name="smash_anchor" value=""/>
+   </properties>
+  </object>
+  <object id="23" name="orbit2" type="orbit_anchor" x="480" y="5472">
+   <point/>
+  </object>
+  <object id="24" gid="52" x="384" y="5184" width="192" height="64">
+   <properties>
+    <property name="oscillate" type="bool" value="true"/>
+    <property name="oscillate_distance" type="float" value="2"/>
+   </properties>
+  </object>
+  <object id="27" gid="52" x="384" y="4992" width="192" height="64">
+   <properties>
+    <property name="oscillate" type="bool" value="true"/>
+    <property name="oscillate_distance" type="float" value="2"/>
+    <property name="oscillate_phase" type="float" value="3.333333"/>
+   </properties>
+  </object>
+  <object id="28" gid="52" x="384" y="4800" width="192" height="64">
+   <properties>
+    <property name="oscillate" type="bool" value="true"/>
+    <property name="oscillate_distance" type="float" value="2"/>
+    <property name="oscillate_phase" type="float" value="6.666666"/>
+   </properties>
+  </object>
+  <object id="31" gid="26" x="544" y="4608" width="256" height="256"/>
+  <object id="32" gid="26" x="160" y="4224" width="256" height="256"/>
+  <object id="33" gid="53" x="400" y="4512" width="64" height="64"/>
+  <object id="34" gid="53" x="496" y="4128" width="64" height="64"/>
+  <object id="45" gid="32" x="32" y="1920" width="320" height="64">
+   <properties>
+    <property name="smash" type="bool" value="true"/>
+    <property name="smash_anchor" value="smash2"/>
+    <property name="smash_hover_time" type="float" value="2.5"/>
+   </properties>
+  </object>
+  <object id="46" gid="32" x="608" y="1920" width="320" height="64">
+   <properties>
+    <property name="smash" type="bool" value="true"/>
+    <property name="smash_anchor" value="smash2"/>
+    <property name="smash_hover_time" type="float" value="2.5"/>
+   </properties>
+  </object>
+  <object id="47" name="smash2" type="smash_anchor" x="480" y="1888">
+   <point/>
+  </object>
+  <object id="48" gid="24" x="160" y="1728" width="256" height="256">
+   <properties>
+    <property name="spin" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="49" gid="24" x="544" y="1728" width="256" height="256">
+   <properties>
+    <property name="spin" type="bool" value="true"/>
+    <property name="spin_ccw" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="50" gid="23" x="416" y="1344" width="128" height="128"/>
+  <object id="51" gid="55" x="160" y="1056" width="320" height="320">
+   <properties>
+    <property name="spin_ccw" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="52" gid="55" x="480" y="1056" width="320" height="320"/>
+  <object id="55" gid="55" x="320" y="3840" width="320" height="320"/>
+ </objectgroup>
+ <layer id="10" name="1" width="15" height="136">
+  <data encoding="csv">
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+1,1,1,1,1,10,0,0,0,11,1,1,1,1,1,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,19,16,16,16,16,16,18,13,13,13,13,
+13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,
+13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,
+13,13,13,13,13,13,13,13,13,13,13,13,13,13,13
+</data>
+ </layer>
+ <objectgroup id="4" name="2">
+  <object id="1" gid="22" x="448" y="8384" width="64" height="64"/>
+  <object id="5" gid="53" x="352" y="7488" width="64" height="64"/>
+  <object id="6" gid="53" x="544" y="7488" width="64" height="64"/>
+  <object id="36" gid="28" x="416" y="3376" width="128" height="128">
+   <properties>
+    <property name="spin" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="37" gid="53" x="384" y="3008" width="64" height="64">
+   <properties>
+    <property name="orbit" type="bool" value="true"/>
+    <property name="orbit_anchor" value="orbit3"/>
+   </properties>
+  </object>
+  <object id="38" gid="53" x="512" y="3136" width="64" height="64">
+   <properties>
+    <property name="orbit" type="bool" value="true"/>
+    <property name="orbit_anchor" value="orbit3"/>
+   </properties>
+  </object>
+  <object id="39" name="orbit3" type="orbit_anchor" x="480" y="3040">
+   <point/>
+  </object>
+  <object id="40" gid="53" x="384" y="2688" width="64" height="64">
+   <properties>
+    <property name="orbit" type="bool" value="true"/>
+    <property name="orbit_anchor" value="orbit4"/>
+    <property name="orbit_ccw" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="41" gid="53" x="512" y="2816" width="64" height="64">
+   <properties>
+    <property name="orbit" type="bool" value="true"/>
+    <property name="orbit_anchor" value="orbit4"/>
+    <property name="orbit_ccw" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="42" name="orbit4" type="orbit_anchor" x="480" y="2720">
+   <point/>
+  </object>
+  <object id="43" gid="53" x="384" y="2304" width="64" height="64">
+   <properties>
+    <property name="orbit" type="bool" value="false"/>
+    <property name="orbit_anchor" value=""/>
+    <property name="orbit_ccw" type="bool" value="false"/>
+    <property name="oscillate" type="bool" value="true"/>
+    <property name="oscillate_angle" type="float" value="270"/>
+    <property name="oscillate_distance" type="float" value="3"/>
+    <property name="oscillate_phase" type="float" value="2"/>
+   </properties>
+  </object>
+  <object id="44" gid="53" x="512" y="2304" width="64" height="64">
+   <properties>
+    <property name="orbit" type="bool" value="false"/>
+    <property name="orbit_anchor" value=""/>
+    <property name="orbit_ccw" type="bool" value="false"/>
+    <property name="oscillate" type="bool" value="true"/>
+    <property name="oscillate_angle" type="float" value="90"/>
+    <property name="oscillate_distance" type="float" value="3"/>
+   </properties>
+  </object>
+  <object id="53" type="finish_trigger" x="320" y="128" width="320" height="64"/>
+ </objectgroup>
+ <objectgroup id="6" name="camera" locked="1">
+  <object id="4" type="camera_zone" x="256" y="640" width="448" height="7872">
+   <properties>
+    <property name="center" type="bool" value="false"/>
+    <property name="center_width" type="float" value="7"/>
+    <property name="fixed" type="bool" value="false"/>
+    <property name="tracking" type="bool" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

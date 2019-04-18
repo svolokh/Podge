@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1"
+	 id="svg915" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:osb="http://www.openswatchbook.org/uri/2009/osb" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 352 64"
+	 style="enable-background:new 0 0 352 64;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;}
+	.st1{fill:#843500;}
+	.st2{fill:#552200;}
+	.st3{fill:#A4A4A4;}
+	.st4{fill:url(#pattern5041);stroke:#9A562B;stroke-width:16;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+<pattern  y="64" width="32" height="32" patternUnits="userSpaceOnUse" id="pattern5041" viewBox="0 -32 32 32" style="overflow:visible;">
+	<g>
+		<rect y="-32" class="st0" width="32" height="32"/>
+		<rect id="rect5013_1_" y="-16" class="st1" width="16" height="16"/>
+		<rect id="rect5035_1_" x="16" y="-16" class="st2" width="16" height="16"/>
+		<rect id="rect5037_1_" y="-32" class="st2" width="16" height="16"/>
+		<rect id="rect5039_1_" x="16" y="-32" class="st1" width="16" height="16"/>
+	</g>
+</pattern>
+<defs>
+	
+	
+		<inkscape:path-effect  apply_no_weight="true" apply_with_weight="true" effect="bspline" helper_size="0" id="path-effect3328" is_visible="true" only_selected="false" steps="2" weight="33.333333">
+		</inkscape:path-effect>
+	
+		<inkscape:path-effect  apply_no_weight="true" apply_with_weight="true" effect="bspline" helper_size="0" id="path-effect3322" is_visible="true" only_selected="false" steps="2" weight="33.333333">
+		</inkscape:path-effect>
+</defs>
+<sodipodi:namedview  bordercolor="#666666" borderopacity="1.0" gridtolerance="10" id="base" inkscape:current-layer="layer1" inkscape:cx="160.67852" inkscape:cy="86.642559" inkscape:document-units="px" inkscape:measure-end="0,0" inkscape:measure-start="0,0" inkscape:pagecheckerboard="true" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="855" inkscape:window-maximized="0" inkscape:window-width="1440" inkscape:window-x="0" inkscape:window-y="0" inkscape:zoom="2" pagecolor="#ffffff" showgrid="true" units="px">
+	<inkscape:grid  id="grid1466" spacingx="16" spacingy="16" type="xygrid"></inkscape:grid>
+</sodipodi:namedview>
+<g id="layer2" transform="translate(0,263.13333)" inkscape:groupmode="layer" inkscape:label="grid">
+</g>
+<path id="path7965" inkscape:connector-curvature="0" sodipodi:nodetypes="cccccccccc" class="st3" d="M24,1.4L0,9.7L16,17L0,25.8
+	l16,6.9L0,41.5l16,6.9L0,57.6L24,64V1.4z"/>
+<path id="path7967" inkscape:connector-curvature="0" sodipodi:nodetypes="cccccccccc" class="st3" d="M328,1.4l24,8.3L336,17
+	l16,8.8l-16,6.9l16,8.8l-16,6.9l16,9.3L328,64V1.4z"/>
+<rect id="rect7963" x="24" y="8" class="st4" width="304" height="48"/>
+</svg>

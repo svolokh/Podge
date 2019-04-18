@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="15" height="32" tilewidth="64" tileheight="64" infinite="0" backgroundcolor="#392410" nextlayerid="6" nextobjectid="8">
+ <tileset firstgid="1" source="../tilesets/walls.tsx"/>
+ <tileset firstgid="22" source="../tilesets/podge.tsx"/>
+ <tileset firstgid="23" source="../tilesets/windmills.tsx"/>
+ <tileset firstgid="27" source="../tilesets/bumpers.tsx"/>
+ <layer id="3" name="1" width="15" height="32">
+  <data encoding="csv">
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,14,0,0,0,0,0,15,13,13,13,13,
+13,13,13,13,19,16,16,16,16,16,18,13,13,13,13,
+13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,
+13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,
+13,13,13,13,13,13,13,13,13,13,13,13,13,13,13
+</data>
+ </layer>
+ <objectgroup id="4" name="2">
+  <object id="1" gid="22" x="448" y="1728" width="64" height="64"/>
+  <object id="5" gid="26" x="320" y="1472" width="320" height="320"/>
+  <object id="6" gid="26" x="320" y="960" width="320" height="320"/>
+ </objectgroup>
+ <objectgroup id="5" name="camera">
+  <object id="2" type="camera_zone" x="256" y="384" width="448" height="1408">
+   <properties>
+    <property name="center" type="bool" value="false"/>
+    <property name="center_width" type="float" value="7"/>
+    <property name="fixed" type="bool" value="false"/>
+    <property name="tracking" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="3" type="finish_trigger" x="320" y="0" width="320" height="64"/>
+  <object id="7" gid="27" x="448" y="1088" width="64" height="64">
+   <properties>
+    <property name="oscillate" type="bool" value="true"/>
+    <property name="oscillate_distance" type="float" value="2"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

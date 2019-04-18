@@ -894,7 +894,8 @@ PODGE_COMPONENT(tile_component) {
 PODGE_PUBLIC_COMPONENT(fixture_component) {
     fixture_component() :
         damage(0),
-        repulsive(false)
+        repulsive(false),
+        restitution(0.0f)
     {
     }
 
@@ -902,11 +903,15 @@ PODGE_PUBLIC_COMPONENT(fixture_component) {
         if(damage < 0) {
             throw validation_error("damage must be >= 0");
         }
+        if(restitution < 0.0f) {
+            throw validation_error("restitution must be >= 0");
+        }
     }
 
     BOOST_HANA_DEFINE_STRUCT(fixture_component,
         (int, damage),
-        (bool, repulsive));
+        (bool, repulsive),
+        (float, restitution));
 };
 
 // Types of level exits and data associated with them

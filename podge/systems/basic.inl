@@ -91,6 +91,8 @@ struct system : entity_system {
 		for(auto &shp : cc.collision_shapes) {
 			auto fixture(e.body()->CreateFixture(shp->shape.get(), 1.0f));
 			e.fixture_data(fixture) = shp->properties;
+			auto &fc(e.fixture_data(fixture).component<fixture_component>());
+			fixture->SetRestitution(fc.restitution);
 		}
 	}
 
