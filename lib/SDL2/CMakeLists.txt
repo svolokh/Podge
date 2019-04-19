@@ -853,7 +853,7 @@ if(ANDROID)
     set(HAVE_SDL_VIDEO TRUE)
 
     # Core stuff
-    find_library(ANDROID_DL_LIBRARY dl)
+    find_library(ANDROID_DL_LIBRARY libdl.so)
     find_library(ANDROID_LOG_LIBRARY log)
     find_library(ANDROID_LIBRARY_LIBRARY android)
     list(APPEND EXTRA_LIBS ${ANDROID_DL_LIBRARY} ${ANDROID_LOG_LIBRARY} ${ANDROID_LIBRARY_LIBRARY})
