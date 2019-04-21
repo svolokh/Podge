@@ -1,4 +1,10 @@
 {
+    "basic": {
+        "has_body": true,
+        "systems": [
+            "basic"
+        ]
+    },
     "balloon": {
         "has_body": true,
         "systems": [

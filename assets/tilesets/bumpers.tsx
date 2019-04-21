@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.1" name="bumpers" tilewidth="64" tileheight="64" tilecount="1" columns="0">
+<tileset version="1.2" tiledversion="1.2.1" name="bumpers" tilewidth="64" tileheight="64" tilecount="2" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0" type="obstacle">
   <properties>
@@ -46,5 +46,11 @@
     <ellipse/>
    </object>
   </objectgroup>
+ </tile>
+ <tile id="1" type="basic">
+  <properties>
+   <property name="keyframes" type="file" value="bumpers/orbit_indicator.json"/>
+  </properties>
+  <image width="64" height="64" source="bumpers/orbit_indicator.png"/>
  </tile>
 </tileset>
