@@ -33,15 +33,16 @@ PODGE_COMPONENT(component) {
 };
 PODGE_REGISTER_COMPONENT(component);
 
-// component other entities can use
+// component attached to other entities Podge collides with
 PODGE_COMPONENT(obstacle_component) {
 	obstacle_component() :
-		damage_multiplier(1.0f)
+		extra_damage(0)
 	{
 	}
 
 	BOOST_HANA_DEFINE_STRUCT(obstacle_component,
-		(float, damage_multiplier));
+		(int, extra_damage) // amount of extra damage Podge should take from colliding with the other entity
+	); 
 };
 PODGE_REGISTER_COMPONENT(obstacle_component);
 
@@ -263,18 +264,21 @@ struct damage_contact_handler : entity_contact_handler {
 		auto &obst(contact.entity_b());
 		auto &pc(p.component<component>());
 		auto &fc(obst.fixture_data(contact.fixture_b()).component<fixture_component>());
-		if(fc.damage > 0 && pc.invuln == 0.0f) {
-			float mult;
+		if(pc.invuln == 0.0f) {
+			int extra;
 			if(obst.has_component<obstacle_component>()) {
 				auto &oc(obst.component<obstacle_component>());
-				mult = oc.damage_multiplier;
+				extra = oc.extra_damage;
 			} else {
-				mult = 1.0f;
+				extra = 0;
 			}
-			hit_arg info;
-			info.amount = int(mult*fc.damage);
-			info.direction_from = -contact.normal();
-			p.signal(hit_, info);
+			auto damage(fc.damage + extra);
+			if(damage > 0) {
+				hit_arg info;
+				info.amount = fc.damage + extra;
+				info.direction_from = -contact.normal();
+				p.signal(hit_, info);
+			}
 		}
 	}
 };

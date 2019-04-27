@@ -513,7 +513,7 @@ struct system : entity_system {
 		}
 		{
 			auto &st(pc.obstacle_st);
-			poc.damage_multiplier = fatal ? 10.0f : 1.0f;
+			poc.extra_damage = fatal ? 1 : 0;
 			b2Filter filter;
 			if(!collides) {
 				filter.maskBits = 0;
