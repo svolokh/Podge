@@ -148,26 +148,19 @@ public:
 				}
 			}
 		}
+		// apply force to Podge and bump bats
+		for(auto c(e.body()->GetContactList()); c != nullptr; c = c->next) {
+			if(c->contact->IsTouching()) {
+				entity_contact ec(c->contact, false);
+				auto fb(to_b2Vec2(bump_force*to_vec2(ec.normal())));
+				ec.entity_b().body()->ApplyForce(fb, ec.point(), true);
+			}
+		}
 		// apply drag
 		util::apply_air_drag(e, cc.width);
 	}
 };
 PODGE_REGISTER_SYSTEM(system);
-
-struct bump_contact_handler : entity_contact_handler {
-	entity_system_mask mask() const {
-		return {
-			{"bump_bat", "podge"},
-			{"bump_bat", "bump_bat"}
-		};
-	}
-
-	void pre_solve(entity_contact &contact) const {
-		auto fb(to_b2Vec2(bump_force*to_vec2(contact.normal())));
-		contact.entity_b().body()->ApplyForce(fb, contact.point(), true);
-	}
-};
-PODGE_REGISTER_CONTACT_HANDLER(bump_contact_handler);
 
 } } }
 

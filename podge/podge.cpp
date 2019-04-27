@@ -1918,6 +1918,7 @@ void level::step() {
 	}
 	dequeue_inputs_();
 	world_.Step(dt_, 8, 3);
+	world_.ClearForces();
 	for(auto &lyr : layers_) {
 		lyr->step();
 	}

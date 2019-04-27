@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="15" height="136" tilewidth="64" tileheight="64" infinite="0" backgroundcolor="#392410" nextlayerid="11" nextobjectid="66">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="15" height="136" tilewidth="64" tileheight="64" infinite="0" backgroundcolor="#392410" nextlayerid="11" nextobjectid="68">
  <tileset firstgid="1" source="../tilesets/walls.tsx"/>
  <tileset firstgid="22" source="../tilesets/podge.tsx"/>
  <tileset firstgid="23" source="../tilesets/waffles.tsx"/>
  <tileset firstgid="53" source="../tilesets/bumpers.tsx"/>
- <tileset firstgid="55" source="../tilesets/windmills.tsx"/>
- <tileset firstgid="59" source="../tilesets/orbit_indicators.tsx"/>
+ <tileset firstgid="54" source="../tilesets/windmills.tsx"/>
+ <tileset firstgid="58" source="../tilesets/orbit_indicators.tsx"/>
  <objectgroup id="5" name="0">
   <object id="2" gid="50" x="512" y="8192" width="256" height="256">
    <properties>
@@ -35,7 +35,7 @@
   <object id="11" name="smash1" type="smash_anchor" x="480" y="7264">
    <point/>
   </object>
-  <object id="12" gid="58" x="320" y="7104" width="320" height="320"/>
+  <object id="12" gid="57" x="320" y="7104" width="320" height="320"/>
   <object id="13" gid="24" x="512" y="6688" width="256" height="256"/>
   <object id="14" gid="24" x="192" y="6368" width="256" height="256"/>
   <object id="15" gid="23" x="416" y="5824" width="128" height="128">
@@ -131,13 +131,13 @@
    </properties>
   </object>
   <object id="50" gid="23" x="416" y="1344" width="128" height="128"/>
-  <object id="51" gid="56" x="160" y="1056" width="320" height="320">
+  <object id="51" gid="55" x="160" y="1056" width="320" height="320">
    <properties>
     <property name="spin_ccw" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="52" gid="56" x="480" y="1056" width="320" height="320"/>
-  <object id="55" gid="56" x="320" y="3840" width="320" height="320"/>
+  <object id="52" gid="55" x="480" y="1056" width="320" height="320"/>
+  <object id="55" gid="55" x="320" y="3840" width="320" height="320"/>
  </objectgroup>
  <layer id="10" name="1" width="15" height="136">
   <data encoding="csv">
@@ -336,11 +336,11 @@
    </properties>
   </object>
   <object id="53" type="finish_trigger" x="320" y="128" width="320" height="64"/>
-  <object id="60" gid="22" x="448" y="8384" width="64" height="64"/>
-  <object id="61" gid="60" x="448" y="3072" width="64" height="64"/>
-  <object id="62" gid="60" x="448" y="2752" width="64" height="64"/>
-  <object id="64" gid="59" x="448" y="5504" width="64" height="64"/>
-  <object id="65" gid="59" x="448" y="5888" width="64" height="64"/>
+  <object id="61" gid="59" x="448" y="3072" width="64" height="64"/>
+  <object id="62" gid="59" x="448" y="2752" width="64" height="64"/>
+  <object id="64" gid="58" x="448" y="5504" width="64" height="64"/>
+  <object id="65" gid="58" x="448" y="5888" width="64" height="64"/>
+  <object id="67" gid="22" x="448" y="8384" width="64" height="64"/>
  </objectgroup>
  <objectgroup id="6" name="camera" locked="1">
   <object id="4" type="camera_zone" x="256" y="640" width="448" height="7872">

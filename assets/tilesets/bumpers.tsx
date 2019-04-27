@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.2" tiledversion="1.2.1" name="bumpers" tilewidth="64" tileheight="64" tilecount="1" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
- <tile id="0" type="obstacle">
+ <tile id="0" type="bumper">
   <properties>
-   <property name="ambient_radius" type="float" value="5"/>
-   <property name="ambient_sound" type="file" value=""/>
+   <property name="bump_force" type="float" value="250"/>
    <property name="follow_path" type="bool" value="false"/>
    <property name="follow_path_ccw" type="bool" value="false"/>
    <property name="follow_path_period" type="float" value="10"/>
@@ -41,7 +40,7 @@
     <properties>
      <property name="damage" type="int" value="0"/>
      <property name="repulsive" type="bool" value="false"/>
-     <property name="restitution" type="float" value="4"/>
+     <property name="restitution" type="float" value="0"/>
     </properties>
     <ellipse/>
    </object>

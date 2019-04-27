@@ -5,6 +5,14 @@
             "basic"
         ]
     },
+    "bumper": {
+        "has_body": true,
+        "systems": [
+            "basic",
+            "obstacle",
+            "bumper"
+        ]
+    },
     "balloon": {
         "has_body": true,
         "systems": [

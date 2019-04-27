@@ -6,6 +6,7 @@
     "systems/barrel/barrel_trigger.inl",
     "systems/basic.inl",
     "systems/bump_bat.inl",
+    "systems/bumper.inl",
     "systems/camera.inl",
     "systems/camera_zone.inl",
     "systems/sensor.inl",
