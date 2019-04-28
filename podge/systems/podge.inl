@@ -61,8 +61,7 @@ namespace podge { namespace systems { namespace podge {
 
 PODGE_COMPONENT(private_component) {
 	BOOST_HANA_DEFINE_STRUCT(private_component,
-		(std::vector<Mix_Chunk *>, pops),
-		(std::vector<Mix_Chunk *>, shockwaves));
+		(std::vector<Mix_Chunk *>, pops));
 };
 PODGE_REGISTER_COMPONENT(private_component);
 
@@ -86,12 +85,8 @@ struct system : entity_system {
 		bc.keyframe = "hp2";
 		{
 			resource_path popdir("audio/bubble/pop");
-			for(auto name : {"1.ogg", "2.ogg", "3.ogg", "4.ogg"}) {
+			for(auto name : {"1.ogg", "2.ogg", "3.ogg"}) {
 				pc.pops.emplace_back(lvl.pool().load_sample(popdir/name));
-			}
-			resource_path shockdir("audio/tap/shockwave");
-			for(auto name : {"1.ogg", "2.ogg", "3.ogg", "4.ogg"}) {
-				pc.shockwaves.emplace_back(lvl.pool().load_sample(shockdir/name));
 			}
 		}
 		e.body()->SetFixedRotation(true);
@@ -235,12 +230,6 @@ struct system : entity_system {
 					auto dir(glm::normalize(hit_pos - in_pos));
 					auto force(to_b2Vec2(strength*dir));
 					e.body()->ApplyForce(force, to_b2Vec2(hit_pos), true);
-				}
-				{
-					std::uniform_int_distribution<> dist(0, pc.shockwaves.size()-1);
-					auto index(dist(lvl.rng()));
-					auto sample(pc.shockwaves[index]);
-					Mix_PlayChannel(-1, sample, 0);
 				}
 				break;
 			}

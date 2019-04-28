@@ -890,7 +890,7 @@ PODGE_COMPONENT(tile_component) {
         (tileset *, source));
 };
 
-// The single component automatically added to all fixtures' data objects.
+// Component automatically added to all fixtures' data objects.
 PODGE_PUBLIC_COMPONENT(fixture_component) {
     fixture_component() :
         damage(0),
@@ -899,19 +899,22 @@ PODGE_PUBLIC_COMPONENT(fixture_component) {
     {
     }
 
-    void validate(const context &) const {
-        if(damage < 0) {
-            throw validation_error("damage must be >= 0");
-        }
-        if(restitution < 0.0f) {
-            throw validation_error("restitution must be >= 0");
-        }
-    }
+    void validate(const context &ctx) const;
 
     BOOST_HANA_DEFINE_STRUCT(fixture_component,
-        (int, damage),
-        (bool, repulsive),
-        (float, restitution));
+        (int, damage), // amount of damage this fixture does to Podge on collision
+        (bool, repulsive), // whether Podge should automatically slightly veer away from this fixture
+        (float, restitution), // the restitution of this fixture
+        (resource_path, hit_sound_1), // sound(s) to play when an entity collides with this fixture ("" if none)
+        (resource_path, hit_sound_2), // ^
+        (resource_path, hit_sound_3) // ^
+    );
+};
+
+// Component automatically added to all fixtures' data objects (used for storing loaded resources, pre-computed values, etc.)
+PODGE_COMPONENT(fixture_internal_component) {
+    BOOST_HANA_DEFINE_STRUCT(fixture_internal_component,
+        (std::vector<Mix_Chunk *>, hit_sounds));
 };
 
 // Types of level exits and data associated with them

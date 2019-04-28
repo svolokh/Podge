@@ -253,9 +253,29 @@ podge_registry registry;
 PODGE_REGISTER_COMPONENT(core_component);
 PODGE_REGISTER_COMPONENT(tile_component);
 PODGE_REGISTER_COMPONENT(fixture_component);
+PODGE_REGISTER_COMPONENT(fixture_internal_component);
 
 collision_shape::collision_shape() {
 	properties.add_component<fixture_component>();
+	properties.add_component<fixture_internal_component>();
+}
+
+void fixture_component::validate(const context &ctx) const {
+	if(damage < 0) {
+		throw validation_error("damage must be >= 0");
+	}
+	if(restitution < 0.0f) {
+		throw validation_error("restitution must be >= 0");
+	}
+	if(!hit_sound_1.empty() && !resource_exists(hit_sound_1.str())) {
+		throw validation_error("the file specified by 'hit_sound_1' does not exist");
+	}
+	if(!hit_sound_2.empty() && !resource_exists(hit_sound_2.str())) {
+		throw validation_error("the file specified by 'hit_sound_2' does not exist");
+	}
+	if(!hit_sound_3.empty() && !resource_exists(hit_sound_3.str())) {
+		throw validation_error("the file specified by 'hit_sound_3' does not exist");
+	}
 }
 
 namespace util {
@@ -1014,6 +1034,7 @@ object &entity::fixture_data(b2Fixture *fixture) {
 	}
 	std::unique_ptr<object> obj(new object());
 	obj->add_component<fixture_component>();
+	obj->add_component<fixture_internal_component>();
 	auto ptr(obj.get());
 	extra_body_data_->fixture_data.emplace_back(std::move(obj));
 	fixture->SetUserData(ptr);
@@ -1254,8 +1275,21 @@ bool podge_registry::ShouldCollide(b2Fixture *fixtureA, b2Fixture *fixtureB) {
 }
 
 void podge_registry::BeginContact(b2Contact *contact) {
+	auto &lvl(level::current());
 	auto &a(util::entity_from_body(contact->GetFixtureA()->GetBody()));
 	auto &b(util::entity_from_body(contact->GetFixtureB()->GetBody()));
+	if(contact->IsTouching()) {
+		// do global processing on contact
+		auto &afd(a.fixture_data(contact->GetFixtureA()));
+		auto &bfd(b.fixture_data(contact->GetFixtureB()));
+		for(auto *fd : {&afd, &bfd}) {
+			auto &fic(fd->component<fixture_internal_component>());
+			if(!fic.hit_sounds.empty()) {
+				auto sample(fic.hit_sounds[std::uniform_int_distribution<>(0, fic.hit_sounds.size() - 1)(lvl.rng())]);
+				Mix_PlayChannel(-1, sample, 0);
+			}
+		}
+	}
 	iterate_handlers(a, b, [&](const entity_contact_handler &handler, bool swap) {
 		entity_contact c(contact, swap);
 		handler.begin_contact(c);

@@ -84,15 +84,22 @@ struct system : entity_system {
 			pc.keyframes.emplace(it.key(), lvl.pool().load_image(path.canonical(dir).str()));
 		}
 
-		// set up collision
+		// set up fixtures
 		if(cc.collision_shapes.empty()) {
 			e.body()->SetType(b2_staticBody);
 		}
 		for(auto &shp : cc.collision_shapes) {
 			auto fixture(e.body()->CreateFixture(shp->shape.get(), 1.0f));
 			e.fixture_data(fixture) = shp->properties;
-			auto &fc(e.fixture_data(fixture).component<fixture_component>());
+			auto &fd(e.fixture_data(fixture));
+			auto &fc(fd.component<fixture_component>());
+			auto &fic(fd.component<fixture_internal_component>());
 			fixture->SetRestitution(fc.restitution);
+			for(auto *path : {&fc.hit_sound_1, &fc.hit_sound_2, &fc.hit_sound_3}) {
+				if(!path->empty()) {
+					fic.hit_sounds.emplace_back(lvl.pool().load_sample(*path));
+				}
+			}
 		}
 	}
 
