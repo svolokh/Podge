@@ -12,6 +12,9 @@
    <object id="11" x="0" y="58">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -20,6 +23,9 @@
    <object id="16" x="81" y="32">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -28,6 +34,9 @@
    <object id="17" x="151" y="20">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -36,6 +45,9 @@
    <object id="18" x="160" y="95">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -44,6 +56,9 @@
    <object id="19" x="162" y="33">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -52,6 +67,9 @@
    <object id="20" x="199" y="26">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -60,6 +78,9 @@
    <object id="21" x="233" y="26">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -68,6 +89,9 @@
    <object id="22" x="241" y="88">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -76,6 +100,9 @@
    <object id="24" x="243" y="40">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -84,6 +111,9 @@
    <object id="25" x="267" y="41">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -92,6 +122,9 @@
    <object id="26" x="299" y="49">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>

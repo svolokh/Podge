@@ -11,6 +11,9 @@
    <object id="2" x="16" y="64">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="0"/>
     </properties>

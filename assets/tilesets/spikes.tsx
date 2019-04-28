@@ -3,7 +3,7 @@
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="1" type="spike">
   <properties>
-    <property name="keyframes" type="file" value="spikes/spike1.json"/>
+   <property name="keyframes" type="file" value="spikes/spike1.json"/>
    <property name="speed" type="float" value="10"/>
   </properties>
   <image width="64" height="64" source="spikes/spike1.png"/>
@@ -11,6 +11,9 @@
    <object id="4" x="0" y="12" width="40" height="40">
     <properties>
      <property name="damage" type="int" value="0"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="true"/>
      <property name="restitution" type="float" value="0"/>
     </properties>
@@ -19,6 +22,9 @@
    <object id="5" x="29" y="15">
     <properties>
      <property name="damage" type="int" value="2"/>
+     <property name="hit_sound_1" type="file" value=""/>
+     <property name="hit_sound_2" type="file" value=""/>
+     <property name="hit_sound_3" type="file" value=""/>
      <property name="repulsive" type="bool" value="true"/>
      <property name="restitution" type="float" value="0"/>
     </properties>

@@ -3,12 +3,12 @@
  <tileset firstgid="1" source="../tilesets/walls.tsx"/>
  <tileset firstgid="22" source="../tilesets/podge.tsx"/>
  <tileset firstgid="23" source="../tilesets/waffles.tsx"/>
- <tileset firstgid="42" source="../tilesets/windmills.tsx"/>
- <tileset firstgid="46" source="../tilesets/barrels.tsx"/>
- <tileset firstgid="47" source="../tilesets/spikes.tsx"/>
- <tileset firstgid="49" source="../tilesets/bump_bats.tsx"/>
- <tileset firstgid="50" source="../tilesets/balloons.tsx"/>
- <tileset firstgid="51" source="../tilesets/leaves.tsx"/>
+ <tileset firstgid="53" source="../tilesets/windmills.tsx"/>
+ <tileset firstgid="57" source="../tilesets/barrels.tsx"/>
+ <tileset firstgid="58" source="../tilesets/spikes.tsx"/>
+ <tileset firstgid="60" source="../tilesets/bump_bats.tsx"/>
+ <tileset firstgid="61" source="../tilesets/balloons.tsx"/>
+ <tileset firstgid="62" source="../tilesets/leaves.tsx"/>
  <objectgroup id="1" name="1">
   <properties>
    <property name="world" type="int" value="0"/>
@@ -44,8 +44,8 @@
     <property name="barrels" value="barrel1,barrel2"/>
    </properties>
   </object>
-  <object id="154" name="barrel1" gid="46" x="544" y="6272" width="64" height="64"/>
-  <object id="155" name="barrel2" gid="46" x="736" y="6080" width="64" height="64"/>
+  <object id="154" name="barrel1" gid="57" x="544" y="6272" width="64" height="64"/>
+  <object id="155" name="barrel2" gid="57" x="736" y="6080" width="64" height="64"/>
   <object id="156" gid="32" x="512" y="6016" width="320" height="64">
    <properties>
     <property name="pulsate" type="bool" value="true"/>
@@ -57,11 +57,11 @@
     <property name="pulsate" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="207" name="spike2" gid="48" x="400" y="2592" width="64" height="64" rotation="-180"/>
-  <object id="208" name="spike1" gid="48" x="416" y="2608" width="64" height="64" rotation="-495"/>
-  <object id="210" name="spike5" gid="1073741872" x="45.2548" y="2466.75" width="64" height="64" rotation="360"/>
-  <object id="211" name="spike4" gid="1073741872" x="74.5097" y="2464" width="64" height="64" rotation="675"/>
-  <object id="212" name="spike6" gid="1073741872" x="32" y="2448" width="64" height="64" rotation="765"/>
+  <object id="207" name="spike2" gid="59" x="400" y="2592" width="64" height="64" rotation="-180"/>
+  <object id="208" name="spike1" gid="59" x="416" y="2608" width="64" height="64" rotation="-495"/>
+  <object id="210" name="spike5" gid="1073741883" x="45.2548" y="2466.75" width="64" height="64" rotation="360"/>
+  <object id="211" name="spike4" gid="1073741883" x="74.5097" y="2464" width="64" height="64" rotation="675"/>
+  <object id="212" name="spike6" gid="1073741883" x="32" y="2448" width="64" height="64" rotation="765"/>
   <object id="213" type="spike_trigger" x="-128" y="2240" width="384" height="384">
    <properties>
     <property name="spikes" value="spike4,spike5,spike6"/>
@@ -74,7 +74,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="215" name="spike3" gid="48" x="368" y="2592" width="64" height="64" rotation="-585"/>
+  <object id="215" name="spike3" gid="59" x="368" y="2592" width="64" height="64" rotation="-585"/>
   <object id="216" gid="25" x="448" y="960" width="128" height="128">
    <properties>
     <property name="smash" type="bool" value="true"/>
@@ -155,7 +155,7 @@
   <object id="244" name="smash_anchor_2" type="smash_anchor" x="929.14" y="1478.63">
    <point/>
   </object>
-  <object id="266" gid="43" x="512" y="7360" width="320" height="320"/>
+  <object id="266" gid="54" x="512" y="7360" width="320" height="320"/>
  </objectgroup>
  <objectgroup id="3" name="2">
   <properties>
@@ -205,12 +205,12 @@
   <object id="182" name="orbit_anchor_1" type="orbit_anchor" x="1120" y="1920">
    <point/>
   </object>
-  <object id="183" gid="49" x="1024" y="2528" width="64" height="64">
+  <object id="183" gid="60" x="1024" y="2528" width="64" height="64">
    <properties>
     <property name="bounds" value="bump_bat_bounds_1"/>
    </properties>
   </object>
-  <object id="184" gid="49" x="1152" y="2656" width="64" height="64">
+  <object id="184" gid="60" x="1152" y="2656" width="64" height="64">
    <properties>
     <property name="bounds" value="bump_bat_bounds_1"/>
    </properties>
@@ -245,8 +245,8 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="3">
-  <object id="290" gid="51" x="448" y="5152" width="320" height="128"/>
-  <object id="291" gid="2147483699" x="576" y="5088" width="320" height="128">
+  <object id="290" gid="62" x="448" y="5152" width="320" height="128"/>
+  <object id="291" gid="2147483710" x="576" y="5088" width="320" height="128">
    <properties>
     <property name="ccw" type="bool" value="false"/>
    </properties>
@@ -551,12 +551,12 @@
   <properties>
    <property name="world" type="int" value="0"/>
   </properties>
-  <object id="159" gid="43" x="512" y="5698.27" width="320" height="320" rotation="-45">
+  <object id="159" gid="54" x="512" y="5698.27" width="320" height="320" rotation="-45">
    <properties>
     <property name="spin_ccw" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="160" gid="43" x="605.726" y="5472" width="320" height="320" rotation="45"/>
+  <object id="160" gid="54" x="605.726" y="5472" width="320" height="320" rotation="45"/>
   <object id="167" type="glass" x="448" y="4528">
    <polygon points="0,0 64,-80 384,-80 448,0 448,160 384,240 64,240 0,160"/>
   </object>

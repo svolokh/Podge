@@ -152,8 +152,11 @@ public:
 		for(auto c(e.body()->GetContactList()); c != nullptr; c = c->next) {
 			if(c->contact->IsTouching()) {
 				entity_contact ec(c->contact, false);
-				auto fb(to_b2Vec2(bump_force*to_vec2(ec.normal())));
-				ec.entity_b().body()->ApplyForce(fb, ec.point(), true);
+				auto &b(ec.entity_b());
+				if(strcmp(b.type().name(), "podge") == 0 || strcmp(b.type().name(), "bump_bat") == 0) {
+					auto fb(to_b2Vec2(bump_force*to_vec2(ec.normal())));
+					ec.entity_b().body()->ApplyForce(fb, ec.point(), true);
+				}
 			}
 		}
 		// apply drag
