@@ -77,7 +77,7 @@ struct system : entity_system {
 };
 PODGE_REGISTER_SYSTEM(system);
 
-// breaks the barrel when it hits something
+// breaks the barrel when it hits a solid body
 struct contact_handler : entity_contact_handler {
 	entity_system_mask mask() const {
 		return {
@@ -86,7 +86,19 @@ struct contact_handler : entity_contact_handler {
 	}
 
 	void begin_contact(entity_contact &contact) const {
-		contact.entity_a().remove();
+		auto should_break(false);
+		if(contact.entity_b().has_body()) {
+			auto body(contact.entity_b().body());
+			for(auto fixture(body->GetFixtureList()); fixture != nullptr; fixture = fixture->GetNext()) {
+				if(!fixture->IsSensor()) {
+					should_break = true;
+					break;
+				}
+			}
+		}
+		if(should_break) {
+			contact.entity_a().remove();
+		}
 	}
 };
 PODGE_REGISTER_CONTACT_HANDLER(contact_handler);

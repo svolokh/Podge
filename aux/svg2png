@@ -1,0 +1,26 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage 1: $0 <directory>"
+    echo "Usage 2: $0 <svg> <png>"
+}
+
+do_convert() {
+    convert -depth 8 -background transparent "$1" "$2"
+}
+
+if [[ -z "$1" ]]; then
+    usage
+    exit 0
+fi
+
+if [[ "$#" == 1 ]]; then
+    find . -maxdepth 1 -name '*.svg' | while read file; do
+        do_convert "$file" "$(echo "$file" | sed "s/\.svg$/\.png/g")"
+    done
+elif [[ "$#" == 2 ]]; then
+    do_convert "$1" "$2"
+else
+    usage
+    exit 1
+fi
