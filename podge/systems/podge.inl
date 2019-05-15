@@ -99,10 +99,13 @@ struct system : entity_system {
 			auto &pc(e.component<private_component>());
 			auto &bc(e.component<basic::component>());
 			auto &c(e.component<component>());
-			c.hp -= info.amount;
+			if(!lvl.demo_mode) {
+				c.hp -= info.amount;
+			}
 			if(info.amount > 0) {
 				auto sample(pc.pops[std::uniform_int_distribution<>(0, pc.pops.size()-1)(lvl.rng())]);
 				Mix_PlayChannel(-1, sample, 0);
+				lvl.num_hits += 1;
 			}
 			if(c.hp <= 0) {
 				auto &lvl(level::current());

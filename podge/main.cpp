@@ -12,12 +12,17 @@
 
 namespace podge {
 
+struct choose_level_result {
+    resource_path tmx_path;
+    bool demo_mode;
+};
+
 struct game {
     game();
 
     // game states
-    resource_path choose_level();
-    void play_level(const resource_path &tmx_path);
+    choose_level_result choose_level();
+    void play_level(const resource_path &tmx_path, bool demo_mode);
 
     std::unique_ptr<gfx_context> gctx;
 };
@@ -37,7 +42,8 @@ static void pre_frame() {
     }
 }
 
-resource_path game::choose_level() {
+static bool demo_mode(false);
+choose_level_result game::choose_level() {
     auto pctx(gctx->new_nk_context());
     auto ctx(pctx.get());
     auto window(gctx->window());
@@ -57,10 +63,24 @@ resource_path game::choose_level() {
             nk_layout_row_dynamic(ctx, 30, 1);
             for(const auto &tmx : tmxs) {
                 if(nk_button_label(ctx, tmx.c_str())) {
-                    return resource_path("levels")/tmx;
+                    return {
+                        resource_path("levels")/tmx,
+                        demo_mode
+                    };
                 }
                 nk_button_set_behavior(ctx, NK_BUTTON_DEFAULT);
             }
+            nk_spacing(ctx, 1);
+            if(demo_mode) {
+                if(nk_button_label(ctx, "Disable demo mode")) {
+                    demo_mode = false;
+                }
+            } else {
+                if(nk_button_label(ctx, "Enable demo mode")) {
+                    demo_mode = true;
+                } 
+            }
+            nk_button_set_behavior(ctx, NK_BUTTON_DEFAULT);
         }
         nk_end(ctx);
         gctx->nk_end(ctx, glm::vec4(0.3f, 0.3f, 0.3f, 1.0f));
@@ -68,7 +88,7 @@ resource_path game::choose_level() {
     PODGE_THROW_ERROR();
 }
 
-void game::play_level(const resource_path &tmx_path) {
+void game::play_level(const resource_path &tmx_path, bool demo_mode) {
     pugi::xml_document tmx;
     auto res(tmx.load_string(get_resource(tmx_path.str()).c_str()));
     if(!res) {
@@ -80,6 +100,8 @@ void game::play_level(const resource_path &tmx_path) {
     auto window(gctx->window());
 
     level lvl(vg, tmx, 1.0f/60.0f, tmx_path.parent());
+    lvl.demo_mode = demo_mode;
+
     auto update_camera_dims([&lvl, &window]() {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
@@ -163,15 +185,19 @@ void game::play_level(const resource_path &tmx_path) {
     }
 
     auto es(*lvl.exit_state());
-    const char *msg;
+    std::string msg;
     if(es.type() == typeid(level_exits::victory)) {
-        msg = "Victory!";
+        if(lvl.num_hits > 2) {
+            msg = "Victory? (You got hit " + std::to_string(lvl.num_hits) + " times)";
+        } else {
+            msg = "Victory!";
+        }
     } else if(es.type() == typeid(level_exits::failure)) {
         msg = "Game Over!";
     } else {
         PODGE_THROW_ERROR();
     }
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Podge", msg, window);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Podge", msg.c_str(), window);
 }
 
 static void run() {
@@ -202,8 +228,8 @@ static void run() {
     game g;
     auto window(g.gctx->window());
     for(;;) {
-        auto tmx_path(g.choose_level());
-        g.play_level(tmx_path);
+        auto res(g.choose_level());
+        g.play_level(res.tmx_path, res.demo_mode);
     }
 }
 

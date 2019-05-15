@@ -1038,6 +1038,11 @@ private:
     std::default_random_engine rng_;
 
     mutable std::set<int> z_indices_buf_;
+
+public:
+    // demo-mode state (this will be removed once we figure out the mechanics and get rid of demo-mode)
+    bool demo_mode = false;
+    int num_hits = 0;
 };
 
 }
