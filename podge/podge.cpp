@@ -477,14 +477,14 @@ static void scale_body(b2Body *body, const glm::vec2 &scale) {
 		switch(fixture->GetType()) {
 			case b2Shape::e_circle:
 				{
-					if(std::abs(scale.x - scale.y) >= std::numeric_limits<float>::epsilon()) {
+					if(std::abs(std::abs(scale.x) - std::abs(scale.y)) >= std::numeric_limits<float>::epsilon()) {
 						PODGE_THROW_ERROR();
 					}
 					auto shape(static_cast<b2CircleShape *>(fixture->GetShape()));
 					std::unique_ptr<b2CircleShape> new_shape(new b2CircleShape());
 					new_shape->m_p.x = shape->m_p.x * scale.x;
 					new_shape->m_p.y = shape->m_p.y * scale.y;
-					new_shape->m_radius = shape->m_radius * scale.x;
+					new_shape->m_radius = std::abs(shape->m_radius * scale.x);
 					def.shape = new_shape.get();
 					shapes.emplace_back(std::move(new_shape));
 					handled = true;
@@ -1469,6 +1469,12 @@ std::unique_ptr<layer> layer::from_object_layer_xml(pugi::xml_node objectgroup_n
 			Pc = glm::vec2(P.x + cc.width/2.0f, P.y + cc.height/2.0f); // tile objects' (x, y) refers to the bottom-left point on the object
 			const auto &ts_cc(ts_spec.component<core_component>());
 			scale = glm::vec2(cc.width/ts_cc.width, cc.height/ts_cc.height);
+			if(cc.flip_horizontal) {
+				scale->x *= -1.0f;
+			}
+			if(cc.flip_vertical) {
+				scale->y *= -1.0f;
+			}
 		} else {
 			auto r(entity_spec::from_object_xml(object_node, cwd));
 			spec = std::move(r.spec);
