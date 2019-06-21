@@ -85,7 +85,7 @@ struct system : entity_system {
 		bc.keyframe = "hp2";
 		{
 			resource_path popdir("audio/bubble/pop");
-			for(auto name : {"1.ogg", "2.ogg", "3.ogg"}) {
+			for(auto name : {"1.wav", "2.wav", "3.wav"}) {
 				pc.pops.emplace_back(lvl.pool().load_sample(popdir/name));
 			}
 		}

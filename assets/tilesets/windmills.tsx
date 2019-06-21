@@ -4,7 +4,7 @@
  <tile id="0" type="obstacle">
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
-   <property name="ambient_sound" type="file" value="../audio/ambient/windmill/windmill.ogg"/>
+   <property name="ambient_sound" type="file" value="../audio/ambient/windmill/windmill.wav"/>
    <property name="follow_path" type="bool" value="false"/>
    <property name="follow_path_ccw" type="bool" value="false"/>
    <property name="follow_path_period" type="float" value="10"/>
@@ -73,7 +73,7 @@
  <tile id="1" type="obstacle">
   <properties>
    <property name="ambient_radius" type="float" value="5"/>
-   <property name="ambient_sound" type="file" value="../audio/ambient/windmill/windmill.ogg"/>
+   <property name="ambient_sound" type="file" value="../audio/ambient/windmill/windmill.wav"/>
    <property name="follow_path" type="bool" value="false"/>
    <property name="follow_path_ccw" type="bool" value="false"/>
    <property name="follow_path_period" type="float" value="10"/>
@@ -178,9 +178,9 @@
    <object id="1" x="80" y="0" width="32" height="192">
     <properties>
      <property name="damage" type="int" value="0"/>
-     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.ogg"/>
-     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.ogg"/>
-     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.ogg"/>
+     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.wav"/>
+     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.wav"/>
+     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.wav"/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="1.5"/>
     </properties>
@@ -188,9 +188,9 @@
    <object id="2" x="0" y="80" width="190" height="32">
     <properties>
      <property name="damage" type="int" value="0"/>
-     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.ogg"/>
-     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.ogg"/>
-     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.ogg"/>
+     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.wav"/>
+     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.wav"/>
+     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.wav"/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="1.5"/>
     </properties>
@@ -198,9 +198,9 @@
    <object id="3" x="64" y="64" width="64" height="64">
     <properties>
      <property name="damage" type="int" value="0"/>
-     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.ogg"/>
-     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.ogg"/>
-     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.ogg"/>
+     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.wav"/>
+     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.wav"/>
+     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.wav"/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="1.5"/>
     </properties>
@@ -247,9 +247,9 @@
    <object id="1" x="144" y="0" width="32" height="318">
     <properties>
      <property name="damage" type="int" value="0"/>
-     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.ogg"/>
-     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.ogg"/>
-     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.ogg"/>
+     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.wav"/>
+     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.wav"/>
+     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.wav"/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="1.5"/>
     </properties>
@@ -257,9 +257,9 @@
    <object id="2" x="0" y="144" width="318" height="32">
     <properties>
      <property name="damage" type="int" value="0"/>
-     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.ogg"/>
-     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.ogg"/>
-     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.ogg"/>
+     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.wav"/>
+     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.wav"/>
+     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.wav"/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="1.5"/>
     </properties>
@@ -267,9 +267,9 @@
    <object id="3" x="128" y="128" width="64" height="64">
     <properties>
      <property name="damage" type="int" value="0"/>
-     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.ogg"/>
-     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.ogg"/>
-     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.ogg"/>
+     <property name="hit_sound_1" type="file" value="../audio/hit/rubber/1.wav"/>
+     <property name="hit_sound_2" type="file" value="../audio/hit/rubber/2.wav"/>
+     <property name="hit_sound_3" type="file" value="../audio/hit/rubber/3.wav"/>
      <property name="repulsive" type="bool" value="false"/>
      <property name="restitution" type="float" value="1.5"/>
     </properties>

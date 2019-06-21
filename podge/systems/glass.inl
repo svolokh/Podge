@@ -41,7 +41,7 @@ struct system : entity_system {
 		auto &lvl(level::current());
 		auto &pc(e.component<private_component>());
 		resource_path dir("audio/tap/glass");
-		for(auto name : {"1.ogg", "2.ogg", "3.ogg", "4.ogg"}) {
+		for(auto name : {"1.wav", "2.wav", "3.wav", "4.wav"}) {
 			pc.glass_taps.push_back(lvl.pool().load_sample(dir/name));
 		}
 		e.body()->SetType(b2_staticBody);
