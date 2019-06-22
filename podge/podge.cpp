@@ -1800,7 +1800,6 @@ level::level(NVGcontext *vg, music_manager &music_mgr, pugi::xml_node tmx_node, 
 	{
 		auto properties_xpn(map_node.select_node("./properties"));
 		if(properties_xpn) {
-			SDL_Log("loading properties!");
 			load_properties_xml(properties_xpn.node(), cwd);
 		}
 	}
