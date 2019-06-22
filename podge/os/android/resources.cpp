@@ -44,6 +44,10 @@ std::string get_resource(const std::string &path) {
 	jni_local_scope scope(16);
 	auto assetmgr(get_asset_manager());
 	auto asset(AAssetManager_open(assetmgr, path.c_str(), AASSET_MODE_BUFFER));
+	if(asset == nullptr) {
+		SDL_Log("Missing resource %s", path.c_str());
+		PODGE_THROW_ERROR();
+	}
 	BOOST_SCOPE_EXIT(asset) {
 		AAsset_close(asset);
 	} BOOST_SCOPE_EXIT_END

@@ -74,11 +74,12 @@ set(SDL2_MIXER_SOURCE_FILES
 	${SDL2_MIXER_DIR}/load_voc.c
 	${SDL2_MIXER_DIR}/mixer.c
 	${SDL2_MIXER_DIR}/music.c
+	${SDL2_MIXER_DIR}/music_wav.c
 	${SDL2_MIXER_DIR}/music_ogg.c
 	${SDL2_MIXER_DIR}/playmus.c
 	${SDL2_MIXER_DIR}/playwave.c)
 add_library(SDL2_mixer STATIC ${SDL2_MIXER_SOURCE_FILES})
-target_compile_definitions(SDL2_mixer PRIVATE MUSIC_OGG)
+target_compile_definitions(SDL2_mixer PRIVATE MUSIC_WAV MUSIC_OGG)
 target_include_directories(SDL2_mixer PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/SDL2/include ${VORBIS_DIR}/include ${OGG_DIR}/include)
 target_link_libraries(SDL2_mixer PUBLIC SDL2-static vorbis)
 

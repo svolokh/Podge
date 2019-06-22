@@ -113,6 +113,28 @@ struct make_type_holder {
     typedef type_holder<T> type;
 };
 
+struct music_manager {
+    music_manager();
+    ~music_manager();
+
+    // loads music and sets it as the current music
+    // previous music must unloaded before this can be done
+    Mix_Chunk *load_music(const resource_path &path);
+
+    // returns the music 
+    Mix_Chunk *current_music() const;
+
+    // returns the previous music
+    Mix_Chunk *previous_music() const;
+
+    // unloads and clears the previous music
+    void unload_previous_music();
+
+private:
+    Mix_Chunk *current_;
+    Mix_Chunk *prev_;
+};
+
 struct resource_pool {
     resource_pool(NVGcontext *vg);
     ~resource_pool();
@@ -122,6 +144,9 @@ struct resource_pool {
     const nm::json &load_json(const resource_path &path) const;
     int load_image(const resource_path &path) const;
     Mix_Chunk *load_sample(const resource_path &path) const;
+
+    // unload all resources stored by this resource pool
+    void reset();
 
 private:
     NVGcontext *vg_;
@@ -873,6 +898,12 @@ struct collision_shape {
 #define PODGE_COMPONENT(NAME) struct NAME : detail::object_component_impl<NAME>
 #define PODGE_PUBLIC_COMPONENT(NAME) struct NAME : detail::public_object_component_impl<NAME>
 
+// Attributes available on a map.
+PODGE_PUBLIC_COMPONENT(level_component) {
+    BOOST_HANA_DEFINE_STRUCT(level_component,
+        (resource_path, bgm)); // background music to play during the level
+};
+
 // Attributes available on entities parsed from any XML.
 PODGE_COMPONENT(core_component) {
     BOOST_HANA_DEFINE_STRUCT(core_component,
@@ -967,8 +998,8 @@ private:
     static current_level_type current_level_;
 
 public:
-    level(NVGcontext *vg, int width, int height, float dt);
-    level(NVGcontext *vg, pugi::xml_node tmx_node, float dt, const resource_path &cwd);
+    level(NVGcontext *vg, music_manager &music_mgr, int width, int height, float dt);
+    level(NVGcontext *vg, music_manager &music_mgr, pugi::xml_node tmx_node, float dt, const resource_path &cwd);
     ~level();
 
     NVGcontext *vg() const;
@@ -1024,6 +1055,7 @@ private:
     std::deque<input> input_queue_;
     tileset_map tilesets_;
     resource_pool pool_;
+    music_manager &music_mgr_;
     b2World world_;
     layers_container layers_;
     glm::vec2 camera_position_;

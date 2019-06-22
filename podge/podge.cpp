@@ -250,6 +250,7 @@ podge_registry registry;
 	register_contact_handler(new T()); \
 })
 
+PODGE_REGISTER_COMPONENT(level_component);
 PODGE_REGISTER_COMPONENT(core_component);
 PODGE_REGISTER_COMPONENT(tile_component);
 PODGE_REGISTER_COMPONENT(fixture_component);
@@ -577,18 +578,63 @@ static void scale_body(b2Body *body, const glm::vec2 &scale) {
 
 namespace podge {
 
+music_manager::music_manager() :
+	current_(nullptr),
+	prev_(nullptr)
+{
+}
+
+music_manager::~music_manager() {
+	if(current_ != nullptr) {
+		Mix_FreeChunk(current_);
+		current_ = nullptr;
+	}
+	if(prev_ != nullptr) {
+		Mix_FreeChunk(prev_);
+		prev_ = nullptr;
+	}
+}
+
+Mix_Chunk *music_manager::load_music(const resource_path &path) {
+	if(prev_ != nullptr) {
+		throw std::runtime_error("previous music must be cleared before load_music() can be called");
+	}
+	prev_ = current_;
+	auto pathstr(path.str());
+	auto data(get_resource(pathstr));
+	auto rw(SDL_RWFromConstMem(data.c_str(), data.size()));
+	BOOST_SCOPE_EXIT(rw) {
+		SDL_RWclose(rw);
+	} BOOST_SCOPE_EXIT_END
+	auto sample(Mix_LoadWAV_RW(rw, 0));
+	if(sample == nullptr) {
+		PODGE_THROW_MIX_ERROR();
+	}
+	current_ = sample;
+	return current_;
+}
+
+Mix_Chunk *music_manager::current_music() const {
+	return current_;
+}
+
+Mix_Chunk *music_manager::previous_music() const {
+	return prev_;
+}
+
+void music_manager::unload_previous_music() {
+	assert(prev_ != nullptr);
+	Mix_FreeChunk(prev_);
+	prev_ = nullptr;
+}
+
 resource_pool::resource_pool(NVGcontext *vg) :
 	vg_(vg)
 {
 }
 
 resource_pool::~resource_pool() {
-	for(const auto &p : samples_) {
-		Mix_FreeChunk(p.second);
-	}
-	for(const auto &p : images_) {
-		nvgDeleteImage(vg_, p.second);
-	}
+	reset();
 }
 
 const nm::json &resource_pool::load_json(const resource_path &path) const {
@@ -642,6 +688,19 @@ Mix_Chunk *resource_pool::load_sample(const resource_path &path) const {
 		assert(r.second);
 		return sample;
 	}
+}
+
+void resource_pool::reset() {
+	for(const auto &p : samples_) {
+		Mix_FreeChunk(p.second);
+	}
+	for(const auto &p : images_) {
+		nvgDeleteImage(vg_, p.second);
+	}
+
+	jsons_.clear();
+	images_.clear();
+	samples_.clear();
 }
 
 validation_error::validation_error(std::string msg) :
@@ -1707,9 +1766,10 @@ level::clear_dtor_current_level::~clear_dtor_current_level() {
 	level::clear_current();
 }
 
-level::level(NVGcontext *vg, int width, int height, float dt) :
+level::level(NVGcontext *vg, music_manager &music_mgr, int width, int height, float dt) :
 	vg_(vg),
 	pool_(vg),
+	music_mgr_(music_mgr),
 	world_(default_gravity),
 	width_(width),
 	height_(height),
@@ -1720,10 +1780,11 @@ level::level(NVGcontext *vg, int width, int height, float dt) :
 	dt_(dt),
 	rng_(std::random_device{}())
 {
+	add_component<level_component>();
 }
 
-level::level(NVGcontext *vg, pugi::xml_node tmx_node, float dt, const resource_path &cwd) :
-	level(vg, tmx_node.select_node("/map").node().attribute("width").as_int(), tmx_node.select_node("/map").node().attribute("height").as_int(), dt)
+level::level(NVGcontext *vg, music_manager &music_mgr, pugi::xml_node tmx_node, float dt, const resource_path &cwd) :
+	level(vg, music_mgr, tmx_node.select_node("/map").node().attribute("width").as_int(), tmx_node.select_node("/map").node().attribute("height").as_int(), dt)
 {
 	level::current(*this);
 	BOOST_SCOPE_EXIT(void) {
@@ -1737,8 +1798,9 @@ level::level(NVGcontext *vg, pugi::xml_node tmx_node, float dt, const resource_p
 
 	// read custom properties
 	{
-		auto properties_xpn(tmx_node.select_node("./properties"));
+		auto properties_xpn(map_node.select_node("./properties"));
 		if(properties_xpn) {
+			SDL_Log("loading properties!");
 			load_properties_xml(properties_xpn.node(), cwd);
 		}
 	}
@@ -1770,6 +1832,14 @@ level::level(NVGcontext *vg, pugi::xml_node tmx_node, float dt, const resource_p
 		}
 	}
 
+	// start music for the level (if any)
+	auto lc(component<level_component>());
+	if(!lc.bgm.empty()) {
+		auto bgm(music_mgr_.load_music(lc.bgm));
+		Mix_FadeInChannel(PODGE_MIX_MUSIC_CHANNEL, bgm, -1, 500);
+	}
+
+	// configure b2World
 	world_.SetContactFilter(&registry);
 	world_.SetContactListener(&registry);
 }

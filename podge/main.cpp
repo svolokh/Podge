@@ -25,6 +25,7 @@ struct game {
     void play_level(const resource_path &tmx_path, bool demo_mode);
 
     std::unique_ptr<gfx_context> gctx;
+    music_manager music_mgr;
 };
 
 game::game() :
@@ -99,7 +100,7 @@ void game::play_level(const resource_path &tmx_path, bool demo_mode) {
     auto vg(pvg.get());
     auto window(gctx->window());
 
-    level lvl(vg, tmx, 1.0f/60.0f, tmx_path.parent());
+    level lvl(vg, music_mgr, tmx, 1.0f/60.0f, tmx_path.parent());
     lvl.demo_mode = demo_mode;
 
     auto update_camera_dims([&lvl, &window]() {
@@ -224,12 +225,22 @@ static void run() {
     } BOOST_SCOPE_EXIT_END
 
     Mix_AllocateChannels(PODGE_MIX_NUM_CHANNELS);
+    Mix_ReserveChannels(1); // reserve the first channel for music
 
     game g;
     auto window(g.gctx->window());
     for(;;) {
         auto res(g.choose_level());
         g.play_level(res.tmx_path, res.demo_mode);
+
+        if(g.music_mgr.previous_music() != nullptr) {
+            g.music_mgr.unload_previous_music();
+        }
+
+        // fade out any playing music
+        if(Mix_Playing(PODGE_MIX_MUSIC_CHANNEL)) {
+            Mix_FadeOutChannel(PODGE_MIX_MUSIC_CHANNEL, 500);
+        }
     }
 }
 
